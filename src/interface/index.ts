@@ -37,19 +37,22 @@ export function initializeMask(): void {
 }
 
 function getTransitionKeyframes(): string {
+  var padding: number = 100;
   var windowWidth: number = window.innerWidth;
   var windowHeight: number = window.innerHeight;
   var radius: number = 43 / 2;
   var centerX: number = 12 + radius;
   var centerY: number = windowHeight - (12 + radius);
-  var cornerX: number = windowWidth + 20;
-  var cornerY: number = -20;
+  var cornerX: number = windowWidth + padding;
+  var cornerY: number = -1 * padding;
   var scale: number = Math.sqrt(Math.pow(cornerX - centerX, 2) + Math.pow(cornerY - centerY, 2)) / radius;
   var keyframes: string = `@keyframes transitioning-zoom { 0% {transform: scale(1);} 100% {transform: scale(${scale});}}`;
   return keyframes;
 }
 
 function turnOnDarkMode(): void {
+  var button = document.querySelector('.darkify_button');
+  button.setAttribute('dark-mode', 'darkifying');
   var sessionID: string = generateID('d_');
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = `${sessionID}_keyframes`;
@@ -61,15 +64,21 @@ function turnOnDarkMode(): void {
   transitionMask.addEventListener(
     'animationend',
     function (e) {
-      document.querySelector(`style#${sessionID}_keyframes`).remove();
+      var keyframesLoaderInstance = document.querySelector(`style#${sessionID}_keyframes`);
+      if (!(keyframesLoaderInstance === null)) {
+        keyframesLoaderInstance.remove();
+      }
       transitionMask.classList.remove('darkify_transitioning');
       document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle;
+      button.setAttribute('dark-mode', 'true');
     },
     { once: true }
   );
 }
 
 function turnOffDarkMode(): void {
+  var button = document.querySelector('.darkify_button');
+  button.setAttribute('dark-mode', 'darkifying');
   var sessionID: string = generateID('d_');
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = `${sessionID}_keyframes`;
@@ -80,9 +89,13 @@ function turnOffDarkMode(): void {
   transitionMask.addEventListener(
     'animationend',
     function (e) {
-      document.querySelector(`style#${sessionID}_keyframes`).remove();
+      var keyframesLoaderInstance = document.querySelector(`style#${sessionID}_keyframes`);
+      if (!(keyframesLoaderInstance === null)) {
+        keyframesLoaderInstance.remove();
+      }
       transitionMask.classList.remove('darkify_transitioning');
       document.querySelector('style.dark_mode_style_loader').innerHTML = '';
+      button.setAttribute('dark-mode', 'false');
     },
     { once: true }
   );
@@ -93,9 +106,9 @@ function switchDarkMode(): void {
   var currentMode = button.getAttribute('dark-mode');
   if (currentMode === 'false') {
     turnOnDarkMode();
-    button.setAttribute('dark-mode', 'true');
   } else {
-    turnOffDarkMode();
-    button.setAttribute('dark-mode', 'false');
+    if (currentMode === 'true') {
+      turnOffDarkMode();
+    }
   }
 }
