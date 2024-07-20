@@ -676,7 +676,6 @@ function getTransitionKeyframes() {
   return keyframes;
 }
 function turnOnDarkMode() {
-  console.log(getDarkModeStyle());
   var sessionID = "d_".concat(interface_md5(Math.random() * new Date().getTime()));
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = "".concat(sessionID, "_keyframes");
@@ -687,6 +686,9 @@ function turnOnDarkMode() {
   transitionMask.addEventListener('animationend', function (e) {
     document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
     transitionMask.classList.remove('autoDarkModeTransitioning');
+    var styleLoader = document.createElement('style');
+    styleLoader.innerHTML = getDarkModeStyle();
+    document.body.appendChild(styleLoader);
   }, {
     once: true
   });
