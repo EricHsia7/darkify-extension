@@ -644,7 +644,7 @@ function initializeCSS() {
   var styleLoader = document.createElement('style');
   styleLoader.innerHTML = src_interface;
   document.documentElement.appendChild(styleLoader);
-  var darkModeStyleLoader = document.createElement('div');
+  var darkModeStyleLoader = document.createElement('style');
   darkModeStyleLoader.classList.add('darkModeStyleLoader');
   document.documentElement.appendChild(darkModeStyleLoader);
 }
