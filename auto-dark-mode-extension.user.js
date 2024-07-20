@@ -409,6 +409,205 @@ __webpack_require__.d(__webpack_exports__, {
   "default": () => (/* binding */ src)
 });
 
+;// CONCATENATED MODULE: ./src/core/index.ts
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+var md5 = __webpack_require__(503);
+function rgbToHsl(color) {
+  var r = color.r / 255;
+  var g = color.g / 255;
+  var b = color.b / 255;
+  var max = Math.max(r, g, b);
+  var min = Math.min(r, g, b);
+  var h,
+    s,
+    l = (max + min) / 2;
+  if (max === min) {
+    h = s = 0; // achromatic
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+  return {
+    h: h,
+    s: s,
+    l: l
+  };
+}
+function isGray(color) {
+  var r = color.r;
+  var g = color.g;
+  var b = color.b;
+  var _rgbToHsl = rgbToHsl(r, g, b),
+    s = _rgbToHsl.s;
+  return s <= 0.38;
+}
+function rgbToHex(color) {
+  var r = color.r;
+  var g = color.g;
+  var b = color.b;
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+}
+function rgbaToHex(color) {
+  var r = color.r;
+  var g = color.g;
+  var b = color.b;
+  var a = Math.round(color.a * 255);
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
+}
+function invertRGB(color) {
+  var r = 255 - color.r;
+  var g = 255 - color.g;
+  var b = 255 - color.b;
+  return isGray(color) ? {
+    r: r,
+    g: g,
+    b: b
+  } : color;
+}
+function darkenRGB(color, percent) {
+  var r = Math.floor(color.r * (1 - percent / 100));
+  var g = Math.floor(color.g * (1 - percent / 100));
+  var b = Math.floor(color.b * (1 - percent / 100));
+  return {
+    r: r,
+    g: g,
+    b: b
+  };
+}
+function getColorInRGBA(element, property) {
+  var style = getComputedStyle(element);
+  var color = style.getPropertyValue(property).trim();
+
+  // Function to resolve CSS variables
+  function resolveCSSVariable(value) {
+    if (value.startsWith('var(')) {
+      var variableName = value.slice(4, -1).trim();
+      var resolvedValue = style.getPropertyValue(variableName).trim();
+      if (resolvedValue.startsWith('var(')) {
+        return resolveCSSVariable(resolvedValue); // Recursively resolve nested variables
+      }
+      return resolvedValue;
+    }
+    return value;
+  }
+
+  // Resolve CSS variable if present
+  color = resolveCSSVariable(color);
+  function hexToRGBA(hex) {
+    var r, g, b;
+    if (hex.length === 4) {
+      // #fff
+      r = parseInt(hex[1] + hex[1], 16);
+      g = parseInt(hex[2] + hex[2], 16);
+      b = parseInt(hex[3] + hex[3], 16);
+    } else if (hex.length === 7) {
+      // #ffffff
+      r = parseInt(hex.slice(1, 3), 16);
+      g = parseInt(hex.slice(3, 5), 16);
+      b = parseInt(hex.slice(5, 7), 16);
+    } else {
+      throw new Error('Invalid hex format');
+    }
+    return {
+      r: r,
+      g: g,
+      b: b,
+      a: 1
+    };
+  }
+  function rgbStringToRGBA(rgb) {
+    var match = rgb.match(/rgba?\((\d+), (\d+), (\d+)(?:, (\d+\.?\d*))?\)/);
+    if (!match) throw new Error('Invalid RGB/RGBA format');
+    return {
+      r: parseInt(match[1]),
+      g: parseInt(match[2]),
+      b: parseInt(match[3]),
+      a: match[4] ? parseFloat(match[4]) : 1
+    };
+  }
+  function nameToRGBA(name) {
+    var ctx = document.createElement('canvas').getContext('2d');
+    ctx.fillStyle = name;
+    var computedColor = ctx.fillStyle; // Now it’s in rgb format
+    return rgbStringToRGBA(computedColor);
+  }
+  if (color === 'transparent') {
+    return {
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 0
+    };
+  } else if (color.startsWith('rgb')) {
+    return rgbStringToRGBA(color);
+  } else if (color.startsWith('#')) {
+    return hexToRGBA(color);
+  } else {
+    // Assume it's a color name
+    return nameToRGBA(color);
+  }
+}
+function getColorRelatedProperties(element) {
+  var result = {};
+  var list = ['color', 'background-color', 'fill', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
+  var totalR = 0;
+  var totalG = 0;
+  var totalB = 0;
+  var totalA = 0;
+  for (var _i = 0, _list = list; _i < _list.length; _i++) {
+    var property = _list[_i];
+    result[property] = getColorInRGBA(element, property);
+    totalR += result[property].r;
+    totalG += result[property].g;
+    totalB += result[property].b;
+    totalA += result[property].a;
+  }
+  var averageR = totalR / list.length;
+  var averageG = totalG / list.length;
+  var averageB = totalB / list.length;
+  var averageA = totalA / list.length;
+  result['average'] = {
+    r: averageR,
+    g: averageG,
+    b: averageB,
+    a: averageA
+  };
+  return result;
+}
+function getDarkModeStyle() {
+  var selectorList = {};
+  var elements = document.querySelectorAll('body *,body');
+  var _iterator = _createForOfIteratorHelper(elements),
+    _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var element = _step.value;
+      var identifier = "i-".concat(md5(Math.random() * new Date().getTime()));
+      element.setAttribute('auto-dark-mode-extension', identifier);
+      selectorList[identifier] = getColorRelatedProperties(element);
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  console.log(selectorList);
+  return {};
+}
 ;// CONCATENATED MODULE: ./src/interface/index.css
 /* harmony default export */ const src_interface = (".autoDarkModeTransitionMask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--d-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-mask-image: -webkit-radial-gradient(white, black);\n  mask-image: -webkit-radial-gradient(white, black);\n  transform: scale(1);\n  backdrop-filter: invert(1) !important;\n  -webkit-backdrop-filter: invert(1) !important;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeTransitioning {\n  animation-duration: 600ms;\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-iteration-count: forward;\n  animation-timing-function: ease-in-out;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeFadeOut {\n  animation-duration: 500ms;\n  animation-name: transitioning-opacity;\n  animation-iteration-count: forward;\n  animation-timing-function: ease-out;\n  animation-direction: reverse;\n}\n\n@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n.autoDarkModeButton {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--d-button-color);\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}");
 ;// CONCATENATED MODULE: ./src/interface/theme.css
@@ -416,7 +615,8 @@ __webpack_require__.d(__webpack_exports__, {
 ;// CONCATENATED MODULE: ./src/interface/index.ts
 
 
-var md5 = __webpack_require__(503);
+
+var interface_md5 = __webpack_require__(503);
 function initializeCSS() {
   //load css
   var themeLoader = document.createElement('style');
@@ -454,7 +654,7 @@ function getTransitionKeyframes() {
   return keyframes;
 }
 function turnOnDarkMode() {
-  var sessionID = "d_".concat(md5(Math.random() * new Date().getTime()));
+  var sessionID = "d_".concat(interface_md5(Math.random() * new Date().getTime()));
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = "".concat(sessionID, "_keyframes");
   keyframesLoader.innerHTML = getTransitionKeyframes();
@@ -464,6 +664,7 @@ function turnOnDarkMode() {
   transitionMask.addEventListener('animationend', function (e) {
     document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
     transitionMask.classList.remove('autoDarkModeTransitioning');
+    getDarkModeStyle();
   }, {
     once: true
   });
