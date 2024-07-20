@@ -398,17 +398,6 @@ function isSlowBuffer (obj) {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
@@ -420,10 +409,10 @@ __webpack_require__.d(__webpack_exports__, {
   "default": () => (/* binding */ src)
 });
 
-// NAMESPACE OBJECT: ./src/interface/index.ts
-var interface_namespaceObject = {};
-__webpack_require__.r(interface_namespaceObject);
-
+;// CONCATENATED MODULE: ./src/interface/index.css
+/* harmony default export */ const src_interface = (".autoDarkModeSheetBackground {\n  position: fixed;\n  top: 0px;\n  left: 0px;\n  width: 100%;\n  height: 100%;\n  background-color: var(--d-transparent);\n  z-index: 1000;\n  display: none;\n  user-select: none;\n  -webkit-user-select: none;\n}\n\n.autoDarkModeSheetBackground[displayed=\"true\"] {\n  display: block;\n}\n\n.autoDarkModeSheet {\n  position: fixed;\n  bottom: 0px;\n  left: 0px;\n  width: 100%;\n  height: clamp(100px, 45%, 450px);\n  background-color: var(--d-background-color);\n  backdrop-filter: blur(15px);\n  -webkit-backdrop-filter: blur(15px);\n  z-index: 1001;\n  display: none;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  user-select: none;\n  -webkit-user-select: none;\n}\n\n.autoDarkModeSheet[displayed=\"true\"] {\n  display: block;\n}\n\n.autoDarkModeSheet .autoDarkModeSheetLink {\n  position: relative;\n  width: 100%;\n  height: 45px;\n  user-select: none;\n  -webkit-user-select: none;\n}\n\n.autoDarkModeSheet .autoDarkModeSheetLink .autoDarkModeSheetLinkText {\n  position: absolute;\n  top: 5px;\n  left: 10px;\n  height: 20px;\n  font-size: 15px;\n  white-space: nowrap;\n  word-break: keep-all;\n  overflow: hidden;\n  color: var(--d-text-color);\n  align-items: center;\n}\n\n.autoDarkModeSheet .autoDarkModeSheetLink .autoDarkModeSheetLinkURL {\n  position: absolute;\n  top: 25px;\n  left: 10px;\n  height: 15px;\n  font-size: 10px;\n  white-space: nowrap;\n  word-break: keep-all;\n  overflow: hidden;\n  color: var(--d-url-color);\n  display: flex;\n  align-items: center;\n}\n\n.autoDarkModeButton {\n  width: 15px;\n  height: 15px;\n  position: fixed;\n  bottom: 10px;\n  left: 10px;\n  border-radius: 15px;\n  background-color: var(--d-gray);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n}\n\n.autoDarkModeButton[status=\"2\"] {\n  background-color: var(--d-green);\n}\n\n.autoDarkModeButton[status=\"1\"] {\n  background-color: var(--d-yellow);\n}\n\n.autoDarkModeButton[status=\"0\"] {\n  background-color: var(--d-red);\n}");
+;// CONCATENATED MODULE: ./src/interface/theme.css
+/* harmony default export */ const theme = (":root {\n  --d-gray: #d2d2d2;\n  --d-red: #ea3323;\n  --d-yellow: #ffb505;\n  --d-green: #51a577;\n  --d-background-color: rgba(255, 255, 255, 0.45);\n  --d-text-color: #333333;\n  --d-url-color: #888888;\n  --d-transparent: rgba(0, 0, 0, 0);\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --d-background-color: rgba(0, 0, 0, 0.45);\n    --d-text-color: #ffffff;\n    --d-url-color: #d2d2d2;\n  }\n}");
 ;// CONCATENATED MODULE: ./src/interface/index.ts
 
 
@@ -433,7 +422,7 @@ function initializeCSS() {
   themeLoader.innerHTML = theme;
   document.body.appendChild(themeLoader);
   var styleLoader = document.createElement('style');
-  styleLoader.innerHTML = style;
+  styleLoader.innerHTML = src_interface;
   document.body.appendChild(styleLoader);
 }
 function initializeButton() {
@@ -477,9 +466,9 @@ function closeSheet() {
 
 var md5 = __webpack_require__(503);
 function initialize() {
-  (0,interface_namespaceObject.initializeCSS)();
-  (0,interface_namespaceObject.initializeButton)();
-  (0,interface_namespaceObject.initializeSheet)();
+  initializeCSS();
+  initializeButton();
+  initializeSheet();
 }
 var autoDarkMode = {
   initialize: initialize
