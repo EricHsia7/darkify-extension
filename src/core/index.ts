@@ -163,7 +163,7 @@ function getColorInRGBA(element: HTMLElement, property: colorRelatedProperty): R
 
 function getColorRelatedProperties(element: HTMLElement): object {
   var result: object = {};
-  var list: colorRelatedProperty[] = ['color', 'background-color', 'fill', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
+  var list: colorRelatedProperty[] = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
   var totalR: number = 0;
   var totalG: number = 0;
   var totalB: number = 0;
@@ -183,14 +183,32 @@ function getColorRelatedProperties(element: HTMLElement): object {
   return result;
 }
 
+function invertProperties(properties: object): object {
+  var result = {};
+  for (var key in properties) {
+    var property = properties[key];
+    result[key] = Object.assign(invertRGB({ r: property.r, g: property.g, b: property.b }), { a: property.a });
+  }
+  return result;
+}
+
+function propertiesToStyle(selector: string, properties: object): string {
+  var lines = [];
+  for (var key in properties) {
+    var property = properties[key];
+    lines.push(`${key}: rgba(${property.r}, ${property.g}, ${property.b}, ${property.a})`);
+  }
+  return `${selector} {${lines.join(';')}}`;
+}
+
 export function getDarkModeStyle(): object {
-  var selectorList = {};
+  var style = [];
   var elements = document.querySelectorAll('body *,body');
   for (var element of elements) {
     var identifier: string = `i-${md5(Math.random() * new Date().getTime())}`;
     element.setAttribute('auto-dark-mode-extension', identifier);
-    selectorList[identifier] = getColorRelatedProperties(element);
+    var invertedProperties = invertProperties(getColorRelatedProperties(element));
+    style.push(propertiesToStyle(`${element.tagName}[auto-dark-mode-extension="${identifier}"]`, invertedProperties));
   }
-  console.log(selectorList);
-  return {};
+  return style.join(' ');
 }
