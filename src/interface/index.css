@@ -1,4 +1,4 @@
-.autoDarkModeSheetBackground {
+.autoDarkModeTransitionMask {
   position: fixed;
   top: 0px;
   left: 0px;
@@ -72,26 +72,17 @@
 }
 
 .autoDarkModeButton {
-  width: 15px;
-  height: 15px;
+  width: 43px;
+  height: 43px;
   position: fixed;
-  bottom: 10px;
-  left: 10px;
-  border-radius: 15px;
-  background-color: var(--d-gray);
+  bottom: 12px;
+  left: 12px;
+  border-radius: 30px;
+  background-color: var(--d-button-color);
   z-index: 999;
   user-select: none;
   -webkit-user-select: none;
-}
-
-.autoDarkModeButton[status="2"] {
-  background-color: var(--d-green);
-}
-
-.autoDarkModeButton[status="1"] {
-  background-color: var(--d-yellow);
-}
-
-.autoDarkModeButton[status="0"] {
-  background-color: var(--d-red);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

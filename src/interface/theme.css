@@ -1,17 +1,14 @@
 :root {
-  --d-gray: #d2d2d2;
-  --d-red: #ea3323;
-  --d-yellow: #ffb505;
-  --d-green: #51a577;
   --d-background-color: rgba(255, 255, 255, 0.45);
+  --d-button-color: #ffffff;
   --d-text-color: #333333;
-  --d-url-color: #888888;
   --d-transparent: rgba(0, 0, 0, 0);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --d-background-color: rgba(0, 0, 0, 0.45);
+    --d-button-color: #333333;
     --d-text-color: #ffffff;
     --d-url-color: #d2d2d2;
   }
