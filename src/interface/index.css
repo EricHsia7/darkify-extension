@@ -4,7 +4,7 @@
   position: fixed;
   bottom: 12px;
   left: 12px;
-  border-radius: 30px;
+  border-radius: 100%;
   background-color: var(--d-transparent);
   z-index: 999;
   display: block;
@@ -25,6 +25,14 @@
   animation-timing-function: linear;
 }
 
+.autoDarkModeTransitionMask.autoDarkModeFadeOut {
+  animation-duration: 350ms;
+  animation-name: transitioning-opacity;
+  animation-iteration-count: forward;
+  animation-timing-function: linear;
+  animation-direction: reverse;
+}
+
 @keyframes transitioning-opacity {
   0% {
     opacity: 0;
@@ -40,7 +48,7 @@
   position: fixed;
   bottom: 12px;
   left: 12px;
-  border-radius: 30px;
+  border-radius: 100%;
   background-color: var(--d-button-color);
   z-index: 1000;
   user-select: none;

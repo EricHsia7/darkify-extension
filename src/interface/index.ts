@@ -1,6 +1,8 @@
 import style from './index.css';
 import theme from './theme.css';
 
+const md5 = require('md5');
+
 export function initializeCSS(): void {
   //load css
   var themeLoader = document.createElement('style');
@@ -28,18 +30,44 @@ export function initializeMask(): void {
   document.body.appendChild(mask);
 }
 
-function makeTransitionKeyframes(): string {
-  var originalWidth = 43
-  var originalHeight = 43
-  var targetWidth = window.innerWidth;
-  var targetHeight = window.innerHeight;
-  
-  
+function getTransitionKeyframes(): string {
+  var windowWidth: number = window.innerWidth;
+  var windowHeight: number = window.innerHeight;
+  var radius: number = 43 / 2;
+  var centerX: number = 12 + radius;
+  var centerY: number = windowHeight - (12 + radius);
+  var cornerX: number = windowWidth;
+  var cornerY: number = 0;
+  var scale: number = Math.sqrt(Math.pow(cornerX - centerX, 2) + Math.pow(cornerY - centerY, 2)) / radius;
+  var keyframes: string = `@keyframes transitioning-opacity { 0%{transform: scale(1);} 100% {transform: scale(${scale});}}`;
+  return keyframes;
 }
 
 export function turnOnDarkMode(): void {
-  const autoDarkModeTransitionMaskElement = document.querySelector('.autoDarkModeTransitionMask');
-  autoDarkModeTransitionMaskElement.setAttribute('displayed', 'true');
+  var sessionID: string = `d_${md5(Math.random() * new Date().getTime())}`;
+
+  var keyframesLoader = document.createElement('style');
+  keyframesLoader.id = `${sessionID}_keyframes`;
+  keyframesLoader.innerHTML = getTransitionKeyframes();
+  document.body.appendChild(keyframesLoader);
+
+  var transitionMask = document.querySelector('.autoDarkModeTransitionMask');
+  transitionMask.classList.add('autoDarkModeTransitioning');
+  transitionMask.addEventListener(
+    'animationend',
+    function (e) {
+      transitionMask.classList.add('autoDarkModeFadeOut');
+      transitionMask.addEventListener(
+        'animationend',
+        function (e) {
+          transitionMask.classList.remove('autoDarkModeFadeOut');
+          transitionMask.classList.remove('autoDarkModeTransitioning');
+        },
+        { once: true }
+      );
+    },
+    { once: true }
+  );
 }
 
 export function turnOffDarkMode(): void {
