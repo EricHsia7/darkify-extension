@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.1.7
+// @version      0.1.8
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -97,10 +97,16 @@ function rgbToHsl(color) {
     l: l
   };
 }
-function isGray(color) {
-  var _rgbToHsl = rgbToHsl(color),
-    s = _rgbToHsl.s;
-  return s <= 0.38;
+function needToInvert(color) {
+  var hsl = rgbToHsl(color);
+  if (hsl.s <= 0.38) {
+    return true;
+  } else {
+    if (hsl.l <= 0.23) {
+      return true;
+    }
+  }
+  return false;
 }
 function rgbToHex(color) {
   var r = color.r;
@@ -119,7 +125,7 @@ function invertRGB(color) {
   var r = 255 - color.r;
   var g = 255 - color.g;
   var b = 255 - color.b;
-  return isGray(color) ? {
+  return needToInvert(color) ? {
     r: r,
     g: g,
     b: b
