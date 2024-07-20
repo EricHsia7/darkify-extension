@@ -1,4 +1,4 @@
-import {getDarkModeStyle} from '../core/index.ts'
+import { getDarkModeStyle } from '../core/index.ts';
 
 import style from './index.css';
 import theme from './theme.css';
@@ -60,6 +60,7 @@ export function turnOnDarkMode(): void {
     function (e) {
       document.querySelector(`style#${sessionID}_keyframes`).remove();
       transitionMask.classList.remove('autoDarkModeTransitioning');
+      getDarkModeStyle();
     },
     { once: true }
   );
