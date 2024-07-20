@@ -678,13 +678,14 @@ function turnOnDarkMode() {
   keyframesLoader.id = "".concat(sessionID, "_keyframes");
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
+  var darkModeStyle = getDarkModeStyle();
   var transitionMask = document.querySelector('.autoDarkModeTransitionMask');
   transitionMask.classList.add('autoDarkModeTransitioning');
   transitionMask.addEventListener('animationend', function (e) {
     document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
     transitionMask.classList.remove('autoDarkModeTransitioning');
     var styleLoader = document.createElement('style');
-    styleLoader.innerHTML = getDarkModeStyle();
+    styleLoader.innerHTML = darkModeStyle;
     document.documentElement.appendChild(styleLoader);
   }, {
     once: true
