@@ -56,6 +56,7 @@ function generateID(prefix) {
     var randomNumber = Math.round(Math.random() * bulkLen);
     result += bulk.substring(randomNumber, randomNumber + 1);
   }
+  result = prefix + result;
   return result;
 }
 ;// CONCATENATED MODULE: ./src/core/index.ts
