@@ -317,18 +317,21 @@ function initializeMask() {
   document.documentElement.appendChild(mask);
 }
 function getTransitionKeyframes() {
+  var padding = 100;
   var windowWidth = window.innerWidth;
   var windowHeight = window.innerHeight;
   var radius = 43 / 2;
   var centerX = 12 + radius;
   var centerY = windowHeight - (12 + radius);
-  var cornerX = windowWidth + 20;
-  var cornerY = -20;
+  var cornerX = windowWidth + padding;
+  var cornerY = -1 * padding;
   var scale = Math.sqrt(Math.pow(cornerX - centerX, 2) + Math.pow(cornerY - centerY, 2)) / radius;
   var keyframes = "@keyframes transitioning-zoom { 0% {transform: scale(1);} 100% {transform: scale(".concat(scale, ");}}");
   return keyframes;
 }
 function turnOnDarkMode() {
+  var button = document.querySelector('.darkify_button');
+  button.setAttribute('dark-mode', 'darkifying');
   var sessionID = generateID('d_');
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = "".concat(sessionID, "_keyframes");
@@ -338,14 +341,20 @@ function turnOnDarkMode() {
   var transitionMask = document.querySelector('.darkify_transition_mask');
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener('animationend', function (e) {
-    document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
+    var keyframesLoaderInstance = document.querySelector("style#".concat(sessionID, "_keyframes"));
+    if (!(keyframesLoaderInstance === null)) {
+      keyframesLoaderInstance.remove();
+    }
     transitionMask.classList.remove('darkify_transitioning');
     document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle;
+    button.setAttribute('dark-mode', 'true');
   }, {
     once: true
   });
 }
 function turnOffDarkMode() {
+  var button = document.querySelector('.darkify_button');
+  button.setAttribute('dark-mode', 'darkifying');
   var sessionID = generateID('d_');
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = "".concat(sessionID, "_keyframes");
@@ -354,9 +363,13 @@ function turnOffDarkMode() {
   var transitionMask = document.querySelector('.darkify_transition_mask');
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener('animationend', function (e) {
-    document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
+    var keyframesLoaderInstance = document.querySelector("style#".concat(sessionID, "_keyframes"));
+    if (!(keyframesLoaderInstance === null)) {
+      keyframesLoaderInstance.remove();
+    }
     transitionMask.classList.remove('darkify_transitioning');
     document.querySelector('style.dark_mode_style_loader').innerHTML = '';
+    button.setAttribute('dark-mode', 'false');
   }, {
     once: true
   });
@@ -366,10 +379,10 @@ function switchDarkMode() {
   var currentMode = button.getAttribute('dark-mode');
   if (currentMode === 'false') {
     turnOnDarkMode();
-    button.setAttribute('dark-mode', 'true');
   } else {
-    turnOffDarkMode();
-    button.setAttribute('dark-mode', 'false');
+    if (currentMode === 'true') {
+      turnOffDarkMode();
+    }
   }
 }
 ;// CONCATENATED MODULE: ./src/index.ts
