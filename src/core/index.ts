@@ -161,22 +161,28 @@ function getColorInRGBA(element: HTMLElement, property: colorRelatedProperty): R
 function getColorRelatedProperties(element: HTMLElement): object {
   var result: object = {};
   var list: colorRelatedProperty[] = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
+  /*
   var totalR: number = 0;
   var totalG: number = 0;
   var totalB: number = 0;
   var totalA: number = 0;
+  */
   for (var property of list) {
     result[property] = getColorInRGBA(element, property);
+    /*
     totalR += result[property].r;
     totalG += result[property].g;
     totalB += result[property].b;
     totalA += result[property].a;
+    */
   }
+  /*
   var averageR: number = totalR / list.length;
   var averageG: number = totalG / list.length;
   var averageB: number = totalB / list.length;
   var averageA: number = totalA / list.length;
   result['average'] = { r: averageR, g: averageG, b: averageB, a: averageA };
+  */
   return result;
 }
 
