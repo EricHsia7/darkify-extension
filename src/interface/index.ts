@@ -46,8 +46,6 @@ function getTransitionKeyframes(): string {
 }
 
 export function turnOnDarkMode(): void {
-  console.log(getDarkModeStyle());
-
   var sessionID: string = `d_${md5(Math.random() * new Date().getTime())}`;
 
   var keyframesLoader = document.createElement('style');
@@ -62,6 +60,9 @@ export function turnOnDarkMode(): void {
     function (e) {
       document.querySelector(`style#${sessionID}_keyframes`).remove();
       transitionMask.classList.remove('autoDarkModeTransitioning');
+      var styleLoader = document.createElement('style');
+      styleLoader.innerHTML = getDarkModeStyle();
+      document.body.appendChild(styleLoader);
     },
     { once: true }
   );
