@@ -1,3 +1,5 @@
+import {getDarkModeStyle} from '../core/index.ts'
+
 import style from './index.css';
 import theme from './theme.css';
 

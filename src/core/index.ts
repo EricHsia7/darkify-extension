@@ -183,7 +183,7 @@ function getColorRelatedProperties(element: HTMLElement): object {
   return result;
 }
 
-function getDarkModeStyle(): object {
+export function getDarkModeStyle(): object {
   var selectorList = {};
   var elements = document.querySelectorAll('body *,body');
   for (var element of elements) {
