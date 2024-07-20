@@ -20,17 +20,17 @@
 }
 
 .autoDarkModeTransitionMask.autoDarkModeTransitioning {
-  animation-duration: 800ms;
+  animation-duration: 600ms;
   animation-name: transitioning-opacity, transitioning-zoom;
   animation-iteration-count: forward;
-  animation-timing-function: linear;
+  animation-timing-function: ease-in-out;
 }
 
 .autoDarkModeTransitionMask.autoDarkModeFadeOut {
-  animation-duration: 350ms;
+  animation-duration: 500ms;
   animation-name: transitioning-opacity;
   animation-iteration-count: forward;
-  animation-timing-function: linear;
+  animation-timing-function: ease-out;
   animation-direction: reverse;
 }
 

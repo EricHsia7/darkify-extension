@@ -36,10 +36,10 @@ function getTransitionKeyframes(): string {
   var radius: number = 43 / 2;
   var centerX: number = 12 + radius;
   var centerY: number = windowHeight - (12 + radius);
-  var cornerX: number = windowWidth;
-  var cornerY: number = 0;
+  var cornerX: number = windowWidth + 20;
+  var cornerY: number = -20;
   var scale: number = Math.sqrt(Math.pow(cornerX - centerX, 2) + Math.pow(cornerY - centerY, 2)) / radius;
-  var keyframes: string = `@keyframes transitioning-zoom { 0%{transform: scale(1);} 100% {transform: scale(${scale});}}`;
+  var keyframes: string = `@keyframes transitioning-zoom { 0% {transform: scale(1);} 100% {transform: scale(${scale});}}`;
   return keyframes;
 }
 
@@ -62,6 +62,7 @@ export function turnOnDarkMode(): void {
         function (e) {
           transitionMask.classList.remove('autoDarkModeFadeOut');
           transitionMask.classList.remove('autoDarkModeTransitioning');
+          document.querySelector(`style#${sessionID}_keyframes`).remove();
         },
         { once: true }
       );
