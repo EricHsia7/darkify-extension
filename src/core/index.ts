@@ -56,9 +56,16 @@ function rgbToHsl(color: RGB): HSL {
   return { h, s, l };
 }
 
-function isGray(color: RGB): boolean {
-  const { s } = rgbToHsl(color);
-  return s <= 0.38;
+function needToInvert(color: RGB): boolean {
+  var hsl: HSL = rgbToHsl(color);
+  if (hsl.s <= 0.38) {
+    return true;
+  } else {
+    if (hsl.l <= 0.23) {
+      return true;
+    }
+  }
+  return false
 }
 
 function rgbToHex(color: RGB): hex {
@@ -80,7 +87,7 @@ function invertRGB(color: RGB): RGB {
   var r = 255 - color.r;
   var g = 255 - color.g;
   var b = 255 - color.b;
-  return isGray(color) ? { r, g, b } : color;
+  return needToInvert(color) ? { r, g, b } : color;
 }
 
 function darkenRGB(color: RGB, percent: number): RGB {
