@@ -20,7 +20,7 @@
 }
 
 .darkify_transition_mask.darkify_transitioning {
-  animation-duration: 600ms;
+  animation-duration: var(--darkify-duration);
   animation-name: transitioning-opacity, transitioning-zoom;
   animation-iteration-count: forward;
   animation-timing-function: var(--darkify-timing-function);
@@ -49,7 +49,7 @@
   align-items: center;
   user-select: none;
   -webkit-user-select: none;
-  transition: background-color 600ms;
+  transition: background-color var(--darkify-duration);
   transition-timing-function: var(--darkify-timing-function);
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -64,12 +64,12 @@
   height: 23px;
   user-select: none;
   -webkit-user-select: none;
-  transition: opacity 600ms;
+  transition: opacity var(--darkify-duration);
   transition-timing-function: var(--darkify-timing-function);
 }
 
 .darkify_button svg path {
-  transition: fill 600ms;
+  transition: fill var(--darkify-duration);
   transition-timing-function: var(--darkify-timing-function);
 }
 
