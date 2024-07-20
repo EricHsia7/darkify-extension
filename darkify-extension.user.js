@@ -561,28 +561,29 @@ function getColorInRGBA(element, property) {
 function getColorRelatedProperties(element) {
   var result = {};
   var list = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
-  var totalR = 0;
-  var totalG = 0;
-  var totalB = 0;
-  var totalA = 0;
+  /*
+  var totalR: number = 0;
+  var totalG: number = 0;
+  var totalB: number = 0;
+  var totalA: number = 0;
+  */
   for (var _i = 0, _list = list; _i < _list.length; _i++) {
     var property = _list[_i];
     result[property] = getColorInRGBA(element, property);
+    /*
     totalR += result[property].r;
     totalG += result[property].g;
     totalB += result[property].b;
     totalA += result[property].a;
+    */
   }
-  var averageR = totalR / list.length;
-  var averageG = totalG / list.length;
-  var averageB = totalB / list.length;
-  var averageA = totalA / list.length;
-  result['average'] = {
-    r: averageR,
-    g: averageG,
-    b: averageB,
-    a: averageA
-  };
+  /*
+  var averageR: number = totalR / list.length;
+  var averageG: number = totalG / list.length;
+  var averageB: number = totalB / list.length;
+  var averageA: number = totalA / list.length;
+  result['average'] = { r: averageR, g: averageG, b: averageB, a: averageA };
+  */
   return result;
 }
 function invertProperties(properties) {
