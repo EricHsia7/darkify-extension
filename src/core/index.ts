@@ -193,7 +193,7 @@ function propertiesToStyle(selector: string, properties: object): string {
   var lines = [];
   for (var key in properties) {
     var property = properties[key];
-    lines.push(`${key}: rgba(${property.r}, ${property.g}, ${property.b}, ${property.a})`);
+    lines.push(`${key}: rgba(${property.r}, ${property.g}, ${property.b}, ${property.a}) !important`);
   }
   return `${selector} {${lines.join(';')}}`;
 }
