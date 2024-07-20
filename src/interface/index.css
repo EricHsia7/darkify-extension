@@ -7,7 +7,6 @@
   border-radius: 100%;
   background-color: var(--d-transparent);
   z-index: 999;
-  display: block;
   user-select: none;
   -webkit-user-select: none;
   opacity: 0;

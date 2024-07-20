@@ -39,7 +39,7 @@ function getTransitionKeyframes(): string {
   var cornerX: number = windowWidth;
   var cornerY: number = 0;
   var scale: number = Math.sqrt(Math.pow(cornerX - centerX, 2) + Math.pow(cornerY - centerY, 2)) / radius;
-  var keyframes: string = `@keyframes transitioning-opacity { 0%{transform: scale(1);} 100% {transform: scale(${scale});}}`;
+  var keyframes: string = `@keyframes transitioning-zoom { 0%{transform: scale(1);} 100% {transform: scale(${scale});}}`;
   return keyframes;
 }
 
