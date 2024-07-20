@@ -13,7 +13,7 @@ export function initializeCSS(): void {
   var styleLoader = document.createElement('style');
   styleLoader.innerHTML = style;
   document.documentElement.appendChild(styleLoader);
-  var darkModeStyleLoader = document.createElement('div');
+  var darkModeStyleLoader = document.createElement('style');
   darkModeStyleLoader.classList.add('darkModeStyleLoader');
   document.documentElement.appendChild(darkModeStyleLoader);
 }
