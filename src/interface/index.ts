@@ -1,7 +1,7 @@
 import style from './index.css';
 import theme from './theme.css';
 
-function initializeCSS(): void {
+export function initializeCSS(): void {
   //load css
   var themeLoader = document.createElement('style');
   themeLoader.innerHTML = theme;
@@ -11,7 +11,7 @@ function initializeCSS(): void {
   document.body.appendChild(styleLoader);
 }
 
-function initializeButton(): void {
+export function initializeButton(): void {
   //add button
   var button = document.createElement('div');
   button.classList.add('autoDarkModeButton');
@@ -22,7 +22,7 @@ function initializeButton(): void {
   document.body.appendChild(button);
 }
 
-function initializeSheet(): void {
+export function initializeSheet(): void {
   //add background of the modal bottom sheet
   var sheetBackground = document.createElement('div');
   sheetBackground.classList.add('autoDarkModeSheetBackground');
@@ -38,14 +38,14 @@ function initializeSheet(): void {
   document.body.appendChild(sheet);
 }
 
-function openSheet(): void {
+export function openSheet(): void {
   const autoDarkModeSheetElement = document.querySelector('.autoDarkModeSheet');
   const autoDarkModeSheetBackgroundElement = document.querySelector('.autoDarkModeSheetBackground');
   autoDarkModeSheetElement.setAttribute('displayed', 'true');
   autoDarkModeSheetBackgroundElement.setAttribute('displayed', 'true');
 }
 
-function closeSheet(): void {
+export function closeSheet(): void {
   const autoDarkModeSheetElement = document.querySelector('.autoDarkModeSheet');
   const autoDarkModeSheetBackgroundElement = document.querySelector('.autoDarkModeSheetBackground');
   autoDarkModeSheetElement.setAttribute('displayed', 'false');
