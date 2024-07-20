@@ -56,16 +56,8 @@ export function turnOnDarkMode(): void {
   transitionMask.addEventListener(
     'animationend',
     function (e) {
-      transitionMask.classList.add('autoDarkModeFadeOut');
-      transitionMask.addEventListener(
-        'animationend',
-        function (e) {
-          transitionMask.classList.remove('autoDarkModeFadeOut');
-          transitionMask.classList.remove('autoDarkModeTransitioning');
-          document.querySelector(`style#${sessionID}_keyframes`).remove();
-        },
-        { once: true }
-      );
+      document.querySelector(`style#${sessionID}_keyframes`).remove();
+      transitionMask.classList.remove('autoDarkModeTransitioning');
     },
     { once: true }
   );
