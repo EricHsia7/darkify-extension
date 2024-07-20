@@ -603,7 +603,7 @@ function propertiesToStyle(selector, properties) {
   var lines = [];
   for (var key in properties) {
     var property = properties[key];
-    lines.push("".concat(key, ": rgba(").concat(property.r, ", ").concat(property.g, ", ").concat(property.b, ", ").concat(property.a, ")"));
+    lines.push("".concat(key, ": rgba(").concat(property.r, ", ").concat(property.g, ", ").concat(property.b, ", ").concat(property.a, ") !important"));
   }
   return "".concat(selector, " {").concat(lines.join(';'), "}");
 }
