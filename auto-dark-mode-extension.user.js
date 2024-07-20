@@ -462,14 +462,8 @@ function turnOnDarkMode() {
   var transitionMask = document.querySelector('.autoDarkModeTransitionMask');
   transitionMask.classList.add('autoDarkModeTransitioning');
   transitionMask.addEventListener('animationend', function (e) {
-    transitionMask.classList.add('autoDarkModeFadeOut');
-    transitionMask.addEventListener('animationend', function (e) {
-      transitionMask.classList.remove('autoDarkModeFadeOut');
-      transitionMask.classList.remove('autoDarkModeTransitioning');
-      document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
-    }, {
-      once: true
-    });
+    document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
+    transitionMask.classList.remove('autoDarkModeTransitioning');
   }, {
     once: true
   });
