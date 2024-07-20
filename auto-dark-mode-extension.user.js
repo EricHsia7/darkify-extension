@@ -429,9 +429,12 @@ __webpack_require__.r(interface_namespaceObject);
 
 function initializeCSS() {
   //load css
-  var style = document.createElement('style');
-  style.innerHTML = theme + css;
-  document.body.appendChild(style);
+  var themeLoader = document.createElement('style');
+  themeLoader.innerHTML = theme;
+  document.body.appendChild(themeLoader);
+  var styleLoader = document.createElement('style');
+  styleLoader.innerHTML = style;
+  document.body.appendChild(styleLoader);
 }
 function initializeButton() {
   //add button
