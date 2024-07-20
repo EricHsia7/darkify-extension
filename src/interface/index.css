@@ -15,8 +15,8 @@
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   mask-image: -webkit-radial-gradient(white, black);
   transform: scale(1);
-  backdrop-filter: invert(1) !important;
-  -webkit-backdrop-filter: invert(1) !important;
+  backdrop-filter: invert(1) grayscale(1) !important;
+  -webkit-backdrop-filter: invert(1) grayscale(1) !important;
 }
 
 .darkify_transition_mask.darkify_transitioning {
