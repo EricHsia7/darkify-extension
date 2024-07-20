@@ -410,7 +410,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 ;// CONCATENATED MODULE: ./src/interface/index.css
-/* harmony default export */ const src_interface = (".autoDarkModeTransitionMask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 30px;\n  background-color: var(--d-transparent);\n  z-index: 999;\n  display: block;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline:none;\n  -webkit-tap-highlight-color:rgba(0,0,0,0);\n  -webkit-mask-image: -webkit-radial-gradient(white, black);\n  mask-image: -webkit-radial-gradient(white, black);\n  transform: scale(1);\n}\n\n.autoDarkModeTransitionMask.autoDarkModeTransitioning {\n  animation-duration: 800ms;\n  animation-name: transitioning;\n  animation-iteration-count: forward;\n  animation-timing-function: linear;\n}\n\n@keyframes transitioning {\n0% {\n  opacity:0;\n  transform: scale(1);\n}\n100% {\n  opacity:1;\n  transform: scale(1);\n}\n}\n\n.autoDarkModeSheet {\n  position: fixed;\n  bottom: 0px;\n  left: 0px;\n  width: 100%;\n  height: clamp(100px, 45%, 450px);\n  background-color: var(--d-background-color);\n  backdrop-filter: blur(15px);\n  -webkit-backdrop-filter: blur(15px);\n  z-index: 1001;\n  display: none;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  user-select: none;\n  -webkit-user-select: none;\n}\n\n.autoDarkModeSheet[displayed=\"true\"] {\n  display: block;\n}\n\n.autoDarkModeSheet .autoDarkModeSheetLink {\n  position: relative;\n  width: 100%;\n  height: 45px;\n  user-select: none;\n  -webkit-user-select: none;\n}\n\n.autoDarkModeSheet .autoDarkModeSheetLink .autoDarkModeSheetLinkText {\n  position: absolute;\n  top: 5px;\n  left: 10px;\n  height: 20px;\n  font-size: 15px;\n  white-space: nowrap;\n  word-break: keep-all;\n  overflow: hidden;\n  color: var(--d-text-color);\n  align-items: center;\n}\n\n.autoDarkModeSheet .autoDarkModeSheetLink .autoDarkModeSheetLinkURL {\n  position: absolute;\n  top: 25px;\n  left: 10px;\n  height: 15px;\n  font-size: 10px;\n  white-space: nowrap;\n  word-break: keep-all;\n  overflow: hidden;\n  color: var(--d-url-color);\n  display: flex;\n  align-items: center;\n}\n\n.autoDarkModeButton {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 30px;\n  background-color: var(--d-button-color);\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}");
+/* harmony default export */ const src_interface = (".autoDarkModeTransitionMask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 30px;\n  background-color: var(--d-transparent);\n  z-index: 999;\n  display: block;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-mask-image: -webkit-radial-gradient(white, black);\n  mask-image: -webkit-radial-gradient(white, black);\n  transform: scale(1);\n}\n\n.autoDarkModeTransitionMask.autoDarkModeTransitioning {\n  animation-duration: 800ms;\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-iteration-count: forward;\n  animation-timing-function: linear;\n}\n\n@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n  100% {\n    opacity: 1;\n  }\n}\n\n.autoDarkModeButton {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 30px;\n  background-color: var(--d-button-color);\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}");
 ;// CONCATENATED MODULE: ./src/interface/theme.css
 /* harmony default export */ const theme = (":root {\n  --d-background-color: rgba(255, 255, 255, 0.45);\n  --d-button-color: #ffffff;\n  --d-text-color: #333333;\n  --d-transparent: rgba(0, 0, 0, 0);\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --d-background-color: rgba(0, 0, 0, 0.45);\n    --d-button-color: #333333;\n    --d-text-color: #ffffff;\n    --d-url-color: #d2d2d2;\n  }\n}");
 ;// CONCATENATED MODULE: ./src/interface/index.ts
@@ -431,36 +431,28 @@ function initializeButton() {
   button.classList.add('autoDarkModeButton');
   button.addEventListener('click', function (event) {
     event.preventDefault();
-    openSheet();
+    turnOnDarkMode();
   });
   document.body.appendChild(button);
 }
-function initializeSheet() {
-  //add background of the modal bottom sheet
-  var sheetBackground = document.createElement('div');
-  sheetBackground.classList.add('autoDarkModeSheetBackground');
-  sheetBackground.addEventListener('click', function (event) {
-    event.preventDefault();
-    closeSheet();
-  });
-  document.body.appendChild(sheetBackground);
-
-  //add modal bottom sheet
-  var sheet = document.createElement('div');
-  sheet.classList.add('autoDarkModeSheet');
-  document.body.appendChild(sheet);
+function initializeMask() {
+  var mask = document.createElement('div');
+  mask.classList.add('autoDarkModeTransitionMask');
+  document.body.appendChild(mask);
 }
-function openSheet() {
-  var autoDarkModeSheetElement = document.querySelector('.autoDarkModeSheet');
-  var autoDarkModeSheetBackgroundElement = document.querySelector('.autoDarkModeSheetBackground');
-  autoDarkModeSheetElement.setAttribute('displayed', 'true');
-  autoDarkModeSheetBackgroundElement.setAttribute('displayed', 'true');
+function makeTransitionKeyframes() {
+  var originalWidth = 43;
+  var originalHeight = 43;
+  var targetWidth = window.innerWidth;
+  var targetHeight = window.innerHeight;
 }
-function closeSheet() {
-  var autoDarkModeSheetElement = document.querySelector('.autoDarkModeSheet');
-  var autoDarkModeSheetBackgroundElement = document.querySelector('.autoDarkModeSheetBackground');
-  autoDarkModeSheetElement.setAttribute('displayed', 'false');
-  autoDarkModeSheetBackgroundElement.setAttribute('displayed', 'false');
+function turnOnDarkMode() {
+  var autoDarkModeTransitionMaskElement = document.querySelector('.autoDarkModeTransitionMask');
+  autoDarkModeTransitionMaskElement.setAttribute('displayed', 'true');
+}
+function turnOffDarkMode() {
+  var autoDarkModeTransitionMaskElement = document.querySelector('.autoDarkModeTransitionMask');
+  autoDarkModeTransitionMaskElement.setAttribute('displayed', 'false');
 }
 ;// CONCATENATED MODULE: ./src/index.ts
 
@@ -468,7 +460,7 @@ var md5 = __webpack_require__(503);
 function initialize() {
   initializeCSS();
   initializeButton();
-  initializeSheet();
+  initializeMask();
 }
 var autoDarkMode = {
   initialize: initialize
