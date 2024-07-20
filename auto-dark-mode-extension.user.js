@@ -563,7 +563,7 @@ function getColorInRGBA(element, property) {
 }
 function getColorRelatedProperties(element) {
   var result = {};
-  var list = ['color', 'background-color', 'fill', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
+  var list = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
   var totalR = 0;
   var totalG = 0;
   var totalB = 0;
@@ -588,8 +588,30 @@ function getColorRelatedProperties(element) {
   };
   return result;
 }
+function invertProperties(properties) {
+  var result = {};
+  for (var key in properties) {
+    var property = properties[key];
+    result[key] = Object.assign(invertRGB({
+      r: property.r,
+      g: property.g,
+      b: property.b
+    }), {
+      a: property.a
+    });
+  }
+  return result;
+}
+function propertiesToStyle(selector, properties) {
+  var lines = [];
+  for (var key in properties) {
+    var property = properties[key];
+    lines.push("".concat(key, ": rgba(").concat(property.r, ", ").concat(property.g, ", ").concat(property.b, ", ").concat(property.a, ")"));
+  }
+  return "".concat(selector, " {").concat(lines.join(';'), "}");
+}
 function getDarkModeStyle() {
-  var selectorList = {};
+  var style = [];
   var elements = document.querySelectorAll('body *,body');
   var _iterator = _createForOfIteratorHelper(elements),
     _step;
@@ -598,15 +620,15 @@ function getDarkModeStyle() {
       var element = _step.value;
       var identifier = "i-".concat(md5(Math.random() * new Date().getTime()));
       element.setAttribute('auto-dark-mode-extension', identifier);
-      selectorList[identifier] = getColorRelatedProperties(element);
+      var invertedProperties = invertProperties(getColorRelatedProperties(element));
+      style.push(propertiesToStyle("".concat(element.tagName, "[auto-dark-mode-extension=\"").concat(identifier, "\"]"), invertedProperties));
     }
   } catch (err) {
     _iterator.e(err);
   } finally {
     _iterator.f();
   }
-  console.log(selectorList);
-  return {};
+  return style.join(' ');
 }
 ;// CONCATENATED MODULE: ./src/interface/index.css
 /* harmony default export */ const src_interface = (".autoDarkModeTransitionMask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--d-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-mask-image: -webkit-radial-gradient(white, black);\n  mask-image: -webkit-radial-gradient(white, black);\n  transform: scale(1);\n  backdrop-filter: invert(1) !important;\n  -webkit-backdrop-filter: invert(1) !important;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeTransitioning {\n  animation-duration: 600ms;\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-iteration-count: forward;\n  animation-timing-function: ease-in-out;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeFadeOut {\n  animation-duration: 500ms;\n  animation-name: transitioning-opacity;\n  animation-iteration-count: forward;\n  animation-timing-function: ease-out;\n  animation-direction: reverse;\n}\n\n@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n.autoDarkModeButton {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--d-button-color);\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}");
@@ -654,6 +676,7 @@ function getTransitionKeyframes() {
   return keyframes;
 }
 function turnOnDarkMode() {
+  console.log(getDarkModeStyle());
   var sessionID = "d_".concat(interface_md5(Math.random() * new Date().getTime()));
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = "".concat(sessionID, "_keyframes");
@@ -664,7 +687,6 @@ function turnOnDarkMode() {
   transitionMask.addEventListener('animationend', function (e) {
     document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
     transitionMask.classList.remove('autoDarkModeTransitioning');
-    getDarkModeStyle();
   }, {
     once: true
   });
