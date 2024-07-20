@@ -57,10 +57,7 @@ function rgbToHsl(color: RGB): HSL {
 }
 
 function isGray(color: RGB): boolean {
-  var r = color.r;
-  var g = color.g;
-  var b = color.b;
-  const { s } = rgbToHsl(r, g, b);
+  const { s } = rgbToHsl(color);
   return s <= 0.38;
 }
 
@@ -208,7 +205,7 @@ export function getDarkModeStyle(): object {
     var identifier: string = `i-${md5(Math.random() * new Date().getTime())}`;
     element.setAttribute('auto-dark-mode-extension', identifier);
     var invertedProperties = invertProperties(getColorRelatedProperties(element));
-    style.push(propertiesToStyle(`${element.tagName}[auto-dark-mode-extension="${identifier}"]`, invertedProperties));
+    style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[auto-dark-mode-extension="${identifier}"]`, invertedProperties));
   }
   return style.join(' ');
 }
