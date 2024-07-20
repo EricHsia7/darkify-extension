@@ -1,18 +1,18 @@
 // ==UserScript==
-// @name         Auto Dark Mode
-// @version      0.1.2
-// @description  Darken any website
+// @name         Darkify
+// @version      0.1.3
+// @description  Darkify Any Website
 // @run-at       document-end
-// @grant        GM_xmlhttpRequest
 // @author       erichsia7
 // @inject-into  content
-// @updateURL    https://erichsia7.github.io/auto-dark-mode-extension/auto-dark-mode-extension.user.js
-// @downloadURL  https://erichsia7.github.io/auto-dark-mode-extension/auto-dark-mode-extension.user.js
+// @updateURL    https://erichsia7.github.io/darkify-extension/darkify-extension.user.js
+// @downloadURL  https://erichsia7.github.io/darkify-extension/darkify-extension.user.js
 // @match        *://*/*
 // @exclude      *://*.google.com/*
 // @exclude      *://*.youtube.com/*
+// @exclude      *://github.*/*
 // ==/UserScript==
-var autoDarkMode;
+var darkify;
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -615,10 +615,10 @@ function getDarkModeStyle() {
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var element = _step.value;
-      var identifier = "i-".concat(md5(Math.random() * new Date().getTime()));
-      element.setAttribute('auto-dark-mode-extension', identifier);
+      var identifier = md5(Math.random() * new Date().getTime());
+      element.setAttribute('darkify-extension', identifier);
       var invertedProperties = invertProperties(getColorRelatedProperties(element));
-      style.push(propertiesToStyle("".concat(String(element.tagName).toLowerCase(), "[auto-dark-mode-extension=\"").concat(identifier, "\"]"), invertedProperties));
+      style.push(propertiesToStyle("".concat(String(element.tagName).toLowerCase(), "[darkify-extension=\"").concat(identifier, "\"]"), invertedProperties));
     }
   } catch (err) {
     _iterator.e(err);
@@ -628,9 +628,9 @@ function getDarkModeStyle() {
   return style.join(' ');
 }
 ;// CONCATENATED MODULE: ./src/interface/index.css
-/* harmony default export */ const src_interface = (".autoDarkModeTransitionMask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--auto-dark-mode-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-mask-image: -webkit-radial-gradient(white, black);\n  mask-image: -webkit-radial-gradient(white, black);\n  transform: scale(1);\n  backdrop-filter: invert(1) !important;\n  -webkit-backdrop-filter: invert(1) !important;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeTransitioning {\n  animation-duration: 600ms;\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-iteration-count: forward;\n  animation-timing-function: var(--auto-dark-mode-timing-function);\n}\n\n@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n.autoDarkModeButton {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  z-index: 1000;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: background-color 600ms;\n  transition-timing-function: var(--auto-dark-mode-timing-function);\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);\n}\n\n.autoDarkModeButton svg {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  width: 23px;\n  height: 23px;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: opacity 600ms;\n  transition-timing-function: var(--auto-dark-mode-timing-function);\n}\n\n.autoDarkModeButton svg path {\n  transition: fill 600ms;\n  transition-timing-function: var(--auto-dark-mode-timing-function);\n}\n\n.autoDarkModeButton[dark-mode=\"true\"] {\n  background-color: var(--auto-dark-mode-333333);\n}\n\n.autoDarkModeButton[dark-mode=\"true\"] svg path {\n  fill: var(--auto-dark-mode-ffffff);\n}\n\n.autoDarkModeButton[dark-mode=\"true\"] svg[mode=\"light\"] {\n  opacity: 0;\n}\n\n.autoDarkModeButton[dark-mode=\"true\"] svg[mode=\"dark\"] {\n  opacity: 1;\n}\n\n.autoDarkModeButton[dark-mode=\"false\"] {\n  background-color: var(--auto-dark-mode-ffffff);\n}\n\n.autoDarkModeButton[dark-mode=\"false\"] svg path {\n  fill: var(--auto-dark-mode-333333);\n}\n\n.autoDarkModeButton[dark-mode=\"false\"] svg[mode=\"light\"] {\n  opacity: 1;\n}\n\n.autoDarkModeButton[dark-mode=\"false\"] svg[mode=\"dark\"] {\n  opacity: 0;\n}");
+/* harmony default export */ const src_interface = (".darkify_transition_mask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--darkify-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-mask-image: -webkit-radial-gradient(white, black);\n  mask-image: -webkit-radial-gradient(white, black);\n  transform: scale(1);\n  backdrop-filter: invert(1) !important;\n  -webkit-backdrop-filter: invert(1) !important;\n}\n\n.darkify_transition_mask.darkify_transitioning {\n  animation-duration: 600ms;\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-iteration-count: forward;\n  animation-timing-function: var(--darkify-timing-function);\n}\n\n@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n.darkify_button {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  z-index: 1000;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: background-color 600ms;\n  transition-timing-function: var(--darkify-timing-function);\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);\n}\n\n.darkify_button svg {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  width: 23px;\n  height: 23px;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: opacity 600ms;\n  transition-timing-function: var(--darkify-timing-function);\n}\n\n.darkify_button svg path {\n  transition: fill 600ms;\n  transition-timing-function: var(--darkify-timing-function);\n}\n\n.darkify_button[dark-mode=\"true\"] {\n  background-color: var(--darkify-333333);\n}\n\n.darkify_button[dark-mode=\"true\"] svg path {\n  fill: var(--darkify-ffffff);\n}\n\n.darkify_button[dark-mode=\"true\"] svg[mode=\"light\"] {\n  opacity: 0;\n}\n\n.darkify_button[dark-mode=\"true\"] svg[mode=\"dark\"] {\n  opacity: 1;\n}\n\n.darkify_button[dark-mode=\"false\"] {\n  background-color: var(--darkify-ffffff);\n}\n\n.darkify_button[dark-mode=\"false\"] svg path {\n  fill: var(--darkify-333333);\n}\n\n.darkify_button[dark-mode=\"false\"] svg[mode=\"light\"] {\n  opacity: 1;\n}\n\n.darkify_button[dark-mode=\"false\"] svg[mode=\"dark\"] {\n  opacity: 0;\n}");
 ;// CONCATENATED MODULE: ./src/interface/theme.css
-/* harmony default export */ const theme = (":root {\n  --auto-dark-mode-ffffff: #ffffff;\n  --auto-dark-mode-333333: #333333;\n  --auto-dark-mode-transparent: rgba(0, 0, 0, 0);\n  --auto-dark-mode-timing-function: cubic-bezier(0.77, 0, 0.175, 1);\n}");
+/* harmony default export */ const theme = (":root {\n  --darkify-ffffff: #ffffff;\n  --darkify-333333: #333333;\n  --darkify-transparent: rgba(0, 0, 0, 0);\n  --darkify-timing-function: cubic-bezier(0.77, 0, 0.175, 1);\n}");
 ;// CONCATENATED MODULE: ./src/interface/index.ts
 
 
@@ -644,14 +644,14 @@ function initializeCSS() {
   var styleLoader = document.createElement('style');
   styleLoader.innerHTML = src_interface;
   document.documentElement.appendChild(styleLoader);
-  var darkModeStyleLoader = document.createElement('style');
-  darkModeStyleLoader.classList.add('darkModeStyleLoader');
-  document.documentElement.appendChild(darkModeStyleLoader);
+  var dark_mode_style_loader = document.createElement('style');
+  dark_mode_style_loader.classList.add('dark_mode_style_loader');
+  document.documentElement.appendChild(dark_mode_style_loader);
 }
 function initializeButton() {
   //add button
   var button = document.createElement('div');
-  button.classList.add('autoDarkModeButton');
+  button.classList.add('darkify_button');
   button.setAttribute('dark-mode', 'false');
   button.innerHTML = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\" mode=\"light\"><path d=\"M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0 60q-74.92 0-127.46-52.54Q300-405.08 300-480q0-74.92 52.54-127.46Q405.08-660 480-660q74.92 0 127.46 52.54Q660-554.92 660-480q0 74.92-52.54 127.46Q554.92-300 480-300ZM80-450q-12.75 0-21.37-8.63Q50-467.26 50-480.01q0-12.76 8.63-21.37Q67.25-510 80-510h90q12.75 0 21.38 8.63 8.62 8.63 8.62 21.38 0 12.76-8.62 21.37Q182.75-450 170-450H80Zm710 0q-12.75 0-21.38-8.63-8.62-8.63-8.62-21.38 0-12.76 8.62-21.37Q777.25-510 790-510h90q12.75 0 21.37 8.63 8.63 8.63 8.63 21.38 0 12.76-8.63 21.37Q892.75-450 880-450h-90ZM479.99-760q-12.76 0-21.37-8.62Q450-777.25 450-790v-90q0-12.75 8.63-21.37 8.63-8.63 21.38-8.63 12.76 0 21.37 8.63Q510-892.75 510-880v90q0 12.75-8.63 21.38-8.63 8.62-21.38 8.62Zm0 710q-12.76 0-21.37-8.63Q450-67.25 450-80v-90q0-12.75 8.63-21.38 8.63-8.62 21.38-8.62 12.76 0 21.37 8.62Q510-182.75 510-170v90q0 12.75-8.63 21.37Q492.74-50 479.99-50ZM240.23-678.38l-50.31-48.93q-8.92-8.31-8.61-20.88.31-12.58 8.73-21.89 9.19-9.3 21.58-9.3 12.38 0 21.07 9.3L282-720.15q8.69 9.3 8.69 21.07t-8.5 21.08q-8.5 9.31-20.57 8.81-12.08-.5-21.39-9.19Zm487.08 488.46L678-239.85q-8.69-9.3-8.69-21.38 0-12.08 8.69-20.77 8.12-9.31 20.29-8.81t21.48 9.19l50.31 48.93q8.92 8.31 8.61 20.88-.31 12.58-8.73 21.89-9.19 9.3-21.58 9.3-12.38 0-21.07-9.3ZM678-677.81q-9.31-8.5-8.81-20.57.5-12.08 9.19-21.39l48.93-50.31q8.31-8.92 20.88-8.61 12.58.31 21.89 8.73 9.3 9.19 9.3 21.58 0 12.38-9.3 21.07L720.15-678q-9.3 8.69-21.07 8.69t-21.08-8.5ZM189.92-189.84q-9.3-9.39-9.3-21.78 0-12.38 9.3-21.07L239.85-282q9.3-8.69 21.38-8.69 12.08 0 20.77 8.69 8.92 8.12 8.42 20.29t-8.8 21.48l-48.93 50.31q-8.69 9.3-21.07 9-12.39-.31-21.7-8.92ZM480-480Z\"/></svg><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\" mode=\"dark\"><path d=\"M481.15-140Q339-140 240.08-238.92 141.16-337.85 141.16-480q0-118.38 73.26-210.46 73.27-92.08 195.19-118.69 12.62-3.16 22.23.61 9.62 3.77 15.62 11.23 6 7.47 7.08 18.12 1.07 10.65-5 21.27-12.39 22.54-18.39 46.83t-6 51.09q0 98.33 68.84 167.17Q562.82-424 661.15-424q29.47 0 56.31-7.46 26.85-7.46 47-17.31 9.85-4.3 19.23-3.04 9.39 1.27 16.02 6.27 7.37 5 10.94 13.66 3.58 8.65.81 20.34-21.31 118-114.81 194.77Q603.15-140 481.15-140Zm0-60q88 0 158-48.5t102-126.5q-20 5-40 8t-40 3q-123 0-209.5-86.5T365.15-660q0-20 3-40t8-40q-78 32-126.5 102t-48.5 158q0 116 82 198t198 82Zm-10-270Z\"/></svg> ";
   button.addEventListener('click', function (event) {
@@ -662,7 +662,7 @@ function initializeButton() {
 }
 function initializeMask() {
   var mask = document.createElement('div');
-  mask.classList.add('autoDarkModeTransitionMask');
+  mask.classList.add('darkify_transition_mask');
   document.documentElement.appendChild(mask);
 }
 function getTransitionKeyframes() {
@@ -684,12 +684,12 @@ function turnOnDarkMode() {
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
   var darkModeStyle = getDarkModeStyle();
-  var transitionMask = document.querySelector('.autoDarkModeTransitionMask');
-  transitionMask.classList.add('autoDarkModeTransitioning');
+  var transitionMask = document.querySelector('.darkify_transition_mask');
+  transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener('animationend', function (e) {
     document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
-    transitionMask.classList.remove('autoDarkModeTransitioning');
-    document.querySelector('style.darkModeStyleLoader').innerHTML = darkModeStyle;
+    transitionMask.classList.remove('darkify_transitioning');
+    document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle;
   }, {
     once: true
   });
@@ -700,18 +700,18 @@ function turnOffDarkMode() {
   keyframesLoader.id = "".concat(sessionID, "_keyframes");
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
-  var transitionMask = document.querySelector('.autoDarkModeTransitionMask');
-  transitionMask.classList.add('autoDarkModeTransitioning');
+  var transitionMask = document.querySelector('.darkify_transition_mask');
+  transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener('animationend', function (e) {
     document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
-    transitionMask.classList.remove('autoDarkModeTransitioning');
-    document.querySelector('style.darkModeStyleLoader').innerHTML = '';
+    transitionMask.classList.remove('darkify_transitioning');
+    document.querySelector('style.dark_mode_style_loader').innerHTML = '';
   }, {
     once: true
   });
 }
 function switchDarkMode() {
-  var button = document.querySelector('.autoDarkModeButton');
+  var button = document.querySelector('.darkify_button');
   var currentMode = button.getAttribute('dark-mode');
   if (currentMode === 'false') {
     turnOnDarkMode();
@@ -728,13 +728,13 @@ function initialize() {
   initializeButton();
   initializeMask();
 }
-var autoDarkMode = {
+var darkify = {
   initialize: initialize
 };
-autoDarkMode.initialize();
-/* harmony default export */ const src = (autoDarkMode);
+darkify.initialize();
+/* harmony default export */ const src = (darkify);
 })();
 
-autoDarkMode = __webpack_exports__["default"];
+darkify = __webpack_exports__["default"];
 /******/ })()
 ;
