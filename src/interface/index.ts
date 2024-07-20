@@ -1,9 +1,8 @@
 import { getDarkModeStyle } from '../core/index.ts';
+import { generateID } from '../tools/index.ts';
 
 import style from './index.css';
 import theme from './theme.css';
-
-const md5 = require('md5');
 
 export function initializeCSS(): void {
   //load css
@@ -51,7 +50,7 @@ function getTransitionKeyframes(): string {
 }
 
 function turnOnDarkMode(): void {
-  var sessionID: string = `d_${md5(Math.random() * new Date().getTime())}`;
+  var sessionID: string = generateID('d_');
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = `${sessionID}_keyframes`;
   keyframesLoader.innerHTML = getTransitionKeyframes();
@@ -71,7 +70,7 @@ function turnOnDarkMode(): void {
 }
 
 function turnOffDarkMode(): void {
-  var sessionID: string = `d_${md5(Math.random() * new Date().getTime())}`;
+  var sessionID: string = generateID('d_');
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = `${sessionID}_keyframes`;
   keyframesLoader.innerHTML = getTransitionKeyframes();

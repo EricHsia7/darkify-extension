@@ -1,4 +1,4 @@
-const md5 = require('md5');
+import { generateID } from '../tools/index.ts';
 
 interface RGBA {
   r: number;
@@ -208,7 +208,7 @@ export function getDarkModeStyle(): object {
   var style = [];
   var elements = document.querySelectorAll('body *,body');
   for (var element of elements) {
-    var identifier: string = md5(Math.random() * new Date().getTime());
+    var identifier: string = generateID('');
     element.setAttribute('darkify-extension', identifier);
     var invertedProperties = invertProperties(getColorRelatedProperties(element));
     style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties));
