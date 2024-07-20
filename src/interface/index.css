@@ -20,18 +20,10 @@
 }
 
 .autoDarkModeTransitionMask.autoDarkModeTransitioning {
-  animation-duration: 600ms;
+  animation-duration: 700ms;
   animation-name: transitioning-opacity, transitioning-zoom;
   animation-iteration-count: forward;
   animation-timing-function: ease-in-out;
-}
-
-.autoDarkModeTransitionMask.autoDarkModeFadeOut {
-  animation-duration: 500ms;
-  animation-name: transitioning-opacity;
-  animation-iteration-count: forward;
-  animation-timing-function: ease-out;
-  animation-direction: reverse;
 }
 
 @keyframes transitioning-opacity {
@@ -39,9 +31,18 @@
     opacity: 0;
   }
 
-  100% {
+  75% {
     opacity: 1;
   }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+
 }
 
 .autoDarkModeButton {

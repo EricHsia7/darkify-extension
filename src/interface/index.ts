@@ -9,10 +9,10 @@ export function initializeCSS(): void {
   //load css
   var themeLoader = document.createElement('style');
   themeLoader.innerHTML = theme;
-  document.body.appendChild(themeLoader);
+  document.documentElement.appendChild(themeLoader);
   var styleLoader = document.createElement('style');
   styleLoader.innerHTML = style;
-  document.body.appendChild(styleLoader);
+  document.documentElement.appendChild(styleLoader);
 }
 
 export function initializeButton(): void {
@@ -23,13 +23,13 @@ export function initializeButton(): void {
     event.preventDefault();
     turnOnDarkMode();
   });
-  document.body.appendChild(button);
+  document.documentElement.appendChild(button);
 }
 
 export function initializeMask(): void {
   var mask = document.createElement('div');
   mask.classList.add('autoDarkModeTransitionMask');
-  document.body.appendChild(mask);
+  document.documentElement.appendChild(mask);
 }
 
 function getTransitionKeyframes(): string {
@@ -51,7 +51,7 @@ export function turnOnDarkMode(): void {
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = `${sessionID}_keyframes`;
   keyframesLoader.innerHTML = getTransitionKeyframes();
-  document.body.appendChild(keyframesLoader);
+  document.documentElement.appendChild(keyframesLoader);
 
   var transitionMask = document.querySelector('.autoDarkModeTransitionMask');
   transitionMask.classList.add('autoDarkModeTransitioning');
@@ -62,7 +62,7 @@ export function turnOnDarkMode(): void {
       transitionMask.classList.remove('autoDarkModeTransitioning');
       var styleLoader = document.createElement('style');
       styleLoader.innerHTML = getDarkModeStyle();
-      document.body.appendChild(styleLoader);
+      document.documentElement.appendChild(styleLoader);
     },
     { once: true }
   );
