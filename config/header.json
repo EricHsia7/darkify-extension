@@ -1,6 +1,6 @@
 {
   "name": "Auto Dark Mode",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Darken any website",
   "run-at": "document-end",
   "grant": "GM_xmlhttpRequest",

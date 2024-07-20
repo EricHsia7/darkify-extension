@@ -1,6 +1,6 @@
 {
   "name": "@erichsia7/auto-dark-mode-extension",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Preload links",
   "main": "dist/auto-dark-mode-extension.user.js",
   "private": false,

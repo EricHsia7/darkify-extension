@@ -1,19 +1,32 @@
-// Function to convert hex to RGB
-function hexToRgb(hex) {
-  hex = hex.replace(/^#/, '');
-  let bigint = parseInt(hex, 16);
-  let r = (bigint >> 16) & 255;
-  let g = (bigint >> 8) & 255;
-  let b = bigint & 255;
+const md5 = require('md5');
 
-  return { r, g, b };
+interface RGBA {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
 }
 
-// Function to convert RGB to HSL
-function rgbToHsl(r, g, b) {
-  r /= 255;
-  g /= 255;
-  b /= 255;
+interface RGB {
+  r: number;
+  g: number;
+  b: number;
+}
+
+interface HSL {
+  h: number;
+  s: number;
+  l: number;
+}
+
+type hex = string;
+
+type colorRelatedProperty = 'color' | 'background-color' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color';
+
+function rgbToHsl(color: RGB): HSL {
+  var r = color.r / 255;
+  var g = color.g / 255;
+  var b = color.b / 255;
 
   let max = Math.max(r, g, b);
   let min = Math.min(r, g, b);
@@ -43,92 +56,44 @@ function rgbToHsl(r, g, b) {
   return { h, s, l };
 }
 
-// Function to determine if a color is gray
-function isGray(hex) {
-  const { r, g, b } = hexToRgb(hex);
+function isGray(color: RGB): boolean {
+  var r = color.r;
+  var g = color.g;
+  var b = color.b;
   const { s } = rgbToHsl(r, g, b);
   return s <= 0.38;
 }
 
-// Function to convert RGB to hex
-function rgbToHex(r, g, b) {
+function rgbToHex(color: RGB): hex {
+  var r = color.r;
+  var g = color.g;
+  var b = color.b;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
 
-// Function to convert RGBA to hex
-function rgbaToHex(r, g, b, a) {
-  let alpha = Math.round(a * 255);
+function rgbaToHex(color: RGBA): hex {
+  var r = color.r;
+  var g = color.g;
+  var b = color.b;
+  var a = Math.round(color.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
 
-// Function to invert a color
-function invertColor(hex) {
-  let r = parseInt(hex.slice(1, 3), 16);
-  let g = parseInt(hex.slice(3, 5), 16);
-  let b = parseInt(hex.slice(5, 7), 16);
-  let invertedColor = isGray(hex) ? rgbToHex(255 - r, 255 - g, 255 - b) : hex;
-  return invertedColor;
+function invertRGB(color: RGB): RGB {
+  var r = 255 - color.r;
+  var g = 255 - color.g;
+  var b = 255 - color.b;
+  return isGray(color) ? { r, g, b } : color;
 }
 
-// Function to darken the background color
-function darkenColor(hex, percent) {
-  let r = parseInt(hex.slice(1, 3), 16);
-  let g = parseInt(hex.slice(3, 5), 16);
-  let b = parseInt(hex.slice(5, 7), 16);
-
-  r = Math.floor(r * (1 - percent / 100));
-  g = Math.floor(g * (1 - percent / 100));
-  b = Math.floor(b * (1 - percent / 100));
-
-  return rgbToHex(r, g, b);
+function darkenRGB(color: RGB, percent: number): RGB {
+  var r = Math.floor(color.r * (1 - percent / 100));
+  var g = Math.floor(color.g * (1 - percent / 100));
+  var b = Math.floor(color.b * (1 - percent / 100));
+  return { r, g, b };
 }
 
-// Function to extract and convert color
-function extractAndConvertColor(color) {
-  let rgbValues = color.match(/\d+/g);
-  let r = parseInt(rgbValues[0]);
-  let g = parseInt(rgbValues[1]);
-  let b = parseInt(rgbValues[2]);
-  let a = rgbValues[3] ? parseFloat(rgbValues[3]) : 1;
-
-  let hexColor;
-  if (a === 1) {
-    hexColor = rgbToHex(r, g, b);
-  } else {
-    hexColor = rgbaToHex(r, g, b, a);
-  }
-  return hexColor;
-}
-
-// Function to apply dark mode style
-function applyDarkModeStyle(targetElement) {
-  const computedStyle = getComputedStyle(targetElement);
-
-  // Extract and convert text color
-  const color = computedStyle.color;
-  const hexColor = extractAndConvertColor(color);
-  const invertedColor = invertColor(hexColor);
-  targetElement.style.color = invertedColor;
-
-  // Extract and convert background color
-  const backgroundColor = computedStyle.backgroundColor;
-  const hexBackgroundColor = extractAndConvertColor(backgroundColor);
-  const darkenedBackgroundColor = darkenColor(hexBackgroundColor, 90); // Darken by 90%
-  targetElement.style.backgroundColor = darkenedBackgroundColor;
-
-  // Extract and convert background color
-  const borderColor = computedStyle.borderColor;
-  const hexBorderColor = extractAndConvertColor(borderColor);
-  const darkenedborderColor = darkenColor(hexBorderColor, 80); // Darken by 50%
-  targetElement.style.borderColor = darkenedborderColor;
-}
-
-var elements = document.querySelectorAll('body *,body');
-for (var e of elements) {
-  applyDarkModeStyle(e);
-}
-
-function getColorInRGBA(element, property) {
+function getColorInRGBA(element: HTMLElement, property: colorRelatedProperty): RGBA {
   const style = getComputedStyle(element);
   let color = style.getPropertyValue(property).trim();
 
@@ -196,7 +161,36 @@ function getColorInRGBA(element, property) {
   }
 }
 
-// Example usage:
-const element = document.getElementById('myElement');
-const backgroundColorRGBA = getColorInRGBA(element, 'background-color');
-console.log(backgroundColorRGBA);
+function getColorRelatedProperties(element: HTMLElement): object {
+  var result: object = {};
+  var list: colorRelatedProperty[] = ['color', 'background-color', 'fill', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
+  var totalR: number = 0;
+  var totalG: number = 0;
+  var totalB: number = 0;
+  var totalA: number = 0;
+  for (var property of list) {
+    result[property] = getColorInRGBA(element, property);
+    totalR += result[property].r;
+    totalG += result[property].g;
+    totalB += result[property].b;
+    totalA += result[property].a;
+  }
+  var averageR: number = totalR / list.length;
+  var averageG: number = totalG / list.length;
+  var averageB: number = totalB / list.length;
+  var averageA: number = totalA / list.length;
+  result['average'] = { r: averageR, g: averageG, b: averageB, a: averageA };
+  return result;
+}
+
+function getDarkModeStyle(): object {
+  var selectorList = {};
+  var elements = document.querySelectorAll('body *,body');
+  for (var element of elements) {
+    var identifier: string = `i-${md5(Math.random() * new Date().getTime())}`;
+    element.setAttribute('auto-dark-mode-extension', identifier);
+    selectorList[identifier] = getColorRelatedProperties(element);
+  }
+  console.log(selectorList);
+  return {};
+}
