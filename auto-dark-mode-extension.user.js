@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Dark Mode
-// @version      0.0.4
+// @version      0.0.5
 // @description  Darken any website
 // @run-at       document-end
 // @grant        GM_xmlhttpRequest
@@ -448,10 +448,7 @@ function rgbToHsl(color) {
   };
 }
 function isGray(color) {
-  var r = color.r;
-  var g = color.g;
-  var b = color.b;
-  var _rgbToHsl = rgbToHsl(r, g, b),
+  var _rgbToHsl = rgbToHsl(color),
     s = _rgbToHsl.s;
   return s <= 0.38;
 }
@@ -621,7 +618,7 @@ function getDarkModeStyle() {
       var identifier = "i-".concat(md5(Math.random() * new Date().getTime()));
       element.setAttribute('auto-dark-mode-extension', identifier);
       var invertedProperties = invertProperties(getColorRelatedProperties(element));
-      style.push(propertiesToStyle("".concat(element.tagName, "[auto-dark-mode-extension=\"").concat(identifier, "\"]"), invertedProperties));
+      style.push(propertiesToStyle("".concat(String(element.tagName).toLowerCase(), "[auto-dark-mode-extension=\"").concat(identifier, "\"]"), invertedProperties));
     }
   } catch (err) {
     _iterator.e(err);
