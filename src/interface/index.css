@@ -1,46 +1,27 @@
-:root {
-  --wp-gray: #d2d2d2;
-  --wp-red: #ea3323;
-  --wp-yellow: #ffb505;
-  --wp-green: #51a577;
-  --wp-background-color: rgba(255, 255, 255, 0.45);
-  --wp-text-color: #333333;
-  --wp-url-color: #888888;
-  --wp-transparent: rgba(0, 0, 0, 0);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --wp-background-color: rgba(0, 0, 0, 0.45);
-    --wp-text-color: #ffffff;
-    --wp-url-color: #d2d2d2;
-  }
-}
-
-.webPreloaderSheetBackground {
+.autoDarkModeSheetBackground {
   position: fixed;
   top: 0px;
   left: 0px;
   width: 100%;
   height: 100%;
-  background-color: var(--wp-transparent);
+  background-color: var(--d-transparent);
   z-index: 1000;
   display: none;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.webPreloaderSheetBackground[displayed="true"] {
+.autoDarkModeSheetBackground[displayed="true"] {
   display: block;
 }
 
-.webPreloaderSheet {
+.autoDarkModeSheet {
   position: fixed;
   bottom: 0px;
   left: 0px;
   width: 100%;
   height: clamp(100px, 45%, 450px);
-  background-color: var(--wp-background-color);
+  background-color: var(--d-background-color);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   z-index: 1001;
@@ -51,11 +32,11 @@
   -webkit-user-select: none;
 }
 
-.webPreloaderSheet[displayed="true"] {
+.autoDarkModeSheet[displayed="true"] {
   display: block;
 }
 
-.webPreloaderSheet .webPreloaderSheetLink {
+.autoDarkModeSheet .autoDarkModeSheetLink {
   position: relative;
   width: 100%;
   height: 45px;
@@ -63,7 +44,7 @@
   -webkit-user-select: none;
 }
 
-.webPreloaderSheet .webPreloaderSheetLink .webPreloaderSheetLinkText {
+.autoDarkModeSheet .autoDarkModeSheetLink .autoDarkModeSheetLinkText {
   position: absolute;
   top: 5px;
   left: 10px;
@@ -72,11 +53,11 @@
   white-space: nowrap;
   word-break: keep-all;
   overflow: hidden;
-  color: var(--wp-text-color);
+  color: var(--d-text-color);
   align-items: center;
 }
 
-.webPreloaderSheet .webPreloaderSheetLink .webPreloaderSheetLinkURL {
+.autoDarkModeSheet .autoDarkModeSheetLink .autoDarkModeSheetLinkURL {
   position: absolute;
   top: 25px;
   left: 10px;
@@ -85,32 +66,32 @@
   white-space: nowrap;
   word-break: keep-all;
   overflow: hidden;
-  color: var(--wp-url-color);
+  color: var(--d-url-color);
   display: flex;
   align-items: center;
 }
 
-.webPreloaderButton {
+.autoDarkModeButton {
   width: 15px;
   height: 15px;
   position: fixed;
   bottom: 10px;
   left: 10px;
   border-radius: 15px;
-  background-color: var(--wp-gray);
+  background-color: var(--d-gray);
   z-index: 999;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.webPreloaderButton[status="2"] {
-  background-color: var(--wp-green);
+.autoDarkModeButton[status="2"] {
+  background-color: var(--d-green);
 }
 
-.webPreloaderButton[status="1"] {
-  background-color: var(--wp-yellow);
+.autoDarkModeButton[status="1"] {
+  background-color: var(--d-yellow);
 }
 
-.webPreloaderButton[status="0"] {
-  background-color: var(--wp-red);
+.autoDarkModeButton[status="0"] {
+  background-color: var(--d-red);
 }

@@ -9,16 +9,6 @@
       "name": "YouTube",
       "pattern": "*://*.youtube.com/*",
       "description": "To avoid reCAPTCHA."
-    },
-    {
-      "name": "GitHub",
-      "pattern": "*://github.*/*",
-      "description": "Is faster enough."
-    },
-    {
-      "name": "Notion",
-      "pattern": "*://*.notion.so/*",
-      "description": "With no quantative links."
     }
   ]
 }

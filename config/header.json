@@ -1,12 +1,12 @@
 {
-  "name": "Web Preloader",
-  "version": "0.2.5",
-  "description": "Preload links",
+  "name": "Auto Dark Mode",
+  "version": "0.0.1",
+  "description": "Darken any website",
   "run-at": "document-end",
   "grant": "GM_xmlhttpRequest",
   "author": "erichsia7",
   "inject-into": "content",
-  "updateURL": "https://erichsia7.github.io/web-preloader/web-preloader.user.js",
-  "downloadURL": "https://erichsia7.github.io/web-preloader/web-preloader.user.js",
+  "updateURL": "https://erichsia7.github.io/auto-dark-mode-extension/auto-dark-mode-extension.user.js",
+  "downloadURL": "https://erichsia7.github.io/auto-dark-mode-extension/auto-dark-mode-extension.user.js",
   "match": "*://*/*"
 }
