@@ -51,6 +51,9 @@
   -webkit-user-select: none;
   transition: background-color 600ms;
   transition-timing-function: var(--auto-dark-mode-timing-function);
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);
 }
 
 .autoDarkModeButton svg {
