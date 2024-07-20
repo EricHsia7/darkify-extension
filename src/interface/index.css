@@ -70,6 +70,8 @@
   height: 23px;
   user-select: none;
   -webkit-user-select: none;
+  transition: opacity 600ms;
+  transition-timing-function: ease-in-out;
 }
 
 .autoDarkModeButton svg path {
@@ -101,10 +103,10 @@
   fill: var(--d-333333);
 }
 
-.autoDarkModeButton[dark-mode="true"] svg[mode="light"] {
+.autoDarkModeButton[dark-mode="false"] svg[mode="light"] {
   opacity: 1;
 }
 
-.autoDarkModeButton[dark-mode="true"] svg[mode="dark"] {
+.autoDarkModeButton[dark-mode="false"] svg[mode="dark"] {
   opacity: 0;
 }
