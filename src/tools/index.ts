@@ -7,5 +7,6 @@ export function generateID(prefix: string): string {
     var randomNumber = Math.round(Math.random() * bulkLen);
     result += bulk.substring(randomNumber, randomNumber + 1);
   }
+  result = prefix + result;
   return result;
 }
