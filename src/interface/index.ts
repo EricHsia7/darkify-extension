@@ -52,7 +52,7 @@ export function turnOnDarkMode(): void {
   keyframesLoader.id = `${sessionID}_keyframes`;
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
-
+  var darkModeStyle = getDarkModeStyle();
   var transitionMask = document.querySelector('.autoDarkModeTransitionMask');
   transitionMask.classList.add('autoDarkModeTransitioning');
   transitionMask.addEventListener(
@@ -61,7 +61,7 @@ export function turnOnDarkMode(): void {
       document.querySelector(`style#${sessionID}_keyframes`).remove();
       transitionMask.classList.remove('autoDarkModeTransitioning');
       var styleLoader = document.createElement('style');
-      styleLoader.innerHTML = getDarkModeStyle();
+      styleLoader.innerHTML = darkModeStyle;
       document.documentElement.appendChild(styleLoader);
     },
     { once: true }
