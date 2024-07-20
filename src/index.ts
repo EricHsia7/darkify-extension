@@ -1,11 +1,11 @@
-import { initializeButton, initializeCSS, initializeSheet } from './interface/index.ts';
+import { initializeButton, initializeCSS, initializeMask } from './interface/index.ts';
 
 const md5 = require('md5');
 
 function initialize(): void {
   initializeCSS();
   initializeButton();
-  initializeSheet();
+  initializeMask();
 }
 
 var autoDarkMode = {

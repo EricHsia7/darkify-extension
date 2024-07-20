@@ -17,37 +17,32 @@ export function initializeButton(): void {
   button.classList.add('autoDarkModeButton');
   button.addEventListener('click', function (event) {
     event.preventDefault();
-    openSheet();
+    turnOnDarkMode();
   });
   document.body.appendChild(button);
 }
 
-export function initializeSheet(): void {
-  //add background of the modal bottom sheet
-  var sheetBackground = document.createElement('div');
-  sheetBackground.classList.add('autoDarkModeSheetBackground');
-  sheetBackground.addEventListener('click', function (event) {
-    event.preventDefault();
-    closeSheet();
-  });
-  document.body.appendChild(sheetBackground);
-
-  //add modal bottom sheet
-  var sheet = document.createElement('div');
-  sheet.classList.add('autoDarkModeSheet');
-  document.body.appendChild(sheet);
+export function initializeMask(): void {
+  var mask = document.createElement('div');
+  mask.classList.add('autoDarkModeTransitionMask');
+  document.body.appendChild(mask);
 }
 
-export function openSheet(): void {
-  const autoDarkModeSheetElement = document.querySelector('.autoDarkModeSheet');
-  const autoDarkModeSheetBackgroundElement = document.querySelector('.autoDarkModeSheetBackground');
-  autoDarkModeSheetElement.setAttribute('displayed', 'true');
-  autoDarkModeSheetBackgroundElement.setAttribute('displayed', 'true');
+function makeTransitionKeyframes(): string {
+  var originalWidth = 43
+  var originalHeight = 43
+  var targetWidth = window.innerWidth;
+  var targetHeight = window.innerHeight;
+  
+  
 }
 
-export function closeSheet(): void {
-  const autoDarkModeSheetElement = document.querySelector('.autoDarkModeSheet');
-  const autoDarkModeSheetBackgroundElement = document.querySelector('.autoDarkModeSheetBackground');
-  autoDarkModeSheetElement.setAttribute('displayed', 'false');
-  autoDarkModeSheetBackgroundElement.setAttribute('displayed', 'false');
+export function turnOnDarkMode(): void {
+  const autoDarkModeTransitionMaskElement = document.querySelector('.autoDarkModeTransitionMask');
+  autoDarkModeTransitionMaskElement.setAttribute('displayed', 'true');
+}
+
+export function turnOffDarkMode(): void {
+  const autoDarkModeTransitionMaskElement = document.querySelector('.autoDarkModeTransitionMask');
+  autoDarkModeTransitionMaskElement.setAttribute('displayed', 'false');
 }
