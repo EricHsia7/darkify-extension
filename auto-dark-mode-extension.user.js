@@ -410,7 +410,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 ;// CONCATENATED MODULE: ./src/interface/index.css
-/* harmony default export */ const src_interface = (".autoDarkModeTransitionMask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--d-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-mask-image: -webkit-radial-gradient(white, black);\n  mask-image: -webkit-radial-gradient(white, black);\n  transform: scale(1);\n  backdrop-filter: invert(1) !important;\n  -webkit-backdrop-filter: invert(1) !important;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeTransitioning {\n  animation-duration: 800ms;\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-iteration-count: forward;\n  animation-timing-function: linear;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeFadeOut {\n  animation-duration: 350ms;\n  animation-name: transitioning-opacity;\n  animation-iteration-count: forward;\n  animation-timing-function: linear;\n  animation-direction: reverse;\n}\n\n@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n.autoDarkModeButton {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--d-button-color);\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}");
+/* harmony default export */ const src_interface = (".autoDarkModeTransitionMask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--d-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-mask-image: -webkit-radial-gradient(white, black);\n  mask-image: -webkit-radial-gradient(white, black);\n  transform: scale(1);\n  backdrop-filter: invert(1) !important;\n  -webkit-backdrop-filter: invert(1) !important;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeTransitioning {\n  animation-duration: 600ms;\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-iteration-count: forward;\n  animation-timing-function: ease-in-out;\n}\n\n.autoDarkModeTransitionMask.autoDarkModeFadeOut {\n  animation-duration: 500ms;\n  animation-name: transitioning-opacity;\n  animation-iteration-count: forward;\n  animation-timing-function: ease-out;\n  animation-direction: reverse;\n}\n\n@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n.autoDarkModeButton {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--d-button-color);\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}");
 ;// CONCATENATED MODULE: ./src/interface/theme.css
 /* harmony default export */ const theme = (":root {\n  --d-background-color: rgba(255, 255, 255, 0.45);\n  --d-button-color: #ffffff;\n  --d-text-color: #333333;\n  --d-transparent: rgba(0, 0, 0, 0);\n}\n\n@media (prefers-color-scheme: dark) {\n  :root {\n    --d-background-color: rgba(0, 0, 0, 0.45);\n    --d-button-color: #333333;\n    --d-text-color: #ffffff;\n    --d-url-color: #d2d2d2;\n  }\n}");
 ;// CONCATENATED MODULE: ./src/interface/index.ts
@@ -447,10 +447,10 @@ function getTransitionKeyframes() {
   var radius = 43 / 2;
   var centerX = 12 + radius;
   var centerY = windowHeight - (12 + radius);
-  var cornerX = windowWidth;
-  var cornerY = 0;
+  var cornerX = windowWidth + 20;
+  var cornerY = -20;
   var scale = Math.sqrt(Math.pow(cornerX - centerX, 2) + Math.pow(cornerY - centerY, 2)) / radius;
-  var keyframes = "@keyframes transitioning-zoom { 0%{transform: scale(1);} 100% {transform: scale(".concat(scale, ");}}");
+  var keyframes = "@keyframes transitioning-zoom { 0% {transform: scale(1);} 100% {transform: scale(".concat(scale, ");}}");
   return keyframes;
 }
 function turnOnDarkMode() {
@@ -466,6 +466,7 @@ function turnOnDarkMode() {
     transitionMask.addEventListener('animationend', function (e) {
       transitionMask.classList.remove('autoDarkModeFadeOut');
       transitionMask.classList.remove('autoDarkModeTransitioning');
+      document.querySelector("style#".concat(sessionID, "_keyframes")).remove();
     }, {
       once: true
     });
