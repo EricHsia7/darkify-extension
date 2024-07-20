@@ -16,6 +16,8 @@
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   mask-image: -webkit-radial-gradient(white, black);
   transform: scale(1);
+  backdrop-filter: invert(1) !important;
+  -webkit-backdrop-filter: invert(1) !important;
 }
 
 .autoDarkModeTransitionMask.autoDarkModeTransitioning {
@@ -37,6 +39,7 @@
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
