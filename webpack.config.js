@@ -39,11 +39,11 @@ module.exports = (env, argv) => {
     mode: 'production', // Set the mode to 'production' or 'development'
     entry: './src/index.ts', // Entry point of your application
     output: {
-      filename: isProduction ? 'auto-dark-mode-extension.user.js' : 'auto-dark-mode-extension.dev.js', // Output bundle filename
+      filename: isProduction ? 'darkify-extension.user.js' : 'darkify-extension.dev.js', // Output bundle filename
       path: path.resolve(__dirname, 'dist'), // Output directory for bundled files
       publicPath: './',
       library: {
-        name: 'autoDarkMode',
+        name: 'darkify',
         type: 'var',
         export: 'default'
       }

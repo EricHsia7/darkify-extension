@@ -202,10 +202,10 @@ export function getDarkModeStyle(): object {
   var style = [];
   var elements = document.querySelectorAll('body *,body');
   for (var element of elements) {
-    var identifier: string = `i-${md5(Math.random() * new Date().getTime())}`;
-    element.setAttribute('auto-dark-mode-extension', identifier);
+    var identifier: string = md5(Math.random() * new Date().getTime());
+    element.setAttribute('darkify-extension', identifier);
     var invertedProperties = invertProperties(getColorRelatedProperties(element));
-    style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[auto-dark-mode-extension="${identifier}"]`, invertedProperties));
+    style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties));
   }
   return style.join(' ');
 }

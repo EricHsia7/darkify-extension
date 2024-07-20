@@ -7,10 +7,10 @@ function initialize(): void {
   initializeMask();
 }
 
-var autoDarkMode = {
+var darkify = {
   initialize
 };
 
-autoDarkMode.initialize();
+darkify.initialize();
 
-export default autoDarkMode;
+export default darkify;

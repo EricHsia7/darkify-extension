@@ -1,12 +1,11 @@
 {
-  "name": "Auto Dark Mode",
-  "version": "0.1.2",
-  "description": "Darken any website",
+  "name": "Darkify",
+  "version": "0.1.3",
+  "description": "Darkify Any Website",
   "run-at": "document-end",
-  "grant": "GM_xmlhttpRequest",
   "author": "erichsia7",
   "inject-into": "content",
-  "updateURL": "https://erichsia7.github.io/auto-dark-mode-extension/auto-dark-mode-extension.user.js",
-  "downloadURL": "https://erichsia7.github.io/auto-dark-mode-extension/auto-dark-mode-extension.user.js",
+  "updateURL": "https://erichsia7.github.io/darkify-extension/darkify-extension.user.js",
+  "downloadURL": "https://erichsia7.github.io/darkify-extension/darkify-extension.user.js",
   "match": "*://*/*"
 }

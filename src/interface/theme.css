@@ -1,6 +1,6 @@
 :root {
-  --auto-dark-mode-ffffff: #ffffff;
-  --auto-dark-mode-333333: #333333;
-  --auto-dark-mode-transparent: rgba(0, 0, 0, 0);
-  --auto-dark-mode-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+  --darkify-ffffff: #ffffff;
+  --darkify-333333: #333333;
+  --darkify-transparent: rgba(0, 0, 0, 0);
+  --darkify-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
 }

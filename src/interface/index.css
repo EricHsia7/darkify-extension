@@ -1,11 +1,11 @@
-.autoDarkModeTransitionMask {
+.darkify_transition_mask {
   width: 43px;
   height: 43px;
   position: fixed;
   bottom: 12px;
   left: 12px;
   border-radius: 100%;
-  background-color: var(--auto-dark-mode-transparent);
+  background-color: var(--darkify-transparent);
   z-index: 999;
   user-select: none;
   -webkit-user-select: none;
@@ -19,11 +19,11 @@
   -webkit-backdrop-filter: invert(1) !important;
 }
 
-.autoDarkModeTransitionMask.autoDarkModeTransitioning {
+.darkify_transition_mask.darkify_transitioning {
   animation-duration: 600ms;
   animation-name: transitioning-opacity, transitioning-zoom;
   animation-iteration-count: forward;
-  animation-timing-function: var(--auto-dark-mode-timing-function);
+  animation-timing-function: var(--darkify-timing-function);
 }
 
 @keyframes transitioning-opacity {
@@ -36,7 +36,7 @@
   }
 }
 
-.autoDarkModeButton {
+.darkify_button {
   width: 43px;
   height: 43px;
   position: fixed;
@@ -50,13 +50,13 @@
   user-select: none;
   -webkit-user-select: none;
   transition: background-color 600ms;
-  transition-timing-function: var(--auto-dark-mode-timing-function);
+  transition-timing-function: var(--darkify-timing-function);
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);
 }
 
-.autoDarkModeButton svg {
+.darkify_button svg {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -65,42 +65,42 @@
   user-select: none;
   -webkit-user-select: none;
   transition: opacity 600ms;
-  transition-timing-function: var(--auto-dark-mode-timing-function);
+  transition-timing-function: var(--darkify-timing-function);
 }
 
-.autoDarkModeButton svg path {
+.darkify_button svg path {
   transition: fill 600ms;
-  transition-timing-function: var(--auto-dark-mode-timing-function);
+  transition-timing-function: var(--darkify-timing-function);
 }
 
-.autoDarkModeButton[dark-mode="true"] {
-  background-color: var(--auto-dark-mode-333333);
+.darkify_button[dark-mode="true"] {
+  background-color: var(--darkify-333333);
 }
 
-.autoDarkModeButton[dark-mode="true"] svg path {
-  fill: var(--auto-dark-mode-ffffff);
+.darkify_button[dark-mode="true"] svg path {
+  fill: var(--darkify-ffffff);
 }
 
-.autoDarkModeButton[dark-mode="true"] svg[mode="light"] {
+.darkify_button[dark-mode="true"] svg[mode="light"] {
   opacity: 0;
 }
 
-.autoDarkModeButton[dark-mode="true"] svg[mode="dark"] {
+.darkify_button[dark-mode="true"] svg[mode="dark"] {
   opacity: 1;
 }
 
-.autoDarkModeButton[dark-mode="false"] {
-  background-color: var(--auto-dark-mode-ffffff);
+.darkify_button[dark-mode="false"] {
+  background-color: var(--darkify-ffffff);
 }
 
-.autoDarkModeButton[dark-mode="false"] svg path {
-  fill: var(--auto-dark-mode-333333);
+.darkify_button[dark-mode="false"] svg path {
+  fill: var(--darkify-333333);
 }
 
-.autoDarkModeButton[dark-mode="false"] svg[mode="light"] {
+.darkify_button[dark-mode="false"] svg[mode="light"] {
   opacity: 1;
 }
 
-.autoDarkModeButton[dark-mode="false"] svg[mode="dark"] {
+.darkify_button[dark-mode="false"] svg[mode="dark"] {
   opacity: 0;
 }

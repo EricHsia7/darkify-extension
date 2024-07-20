@@ -9,6 +9,11 @@
       "name": "YouTube",
       "pattern": "*://*.youtube.com/*",
       "description": "To avoid reCAPTCHA."
+    },
+    {
+      "name": "Github",
+      "pattern": "*://github.*/*",
+      "description": ""
     }
   ]
 }
