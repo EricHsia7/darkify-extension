@@ -2,9 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const AdvancedPreset = require('cssnano-preset-advanced');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 var userscriptHeader = require('./config/header.json');
 var userscriptExclusionList = require('./config/exclusion_list.json');
@@ -13,9 +10,6 @@ module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
   return {
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: 'darkify-extension.user.min.css' // Output CSS filename
-      }),
       new webpack.BannerPlugin({
         banner: function () {
           var lines = [];
@@ -39,7 +33,8 @@ module.exports = (env, argv) => {
             .join('\n');
         },
         raw: true, // if true, banner will not be wrapped in a comment
-        entryOnly: true, // if true, the banner will only be added to the entry chunks
+        entryOnly: true, // if true, the banner will only be added to the entry chunks,
+        test: /\.js$/,
         stage: webpack.Compilation.PROCESS_ASSETS_STAGE_REPORT
       })
     ],
@@ -71,7 +66,7 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader']
+          use: ['style-loader', 'css-loader']
         }
       ]
     },
@@ -85,18 +80,6 @@ module.exports = (env, argv) => {
         new TerserPlugin({
           //terserOptions: {},
           extractComments: false
-        }),
-        new CssMinimizerPlugin({
-          parallel: 4,
-          minimizerOptions: {
-            preset: [
-              'default',
-              AdvancedPreset,
-              {
-                discardComments: { removeAll: true }
-              }
-            ]
-          }
         })
       ]
     }

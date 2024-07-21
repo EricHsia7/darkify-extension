@@ -14,7 +14,6 @@ function loadCSS(url) {
 
 export function initializeCSS(): void {
   //load css
-  loadCSS('https://erichsia7.github.io/darkify-extension/darkify-extension.user.min.css');
   /*
   var themeLoader = document.createElement('style');
   themeLoader.innerHTML = theme;
