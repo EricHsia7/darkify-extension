@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.0
+// @version      0.2.1
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -282,7 +282,7 @@ function getColorInRGBA(element, property) {
 }
 function getColorRelatedProperties(element) {
   var result = {};
-  var list = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
+  var list = ['color', 'background-color', 'background-image', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
   /*
   var totalR: number = 0;
   var totalG: number = 0;
