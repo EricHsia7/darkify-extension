@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.4.0
+// @version      0.4.1
 // @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -64,10 +64,13 @@ function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 
+var defaultR = 255;
+var defaultG = 255;
+var defaultB = 255;
 function rgbToHsl(color) {
-  var r = ((color === null || color === void 0 ? void 0 : color.r) || 0) / 255;
-  var g = ((color === null || color === void 0 ? void 0 : color.g) || 0) / 255;
-  var b = ((color === null || color === void 0 ? void 0 : color.b) || 0) / 255;
+  var r = ((color === null || color === void 0 ? void 0 : color.r) || defaultR) / 255;
+  var g = ((color === null || color === void 0 ? void 0 : color.g) || defaultG) / 255;
+  var b = ((color === null || color === void 0 ? void 0 : color.b) || defaultB) / 255;
   var max = Math.max(r, g, b);
   var min = Math.min(r, g, b);
   var h,
@@ -98,15 +101,15 @@ function rgbToHsl(color) {
   };
 }
 function rgbToHex(color) {
-  var r = (color === null || color === void 0 ? void 0 : color.r) || 0;
-  var g = (color === null || color === void 0 ? void 0 : color.g) || 0;
-  var b = (color === null || color === void 0 ? void 0 : color.b) || 0;
+  var r = (color === null || color === void 0 ? void 0 : color.r) || defaultR;
+  var g = (color === null || color === void 0 ? void 0 : color.g) || defaultG;
+  var b = (color === null || color === void 0 ? void 0 : color.b) || defaultB;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
 function rgbaToHex(color) {
-  var r = (color === null || color === void 0 ? void 0 : color.r) || 0;
-  var g = (color === null || color === void 0 ? void 0 : color.g) || 0;
-  var b = (color === null || color === void 0 ? void 0 : color.b) || 0;
+  var r = (color === null || color === void 0 ? void 0 : color.r) || defaultR;
+  var g = (color === null || color === void 0 ? void 0 : color.g) || defaultG;
+  var b = (color === null || color === void 0 ? void 0 : color.b) || defaultB;
   var a = Math.round(color.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
@@ -133,15 +136,15 @@ function invertRGB(color) {
   } : color;
 }
 function invertRGBA(color) {
-  var r = 255 - ((color === null || color === void 0 ? void 0 : color.r) || 0);
-  var g = 255 - ((color === null || color === void 0 ? void 0 : color.g) || 0);
-  var b = 255 - ((color === null || color === void 0 ? void 0 : color.b) || 0);
+  var r = 255 - ((color === null || color === void 0 ? void 0 : color.r) || defaultR);
+  var g = 255 - ((color === null || color === void 0 ? void 0 : color.g) || defaultG);
+  var b = 255 - ((color === null || color === void 0 ? void 0 : color.b) || defaultB);
   var a = (color === null || color === void 0 ? void 0 : color.a) || 0;
   return needToInvert({
     type: 'color',
-    r: (color === null || color === void 0 ? void 0 : color.r) || 0,
-    g: (color === null || color === void 0 ? void 0 : color.g) || 0,
-    b: (color === null || color === void 0 ? void 0 : color.b) || 0
+    r: (color === null || color === void 0 ? void 0 : color.r) || defaultR,
+    g: (color === null || color === void 0 ? void 0 : color.g) || defaultG,
+    b: (color === null || color === void 0 ? void 0 : color.b) || defaultB
   }) ? {
     type: 'color',
     r: r,
@@ -358,9 +361,9 @@ function getColorInRGBA(element, property) {
     if (color.startsWith('url')) {
       return {
         type: 'color',
-        r: 0,
-        g: 0,
-        b: 0,
+        r: defaultR,
+        g: defaultG,
+        b: defaultB,
         a: 0
       };
     }
