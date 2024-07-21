@@ -185,15 +185,6 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     return rgbStringToRGBA(computedColor);
   }
 
-  function parseColorStops(colorStops: string): colorStop[] {
-    return colorStops.split(',').map((stop) => {
-      const parts = stop.trim().split(/\s+/);
-      const color = getColorInRGBAFromString(parts[0]);
-      const position = parts[1] || null;
-      return { type: 'color-stop', color: color, position };
-    });
-  }
-
   function parseGradient(gradient: string) {
     const linearGradientRegex = /^linear-gradient\((.*)\)$/;
     const radialGradientRegex = /^radial-gradient\((.*)\)$/;
@@ -216,7 +207,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
 
       // Determine if the first part is a direction or a color stop
       let direction;
-      const colorStops = [];
+      const colorStops: colorStop[] = [];
 
       if (parts[0].trim().match(/^\d+deg$|^to /)) {
         direction = parts.shift().trim();
