@@ -83,18 +83,6 @@ function rgbToHsl(color: RGB): HSL {
   return { h, s, l };
 }
 
-function needToInvert(color: RGB): boolean {
-  var hsl: HSL = rgbToHsl(color);
-  if (hsl.s <= 0.38) {
-    return true;
-  } else {
-    if (hsl.l <= 0.23) {
-      return true;
-    }
-  }
-  return false;
-}
-
 function rgbToHex(color: RGB): hex {
   var r = color.r;
   var g = color.g;
@@ -110,11 +98,31 @@ function rgbaToHex(color: RGBA): hex {
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
 
+function needToInvert(color: RGB): boolean {
+  var hsl: HSL = rgbToHsl(color);
+  if (hsl.s <= 0.38) {
+    return true;
+  } else {
+    if (hsl.l <= 0.23) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function invertRGB(color: RGB): RGB {
   var r = 255 - color.r;
   var g = 255 - color.g;
   var b = 255 - color.b;
   return needToInvert(color) ? { type: 'color', r, g, b } : color;
+}
+
+function invertRGBA(color: RGBA): RGBA {
+  var r = 255 - color.r;
+  var g = 255 - color.g;
+  var b = 255 - color.b;
+  var a = color.a;
+  return needToInvert({ type: 'color', r: color.r, g: color.g, b: color.b }) ? { type: 'color', r, g, b, a } : color;
 }
 
 function darkenRGB(color: RGB, percent: number): RGB {
@@ -279,11 +287,41 @@ function invertProperties(properties: object): object {
   var result = {};
   for (var key in properties) {
     var property = properties[key];
-    if (property?.type === 'color') {
-      result[key] = Object.assign(invertRGB({ type: 'color', r: property.r, g: property.g, b: property.b }), { a: property.a });
-      continue;
+    switch (property?.type) {
+      case 'color':
+        result[key] = invertRGBA(property);
+        break;
+      case 'linear-gradient':
+        result[key] = {
+          type: 'linear-gradient',
+          direction,
+          colorStops: property.colorStops.map((stop) => {
+            return { type: 'color-stop', color: invertRGBA(stop.color), position };
+          })
+        };
+        break;
+      case 'radial-gradient':
+        result[key] = {
+          type: 'radial-gradient',
+          shapeAndSize,
+          colorStops: property.colorStops.map((stop) => {
+            return { type: 'color-stop', color: invertRGBA(stop.color), position };
+          })
+        };
+        break;
+      case 'conic-gradient':
+        result[key] = {
+          type: 'conic-gradient',
+          angle,
+          colorStops: property.colorStops.map((stop) => {
+            return { type: 'color-stop', color: invertRGBA(stop.color), position };
+          })
+        };
+        break;
+      default:
+        result[key] = property;
+        break;
     }
-    result[key] = property;
   }
   return result;
 }
@@ -293,9 +331,23 @@ function propertiesToStyle(selector: string, properties: object): string {
   for (var key in properties) {
     var property = properties[key];
     var value = '';
-    if (property?.type === 'color') {
-      value = `rgba(${property.r}, ${property.g}, ${property.b}, ${property.a})`;
+    switch (property?.type) {
+      case 'color':
+        value = `rgba(${property.r}, ${property.g}, ${property.b}, ${property.a})`;
+        break;
+      case 'linear-gradient':
+        var colorStopsString = property.colorStops
+          .map((stop) => {
+            return `rgba(${stop.color.r}, ${stop.color.g}, ${stop.color.b}, ${stop.color.a}) ${stop.position}`;
+          })
+          .join(', ');
+        value = `linear-gradient(${property.direction}, ${colorStopsString})`;
+        break;
+      default:
+        value = '';
+        break;
     }
+
     lines.push(`${key}: ${value} !important`);
   }
   return `${selector} {${lines.join(';')}}`;
