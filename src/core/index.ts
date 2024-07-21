@@ -297,7 +297,7 @@ function invertProperties(properties: object): object {
       case 'linear-gradient':
         result[key] = {
           type: 'linear-gradient',
-          direction,
+          direction: property.direction,
           colorStops: property.colorStops.map((stop) => {
             return { type: 'color-stop', color: invertRGBA(stop.color), position };
           })
@@ -306,7 +306,7 @@ function invertProperties(properties: object): object {
       case 'radial-gradient':
         result[key] = {
           type: 'radial-gradient',
-          shapeAndSize,
+          shapeAndSize: property.shapeAndSize,
           colorStops: property.colorStops.map((stop) => {
             return { type: 'color-stop', color: invertRGBA(stop.color), position };
           })
@@ -315,7 +315,7 @@ function invertProperties(properties: object): object {
       case 'conic-gradient':
         result[key] = {
           type: 'conic-gradient',
-          angle,
+          angle: property.angle,
           colorStops: property.colorStops.map((stop) => {
             return { type: 'color-stop', color: invertRGBA(stop.color), position };
           })
