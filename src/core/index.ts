@@ -245,6 +245,9 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     if (color.startsWith('#')) {
       return hexToRGBA(color);
     }
+    if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
+      return parseGradient(color);
+    }
     if (color.startsWith('url')) {
       return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
     }

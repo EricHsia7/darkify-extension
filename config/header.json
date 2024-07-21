@@ -1,6 +1,6 @@
 {
   "name": "Darkify",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Darkify Any Website",
   "run-at": "document-end",
   "author": "erichsia7",
