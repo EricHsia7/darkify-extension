@@ -4,24 +4,7 @@ import { generateID } from '../tools/index.ts';
 import './index.css';
 import './theme.css';
 
-function loadCSS(url) {
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.type = 'text/css';
-  link.href = url;
-  document.head.appendChild(link);
-}
-
 export function initializeCSS(): void {
-  //load css
-  /*
-  var themeLoader = document.createElement('style');
-  themeLoader.innerHTML = theme;
-  document.documentElement.appendChild(themeLoader);
-  var styleLoader = document.createElement('style');
-  styleLoader.innerHTML = style;
-  document.documentElement.appendChild(styleLoader);
-  */
   var dark_mode_style_loader = document.createElement('style');
   dark_mode_style_loader.classList.add('dark_mode_style_loader');
   document.documentElement.appendChild(dark_mode_style_loader);
