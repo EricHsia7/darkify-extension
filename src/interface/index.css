@@ -8,6 +8,16 @@
   }
 }
 
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 .darkify_transition_mask {
   width: 43px;
   height: 43px;
@@ -22,8 +32,6 @@
   opacity: 0;
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-  mask-image: -webkit-radial-gradient(white, black);
   transform: scale(1);
   backdrop-filter: invert(1) grayscale(1) !important;
   -webkit-backdrop-filter: invert(1) grayscale(1) !important;
@@ -50,8 +58,6 @@
   opacity: 0;
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-  mask-image: -webkit-radial-gradient(white, black);
   backdrop-filter: grayscale(1) !important;
   -webkit-backdrop-filter: grayscale(1) !important;
   transform: translateX(-100%);
@@ -64,10 +70,9 @@
 
 .darkify_gray_mask.darkify_fade_out {
   animation-duration: var(--darkify-duration-half);
-  animation-name: transitioning-opacity;
+  animation-name: fade-out;
   animation-iteration-count: forward;
-  animation-timing-function: var(--darkify-timing-function);
-  animation-direction: reverse;
+  animation-timing-function: ease-out;
 }
 
 .darkify_button {
