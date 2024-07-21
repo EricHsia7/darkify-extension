@@ -140,7 +140,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     return value;
   }
 
-  function hexToRGBA(hex: hex): RGBA {
+  function hexToRGBA(hex: string): RGBA {
     let r, g, b;
     if (hex.length === 4) {
       // #fff
@@ -224,24 +224,24 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     }
   }
 
-  function getColorInRGBAFromString(color) {
+  function getColorInRGBAFromString(color: string) {
     // Resolve CSS variable if present
     color = resolveCSSVariable(color);
 
     if (color === 'transparent') {
       return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
-    } else if (color.startsWith('rgb')) {
-      return rgbStringToRGBA(color);
-    } else if (color.startsWith('#')) {
-      return hexToRGBA(color);
-    } else if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
-      return parseGradient(color);
-    } else if (color.startsWith('url')) {
-      return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
-    } else {
-      // Assume it's a color name
-      return nameToRGBA(color);
     }
+    if (color.startsWith('rgb')) {
+      return rgbStringToRGBA(color);
+    }
+    if (color.startsWith('#')) {
+      return hexToRGBA(color);
+    }
+    if (color.startsWith('url')) {
+      return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
+    }
+    return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
+    //return nameToRGBA(color);
   }
 
   return getColorInRGBAFromString(color);
