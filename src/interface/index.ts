@@ -4,8 +4,17 @@ import { generateID } from '../tools/index.ts';
 import './index.css';
 import './theme.css';
 
+function loadCSS(url) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = url;
+  document.head.appendChild(link);
+}
+
 export function initializeCSS(): void {
   //load css
+  loadCSS('https://erichsia7.github.io/darkify-extension/darkify-extension.user.min.css');
   /*
   var themeLoader = document.createElement('style');
   themeLoader.innerHTML = theme;

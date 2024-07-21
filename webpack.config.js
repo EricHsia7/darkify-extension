@@ -4,6 +4,7 @@ const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const AdvancedPreset = require('cssnano-preset-advanced');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 var userscriptHeader = require('./config/header.json');
 var userscriptExclusionList = require('./config/exclusion_list.json');
@@ -12,6 +13,9 @@ module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
   return {
     plugins: [
+      new MiniCssExtractPlugin({
+        filename: 'darkify-extension.user.min.css' // Output CSS filename
+      }),
       new webpack.BannerPlugin({
         banner: function () {
           var lines = [];
@@ -67,13 +71,7 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.css$/,
-          use: [
-            'style-loader',
-            {
-              loader: 'css-loader',
-              options: { sourceMap: true } // Enable source maps
-            }
-          ]
+          use: [MiniCssExtractPlugin.loader, 'css-loader']
         }
       ]
     },

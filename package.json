@@ -1,6 +1,6 @@
 {
   "name": "@erichsia7/darkify-extension",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Darken Any Website",
   "main": "darkify-extension.user.js",
   "private": false,
@@ -32,7 +32,7 @@
     "css-minimizer-webpack-plugin": "^5.0.1",
     "cssnano-preset-advanced": "^6.0.1",
     "css-loader": "^6.8.1",
-    "style-loader": "^3.3.3"
+    "mini-css-extract-plugin": "^2.7.6"
   },
   "dependencies": {}
 }
