@@ -84,10 +84,10 @@ function turnOnDarkMode(): void {
         function (e) {
           endingMask.classList.remove('darkify_displayed');
           endingMask.classList.remove('darkify_filter_fade_out');
+          button.setAttribute('darkifying', 'false');
         },
         { once: true }
       );
-      button.setAttribute('darkifying', 'false');
     },
     { once: true }
   );
@@ -122,10 +122,10 @@ function turnOffDarkMode(): void {
         function (e) {
           endingMask.classList.remove('darkify_displayed');
           endingMask.classList.remove('darkify_filter_fade_out');
+          button.setAttribute('darkifying', 'false');
         },
         { once: true }
       );
-      button.setAttribute('darkifying', 'false');
     },
     { once: true }
   );
