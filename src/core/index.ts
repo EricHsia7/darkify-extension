@@ -55,7 +55,7 @@ type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 
 const defaultR: number = 255;
 const defaultG: number = 255;
 const defaultB: number = 255;
-const defaultA: number = 0;
+const defaultA: number = 1;
 
 function fixRGB(color: RGB): RGB {
   if (typeof color === 'object' && !Array.isArray(color)) {
