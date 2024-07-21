@@ -124,7 +124,7 @@ function invertRGBA(color: RGBA): RGBA {
   var g = 255 - (color?.g || 0);
   var b = 255 - (color?.b || 0);
   var a = color?.a || 0;
-  return needToInvert({ type: 'color', r: color.r, g: color?.g, b: color.b }) ? { type: 'color', r, g, b, a } : color;
+  return needToInvert({ type: 'color', r: color?.r || 0, g: color?.g || 0, b: color?.b || 0 }) ? { type: 'color', r, g, b, a } : color;
 }
 
 function darkenRGB(color: RGB, percent: number): RGB {
