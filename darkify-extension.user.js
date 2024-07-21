@@ -218,6 +218,22 @@ function getColorInRGBA(element, property) {
     var linearGradientRegex = /^linear-gradient\((.*)\)$/;
     var radialGradientRegex = /^radial-gradient\((.*)\)$/;
     var conicGradientRegex = /^conic-gradient\((.*)\)$/;
+    function parseColorStops(parts) {
+      var colorStops = [];
+      parts.forEach(function (part) {
+        var matches2 = part.trim().match(positionRegex);
+        if (matches2) {
+          var color = getColorInRGBAFromString(part.trim().replace(positionRegex, '').trim());
+          var position = matches2[0].trim();
+          colorStops.push({
+            type: 'color-stop',
+            color: color,
+            position: position
+          });
+        }
+      });
+      return colorStops;
+    }
     function parseLinearGradient(gradientString) {
       // Regular expression to match the linear-gradient function
       var regex = /linear-gradient\((.*)\)/;
@@ -234,7 +250,6 @@ function getColorInRGBA(element, property) {
 
       // Determine if the first part is a direction or a color stop
       var direction;
-      var colorStops = [];
       if (parts[0].trim().match(/^\d+deg$|^to /)) {
         direction = parts.shift().trim();
       } else {
@@ -243,33 +258,60 @@ function getColorInRGBA(element, property) {
 
       // Process remaining parts as color stops
       var positionRegex = /(\d+(cm|mm|in|px|pt|px|em|ex|ch|rem|vw|vh|vmin|vmax|%))$/;
-      parts.forEach(function (part) {
-        var matches2 = part.trim().match(positionRegex);
-        if (matches2) {
-          var color = getColorInRGBAFromString(part.trim().replace(positionRegex, '').trim());
-          var position = matches2[0].trim();
-          colorStops.push({
-            type: 'color-stop',
-            color: color,
-            position: position
-          });
-        }
-      });
+      var colorStops = parseColorStops(parts);
       return {
         type: 'linear-gradient',
         direction: direction,
         colorStops: colorStops
       };
     }
-    function parseRadialGradient(matches) {
-      var parts = matches[1].split(/,(.+)/);
-      var shapeAndSize = parts[0].trim();
-      var colorStops = parseColorStops(parts[1]);
-      return {
+    function parseRadialGradient(gradientString) {
+      // Give the default values
+      var gradient = {
         type: 'radial-gradient',
-        shapeAndSize: shapeAndSize,
-        colorStops: colorStops
+        shape: 'circle',
+        size: 'farthest-corner',
+        position: 'center',
+        colorStops: []
       };
+
+      // Regular expression to match the radial-gradient function
+      var regex = /radial-gradient\((.*)\)/i;
+      var matches = gradientString.match(regex);
+      if (!matches) {
+        throw new Error('Invalid radial gradient string');
+      }
+
+      // Split the content by commas, but ignore commas inside parentheses
+      var gradientContent = matches[1];
+      var parts = gradientContent.split(/,(?![^\(]*\))/);
+      var currentPartIndex = 0;
+
+      // Check for shape and size (e.g., "circle", "ellipse", "circle closest-side", etc.)
+      var shapeSizePattern = /^\s*(circle|ellipse|closest-side|farthest-side|closest-corner|farthest-corner|contain|cover)?\s*(circle|ellipse|closest-side|farthest-side|closest-corner|farthest-corner|contain|cover)?\s*/i;
+      var shapeSizeMatch = parts[currentPartIndex].match(shapeSizePattern);
+      if (shapeSizeMatch) {
+        gradient.shape = shapeSizeMatch[1] || null;
+        gradient.size = shapeSizeMatch[2] || null;
+        if (shapeSizeMatch[1] || shapeSizeMatch[2]) {
+          currentPartIndex++;
+        }
+      }
+
+      // Check for position (e.g., "at center", "at top left", etc.)
+      var positionPattern = /^\s*at\s+([^\s,]+)\s+([^\s,]+)\s*/i;
+      var positionMatch = parts[currentPartIndex].match(positionPattern);
+      if (positionMatch) {
+        gradient.position = "".concat(positionMatch[1], " ").concat(positionMatch[2]);
+        currentPartIndex++;
+      }
+
+      // Extract color stops
+      for (var i = currentPartIndex; i < parts.length; i++) {
+        var _colorStop = parts[i].trim();
+        gradient.colorStops.push(_colorStop);
+      }
+      return gradient;
     }
     function parseConicGradient(matches) {
       var parts = matches[1].split(/,(.+)/);
@@ -432,6 +474,16 @@ function propertiesToStyle(selector, properties) {
             return "rgba(".concat(stop.color.r, ", ").concat(stop.color.g, ", ").concat(stop.color.b, ", ").concat(stop.color.a, ") ").concat(stop.position);
           }).join(', ');
           value = "linear-gradient(".concat(property.direction, ", ").concat(colorStopsString, ")");
+        } else {
+          continue;
+        }
+        break;
+      case 'radial-gradient':
+        if (property.colorStops.length >= 2) {
+          var colorStopsString = property.colorStops.map(function (stop) {
+            return "rgba(".concat(stop.color.r, ", ").concat(stop.color.g, ", ").concat(stop.color.b, ", ").concat(stop.color.a, ") ").concat(stop.position);
+          }).join(', ');
+          value = "radial-gradient(".concat(property.shape, " ").concat(property.size, " at ").concat(property.position, ", ").concat(colorStopsString, ")");
         } else {
           continue;
         }
