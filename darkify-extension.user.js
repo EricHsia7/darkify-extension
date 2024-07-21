@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.1.9
+// @version      0.2.0
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -280,11 +280,6 @@ function getColorInRGBA(element, property) {
   }
   return getColorInRGBAFromString(color);
 }
-
-// Example usage:
-var core_element = document.getElementById('myElement');
-var backgroundColorRGBA = getColorInRGBA(core_element, 'background-image');
-console.log(backgroundColorRGBA);
 function getColorRelatedProperties(element) {
   var result = {};
   var list = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
