@@ -12,7 +12,9 @@ To install Darkify, you need to do these steps:
 
 ## Features
 * Exclude images unwanted to invert.
-* Keep colors normal. Red would be red, green would be green, blue would be blue. And you can use it without learning new tricks.
+* Keep colors normal. Red would be red, green would be green, blue would be blue. And you can use it without learning new tricks[^1].
+
+[^1]: "new tricks" is derived from "you can't teach an old dog new tricks".
 
 ## Roadmaps
 * More customized options.
