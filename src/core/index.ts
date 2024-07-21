@@ -1,6 +1,7 @@
 import { generateID } from '../tools/index.ts';
 
 interface RGBA {
+  type: 'color';
   r: number;
   g: number;
   b: number;
@@ -8,15 +9,23 @@ interface RGBA {
 }
 
 interface RGB {
+  type: 'color';
   r: number;
   g: number;
   b: number;
 }
 
 interface HSL {
+  type: 'color';
   h: number;
   s: number;
   l: number;
+}
+
+interface colorStop {
+  type: 'color-stop';
+  color: RGBA;
+  position: string;
 }
 
 type hex = string;
@@ -65,7 +74,7 @@ function needToInvert(color: RGB): boolean {
       return true;
     }
   }
-  return false
+  return false;
 }
 
 function rgbToHex(color: RGB): hex {
@@ -97,11 +106,10 @@ function darkenRGB(color: RGB, percent: number): RGB {
   return { r, g, b };
 }
 
-function getColorInRGBA(element: HTMLElement, property: colorRelatedProperty): RGBA {
+function getColorInRGBA(element: HTMLElement, property: object): RGBA {
   const style = getComputedStyle(element);
   let color = style.getPropertyValue(property).trim();
 
-  // Function to resolve CSS variables
   function resolveCSSVariable(value) {
     if (value.startsWith('var(')) {
       const variableName = value.slice(4, -1).trim();
@@ -113,9 +121,6 @@ function getColorInRGBA(element: HTMLElement, property: colorRelatedProperty): R
     }
     return value;
   }
-
-  // Resolve CSS variable if present
-  color = resolveCSSVariable(color);
 
   function hexToRGBA(hex) {
     let r, g, b;
@@ -132,13 +137,14 @@ function getColorInRGBA(element: HTMLElement, property: colorRelatedProperty): R
     } else {
       throw new Error('Invalid hex format');
     }
-    return { r, g, b, a: 1 };
+    return { type: 'color', r, g, b, a: 1 };
   }
 
-  function rgbStringToRGBA(rgb) {
+  function rgbStringToRGBA(rgb: string): RGBA {
     const match = rgb.match(/rgba?\((\d+), (\d+), (\d+)(?:, (\d+\.?\d*))?\)/);
     if (!match) throw new Error('Invalid RGB/RGBA format');
     return {
+      type: 'color',
       r: parseInt(match[1]),
       g: parseInt(match[2]),
       b: parseInt(match[3]),
@@ -146,25 +152,89 @@ function getColorInRGBA(element: HTMLElement, property: colorRelatedProperty): R
     };
   }
 
-  function nameToRGBA(name) {
+  function nameToRGBA(name: string): RGBA {
     const ctx = document.createElement('canvas').getContext('2d');
     ctx.fillStyle = name;
     const computedColor = ctx.fillStyle; // Now it’s in rgb format
     return rgbStringToRGBA(computedColor);
   }
 
-  if (color === 'transparent') {
-    return { r: 0, g: 0, b: 0, a: 0 };
-  } else if (color.startsWith('rgb')) {
-    return rgbStringToRGBA(color);
-  } else if (color.startsWith('#')) {
-    return hexToRGBA(color);
-  } else {
-    // Assume it's a color name
-    return nameToRGBA(color);
+  function parseColorStops(colorStops: string): colorStop[] {
+    return colorStops.split(',').map((stop) => {
+      const parts = stop.trim().split(/\s+/);
+      const color = parts[0];
+      const position = parts[1] || null;
+      return { type: 'color-stop', color: getColorInRGBAFromString(color), position };
+    });
   }
+
+  function parseGradient(gradient) {
+    const linearGradientRegex = /linear-gradient\(([^)]+)\)/;
+    const radialGradientRegex = /radial-gradient\(([^)]+)\)/;
+    const conicGradientRegex = /conic-gradient\(([^)]+)\)/;
+
+    function parseLinearGradient(matches) {
+      const parts = matches[1].split(/,(.+)/);
+      const direction = parts[0].trim();
+      const colorStops = parseColorStops(parts[1]);
+      return { type: 'linear-gradient', direction, colorStops };
+    }
+
+    function parseRadialGradient(matches) {
+      const parts = matches[1].split(/,(.+)/);
+      const shapeAndSize = parts[0].trim();
+      const colorStops = parseColorStops(parts[1]);
+      return { type: 'radial-gradient', shapeAndSize, colorStops };
+    }
+
+    function parseConicGradient(matches) {
+      const parts = matches[1].split(/,(.+)/);
+      const angle = parts[0].trim();
+      const colorStops = parseColorStops(parts[1]);
+      return { type: 'conic-gradient', angle, colorStops };
+    }
+
+    let matches;
+    if ((matches = gradient.match(linearGradientRegex))) {
+      return parseLinearGradient(matches);
+    } else if ((matches = gradient.match(radialGradientRegex))) {
+      return parseRadialGradient(matches);
+    } else if ((matches = gradient.match(conicGradientRegex))) {
+      return parseConicGradient(matches);
+    } else {
+      throw new Error('Unsupported gradient format');
+    }
+  }
+
+  function getColorInRGBAFromString(color) {
+    color = resolveCSSVariable(color);
+
+    if (color === 'transparent') {
+      return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
+    } else if (color.startsWith('rgb')) {
+      return rgbStringToRGBA(color);
+    } else if (color.startsWith('#')) {
+      return hexToRGBA(color);
+    } else {
+      // Assume it's a color name
+      return nameToRGBA(color);
+    }
+  }
+
+  // Resolve CSS variable if present
+  color = resolveCSSVariable(color);
+
+  if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
+    return parseGradient(color);
+  }
+
+  return getColorInRGBAFromString(color);
 }
 
+// Example usage:
+const element = document.getElementById('myElement');
+const backgroundColorRGBA = getColorInRGBA(element, 'background-image');
+console.log(backgroundColorRGBA);
 function getColorRelatedProperties(element: HTMLElement): object {
   var result: object = {};
   var list: colorRelatedProperty[] = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
@@ -176,6 +246,7 @@ function getColorRelatedProperties(element: HTMLElement): object {
   */
   for (var property of list) {
     result[property] = getColorInRGBA(element, property);
+    console.log(result[property]);
     /*
     totalR += result[property].r;
     totalG += result[property].g;
@@ -197,7 +268,11 @@ function invertProperties(properties: object): object {
   var result = {};
   for (var key in properties) {
     var property = properties[key];
-    result[key] = Object.assign(invertRGB({ r: property.r, g: property.g, b: property.b }), { a: property.a });
+    if (property?.type === 'color') {
+      result[key] = Object.assign(invertRGB({ r: property.r, g: property.g, b: property.b }), { a: property.a });
+      continue;
+    }
+    result[key] = property;
   }
   return result;
 }
@@ -206,7 +281,11 @@ function propertiesToStyle(selector: string, properties: object): string {
   var lines = [];
   for (var key in properties) {
     var property = properties[key];
-    lines.push(`${key}: rgba(${property.r}, ${property.g}, ${property.b}, ${property.a}) !important`);
+    var value = '';
+    if (property?.type === 'color') {
+      value = `rgba(${property.r}, ${property.g}, ${property.b}, ${property.a})`;
+    }
+    lines.push(`${key}: ${value} !important`);
   }
   return `${selector} {${lines.join(';')}}`;
 }
