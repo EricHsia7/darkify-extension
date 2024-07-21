@@ -52,10 +52,14 @@ type hex = string;
 
 type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color';
 
+const defaultR: number = 255;
+const defaultG: number = 255;
+const defaultB: number = 255;
+
 function rgbToHsl(color: RGB): HSL {
-  var r = (color?.r || 0) / 255;
-  var g = (color?.g || 0) / 255;
-  var b = (color?.b || 0) / 255;
+  var r = (color?.r || defaultR) / 255;
+  var g = (color?.g || defaultG) / 255;
+  var b = (color?.b || defaultB) / 255;
 
   let max = Math.max(r, g, b);
   let min = Math.min(r, g, b);
@@ -86,16 +90,16 @@ function rgbToHsl(color: RGB): HSL {
 }
 
 function rgbToHex(color: RGB): hex {
-  var r = color?.r || 0;
-  var g = color?.g || 0;
-  var b = color?.b || 0;
+  var r = color?.r || defaultR;
+  var g = color?.g || defaultG;
+  var b = color?.b || defaultB;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
 
 function rgbaToHex(color: RGBA): hex {
-  var r = color?.r || 0;
-  var g = color?.g || 0;
-  var b = color?.b || 0;
+  var r = color?.r || defaultR;
+  var g = color?.g || defaultG;
+  var b = color?.b || defaultB;
   var a = Math.round(color.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
@@ -120,11 +124,11 @@ function invertRGB(color: RGB): RGB {
 }
 
 function invertRGBA(color: RGBA): RGBA {
-  var r = 255 - (color?.r || 0);
-  var g = 255 - (color?.g || 0);
-  var b = 255 - (color?.b || 0);
+  var r = 255 - (color?.r || defaultR);
+  var g = 255 - (color?.g || defaultG);
+  var b = 255 - (color?.b || defaultB);
   var a = color?.a || 0;
-  return needToInvert({ type: 'color', r: color?.r || 0, g: color?.g || 0, b: color?.b || 0 }) ? { type: 'color', r, g, b, a } : color;
+  return needToInvert({ type: 'color', r: color?.r || defaultR, g: color?.g || defaultG, b: color?.b || defaultB }) ? { type: 'color', r, g, b, a } : color;
 }
 
 function darkenRGB(color: RGB, percent: number): RGB {
@@ -328,7 +332,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
       return parseGradient(color);
     }
     if (color.startsWith('url')) {
-      return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
+      return { type: 'color', r: defaultR, g: defaultG, b: defaultB, a: 0 };
     }
     return nameToRGBA(color);
   }
