@@ -278,6 +278,9 @@ function getColorInRGBA(element, property) {
   if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
     return parseGradient(color);
   }
+  if (color.startsWith('url')) {
+    color = 'transparent';
+  }
   return getColorInRGBAFromString(color);
 }
 function getColorRelatedProperties(element) {
@@ -291,9 +294,7 @@ function getColorRelatedProperties(element) {
   */
   for (var _i = 0, _list = list; _i < _list.length; _i++) {
     var property = _list[_i];
-    console.log(element.tagName);
     result[property] = getColorInRGBA(element, property);
-    console.log(result[property]);
     /*
     totalR += result[property].r;
     totalG += result[property].g;
