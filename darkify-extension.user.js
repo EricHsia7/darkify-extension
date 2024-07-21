@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.7
+// @version      0.2.8
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -213,18 +213,6 @@ function getColorInRGBA(element, property) {
     ctx.fillStyle = name;
     var computedColor = ctx.fillStyle; // Now it’s in rgb format
     return rgbStringToRGBA(computedColor);
-  }
-  function parseColorStops(colorStops) {
-    return colorStops.split(',').map(function (stop) {
-      var parts = stop.trim().split(/\s+/);
-      var color = getColorInRGBAFromString(parts[0]);
-      var position = parts[1] || null;
-      return {
-        type: 'color-stop',
-        color: color,
-        position: position
-      };
-    });
   }
   function parseGradient(gradient) {
     var linearGradientRegex = /^linear-gradient\((.*)\)$/;
