@@ -14,7 +14,7 @@ To install Darkify, you need to do these steps:
 * Exclude images unwanted to invert.
 * Keep colors normal. Red would be red, green would be green, blue would be blue. And you can use it without learning new tricks[^1].
 
-[^1]: "new tricks" is derived from "you can't teach an old dog new tricks".
+[^1]: "New tricks" is derived from the saying "You can't teach an old dog new tricks." It means you can use websites in the ways you are used to.
 
 ## Roadmaps
 * More customized options.
