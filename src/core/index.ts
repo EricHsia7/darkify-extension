@@ -36,7 +36,9 @@ interface linearGradient {
 
 interface radialGradient {
   type: 'radial-gradient';
-  shapeAndSize: string;
+  shape: string;
+  size: string;
+  position: string;
   colorStops: colorStop[];
 }
 
@@ -190,7 +192,24 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     const radialGradientRegex = /^radial-gradient\((.*)\)$/;
     const conicGradientRegex = /^conic-gradient\((.*)\)$/;
 
-    function parseLinearGradient(gradientString: string) {
+    function parseColorStops(parts: string[]): colorStop[] {
+      var colorStops: colorStop[] = [];
+      parts.forEach((part) => {
+        var matches2 = part.trim().match(positionRegex);
+        if (matches2) {
+          var color = getColorInRGBAFromString(part.trim().replace(positionRegex, '').trim());
+          var position = matches2[0].trim();
+          colorStops.push({
+            type: 'color-stop',
+            color,
+            position
+          });
+        }
+      });
+      return colorStops;
+    }
+
+    function parseLinearGradient(gradientString: string): linearGradient {
       // Regular expression to match the linear-gradient function
       const regex = /linear-gradient\((.*)\)/;
       const matches = gradientString.match(regex);
@@ -207,8 +226,6 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
 
       // Determine if the first part is a direction or a color stop
       let direction;
-      const colorStops: colorStop[] = [];
-
       if (parts[0].trim().match(/^\d+deg$|^to /)) {
         direction = parts.shift().trim();
       } else {
@@ -217,27 +234,62 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
 
       // Process remaining parts as color stops
       const positionRegex = /(\d+(cm|mm|in|px|pt|px|em|ex|ch|rem|vw|vh|vmin|vmax|%))$/;
-      parts.forEach((part) => {
-        var matches2 = part.trim().match(positionRegex);
-        if (matches2) {
-          var color = getColorInRGBAFromString(part.trim().replace(positionRegex, '').trim());
-          var position = matches2[0].trim();
-          colorStops.push({
-            type: 'color-stop',
-            color,
-            position
-          });
-        }
-      });
-
+      const colorStops = parseColorStops(parts);
       return { type: 'linear-gradient', direction, colorStops };
     }
 
-    function parseRadialGradient(matches) {
-      const parts = matches[1].split(/,(.+)/);
-      const shapeAndSize = parts[0].trim();
-      const colorStops = parseColorStops(parts[1]);
-      return { type: 'radial-gradient', shapeAndSize, colorStops };
+    function parseRadialGradient(gradientString: string): radialGradient {
+      // Give the default values
+      const gradient = {
+        type: 'radial-gradient',
+        shape: 'circle',
+        size: 'farthest-corner',
+        position: 'center',
+        colorStops: []
+      };
+
+      // Regular expression to match the radial-gradient function
+      const regex = /radial-gradient\((.*)\)/i;
+      const matches = gradientString.match(regex);
+
+      if (!matches) {
+        throw new Error('Invalid radial gradient string');
+      }
+
+      // Split the content by commas, but ignore commas inside parentheses
+      const gradientContent = matches[1];
+      const parts = gradientContent.split(/,(?![^\(]*\))/);
+
+      let currentPartIndex = 0;
+
+      // Check for shape and size (e.g., "circle", "ellipse", "circle closest-side", etc.)
+      const shapeSizePattern = /^\s*(circle|ellipse|closest-side|farthest-side|closest-corner|farthest-corner|contain|cover)?\s*(circle|ellipse|closest-side|farthest-side|closest-corner|farthest-corner|contain|cover)?\s*/i;
+      let shapeSizeMatch = parts[currentPartIndex].match(shapeSizePattern);
+
+      if (shapeSizeMatch) {
+        gradient.shape = shapeSizeMatch[1] || null;
+        gradient.size = shapeSizeMatch[2] || null;
+        if (shapeSizeMatch[1] || shapeSizeMatch[2]) {
+          currentPartIndex++;
+        }
+      }
+
+      // Check for position (e.g., "at center", "at top left", etc.)
+      const positionPattern = /^\s*at\s+([^\s,]+)\s+([^\s,]+)\s*/i;
+      let positionMatch = parts[currentPartIndex].match(positionPattern);
+
+      if (positionMatch) {
+        gradient.position = `${positionMatch[1]} ${positionMatch[2]}`;
+        currentPartIndex++;
+      }
+
+      // Extract color stops
+      for (let i = currentPartIndex; i < parts.length; i++) {
+        const colorStop = parts[i].trim();
+        gradient.colorStops.push(colorStop);
+      }
+
+      return gradient;
     }
 
     function parseConicGradient(matches) {
@@ -373,6 +425,18 @@ function propertiesToStyle(selector: string, properties: object): string {
             })
             .join(', ');
           value = `linear-gradient(${property.direction}, ${colorStopsString})`;
+        } else {
+          continue;
+        }
+        break;
+      case 'radial-gradient':
+        if (property.colorStops.length >= 2) {
+          var colorStopsString = property.colorStops
+            .map((stop) => {
+              return `rgba(${stop.color.r}, ${stop.color.g}, ${stop.color.b}, ${stop.color.a}) ${stop.position}`;
+            })
+            .join(', ');
+          value = `radial-gradient(${property.shape} ${property.size} at ${property.position}, ${colorStopsString})`;
         } else {
           continue;
         }
