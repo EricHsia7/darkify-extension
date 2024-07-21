@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.9
+// @version      0.3.0
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -219,6 +219,7 @@ function getColorInRGBA(element, property) {
     var radialGradientRegex = /^radial-gradient\((.*)\)$/;
     var conicGradientRegex = /^conic-gradient\((.*)\)$/;
     function parseColorStops(parts) {
+      var positionRegex = /(\d+(cm|mm|in|px|pt|px|em|ex|ch|rem|vw|vh|vmin|vmax|%))$/;
       var colorStops = [];
       parts.forEach(function (part) {
         var matches2 = part.trim().match(positionRegex);
@@ -257,7 +258,6 @@ function getColorInRGBA(element, property) {
       }
 
       // Process remaining parts as color stops
-      var positionRegex = /(\d+(cm|mm|in|px|pt|px|em|ex|ch|rem|vw|vh|vmin|vmax|%))$/;
       var colorStops = parseColorStops(parts);
       return {
         type: 'linear-gradient',
