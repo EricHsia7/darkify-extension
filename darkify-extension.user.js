@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.4.4
+// @version      0.4.5
 // @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -8,6 +8,7 @@
 // @updateURL    https://erichsia7.github.io/darkify-extension/darkify-extension.user.js
 // @downloadURL  https://erichsia7.github.io/darkify-extension/darkify-extension.user.js
 // @match        *://*/*
+// @noframes     
 // @exclude      *://*.google.com/*
 // @exclude      *://*.youtube.com/*
 // @exclude      *://github.*/*
@@ -63,14 +64,60 @@ function generateID(prefix) {
 function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 
 var defaultR = 255;
 var defaultG = 255;
 var defaultB = 255;
-function rgbToHsl(color) {
-  var r = (color.hasOwnProperty('r') ? color.r : defaultR) / 255;
-  var g = (color.hasOwnProperty('g') ? color.g : defaultG) / 255;
-  var b = (color.hasOwnProperty('b') ? color.b : defaultB) / 255;
+var defaultA = 0;
+function fixRGB(color) {
+  if (_typeof(color) === 'object' && !Array.isArray(color)) {
+    var r = color.hasOwnProperty('r') ? color.r : defaultR;
+    var g = color.hasOwnProperty('g') ? color.g : defaultG;
+    var b = color.hasOwnProperty('b') ? color.b : defaultB;
+    return {
+      type: 'color',
+      r: r,
+      g: g,
+      b: b
+    };
+  } else {
+    return {
+      type: 'color',
+      r: defaultR,
+      g: defaultG,
+      b: defaultB
+    };
+  }
+}
+function fixRGBA(color) {
+  if (_typeof(color) === 'object' && !Array.isArray(color)) {
+    var r = color.hasOwnProperty('r') ? color.r : defaultR;
+    var g = color.hasOwnProperty('g') ? color.g : defaultG;
+    var b = color.hasOwnProperty('b') ? color.b : defaultB;
+    var a = color.hasOwnProperty('a') ? color.a : defaultA;
+    return {
+      type: 'color',
+      r: r,
+      g: g,
+      b: b,
+      a: a
+    };
+  } else {
+    return {
+      type: 'color',
+      r: defaultR,
+      g: defaultG,
+      b: defaultB,
+      a: defaultA
+    };
+  }
+}
+function RGB2HSL(color) {
+  var fixedColor = fixRGB(color);
+  var r = fixedColor.r / 255;
+  var g = fixedColor.g / 255;
+  var b = fixedColor.b / 255;
   var max = Math.max(r, g, b);
   var min = Math.min(r, g, b);
   var h,
@@ -101,7 +148,7 @@ function rgbToHsl(color) {
     l: l
   };
 }
-function hslToRgb(hsl) {
+function HSL2RGB(hsl) {
   var h = hsl.h,
     s = hsl.s,
     l = hsl.l;
@@ -109,12 +156,13 @@ function hslToRgb(hsl) {
     // achromatic
     var rgb = Math.round(l * 255);
     return {
+      type: 'color',
       r: rgb,
       g: rgb,
       b: rgb
     };
   } else {
-    var hueToRgb = function hueToRgb(p, q, t) {
+    var HUE2RGB = function HUE2RGB(p, q, t) {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -124,9 +172,9 @@ function hslToRgb(hsl) {
     };
     var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
     var p = 2 * l - q;
-    var r = hueToRgb(p, q, h + 1 / 3);
-    var g = hueToRgb(p, q, h);
-    var b = hueToRgb(p, q, h - 1 / 3);
+    var r = HUE2RGB(p, q, h + 1 / 3);
+    var g = HUE2RGB(p, q, h);
+    var b = HUE2RGB(p, q, h - 1 / 3);
     return {
       type: 'color',
       r: Math.round(r * 255),
@@ -135,22 +183,24 @@ function hslToRgb(hsl) {
     };
   }
 }
-function rgbToHex(color) {
-  var r = color.hasOwnProperty('r') ? color.r : defaultR;
-  var g = color.hasOwnProperty('g') ? color.g : defaultG;
-  var b = color.hasOwnProperty('b') ? color.b : defaultB;
+function RGB2HEX(color) {
+  var fixedColor = fixRGB(color);
+  var r = fixedColor.r;
+  var g = fixedColor.g;
+  var b = fixedColor.b;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
-function rgbaToHex(color) {
-  var r = color.hasOwnProperty('r') ? color.r : defaultR;
-  var g = color.hasOwnProperty('g') ? color.g : defaultG;
-  var b = color.hasOwnProperty('b') ? color.b : defaultB;
-  var a = Math.round(color.a * 255);
+function RGBA2HEX(color) {
+  var fixedColor = fixRGBA(color);
+  var r = fixedColor.r;
+  var g = fixedColor.g;
+  var b = fixedColor.b;
+  var a = Math.round(fixedColor.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
 function invertRGBA(color) {
   var needToInvert = false;
-  var hsl = rgbToHsl(color);
+  var hsl = RGB2HSL(color);
   if (hsl.s <= 0.38) {
     needToInvert = true;
   } else {
@@ -159,10 +209,11 @@ function invertRGBA(color) {
     }
   }
   if (needToInvert) {
-    var r = 255 - (color.hasOwnProperty('r') ? color.r : defaultR);
-    var g = 255 - (color.hasOwnProperty('g') ? color.g : defaultG);
-    var b = 255 - (color.hasOwnProperty('b') ? color.b : defaultB);
-    var hsl2 = rgbToHsl({
+    var fixedColor = fixRGBA(color);
+    var r = 255 - fixedColor.r;
+    var g = 255 - fixedColor.g;
+    var b = 255 - fixedColor.b;
+    var hsl2 = RGB2HSL({
       type: 'color',
       r: r,
       g: g,
@@ -171,7 +222,7 @@ function invertRGBA(color) {
     var h = hsl.h;
     var s = hsl2.s;
     var l = hsl2.l;
-    var color2 = hslToRgb({
+    var color2 = HSL2RGB({
       type: 'color',
       h: h,
       s: s,
@@ -180,7 +231,7 @@ function invertRGBA(color) {
     var r2 = color2.r;
     var g2 = color2.g;
     var b2 = color2.b;
-    var a2 = color !== null && color !== void 0 && color.a ? color.a : 0;
+    var a2 = fixedColor.a;
     return {
       type: 'color',
       r: r2,
@@ -216,7 +267,7 @@ function getColorInRGBA(element, property) {
     }
     return value;
   }
-  function hexToRGBA(hex) {
+  function HEX2RGBA(hex) {
     var r, g, b;
     if (hex.length === 4) {
       // #fff
@@ -392,7 +443,7 @@ function getColorInRGBA(element, property) {
       return rgbStringToRGBA(color);
     }
     if (color.startsWith('#')) {
-      return hexToRGBA(color);
+      return HEX2RGBA(color);
     }
     if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
       return parseGradient(color);
@@ -403,7 +454,7 @@ function getColorInRGBA(element, property) {
         r: defaultR,
         g: defaultG,
         b: defaultB,
-        a: 0
+        a: defaultA
       };
     }
     return nameToRGBA(color);
@@ -553,7 +604,7 @@ function getDarkModeStyle() {
   } finally {
     _iterator.f();
   }
-  return style.join(' ');
+  return style.join('');
 }
 ;// CONCATENATED MODULE: ./src/interface/index.css
 /* harmony default export */ const src_interface = ("@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n@keyframes filter-fade-out {\n  0% {\n    backdrop-filter: grayscale(1);\n    -webkit-backdrop-filter: grayscale(1);\n  }\n\n  100% {\n    backdrop-filter: grayscale(0);\n    -webkit-backdrop-filter: grayscale(0);\n  }\n}\n\n.darkify_transition_mask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--darkify-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  transform: scale(1);\n  backdrop-filter: invert(1) grayscale(1);\n  -webkit-backdrop-filter: invert(1) grayscale(1);\n}\n\n.darkify_transition_mask.darkify_transitioning {\n  animation-duration: var(--darkify-duration);\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-fill-mode: forwards;\n  animation-timing-function: var(--darkify-timing-function);\n  animation-direction: normal;\n}\n\n.darkify_ending_mask {\n  position: fixed;\n  top: 0px;\n  left: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: none;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  backdrop-filter: grayscale(1);\n  -webkit-backdrop-filter: grayscale(1);\n}\n\n.darkify_ending_mask.darkify_displayed {\n  display: block;\n  opacity: 1;\n}\n\n.darkify_ending_mask.darkify_filter_fade_out {\n  animation-duration: var(--darkify-duration-2);\n  animation-name: filter-fade-out;\n  animation-fill-mode: forwards;\n  animation-timing-function: ease-out;\n}\n\n.darkify_button {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  z-index: 1001;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: background-color var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);\n}\n\n.darkify_button svg {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  width: 23px;\n  height: 23px;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: opacity var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n}\n\n.darkify_button svg path {\n  transition: fill var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n}\n\n.darkify_button[dark-mode=\"true\"] {\n  background-color: var(--darkify-333333);\n}\n\n.darkify_button[dark-mode=\"true\"] svg path {\n  fill: var(--darkify-ffffff);\n}\n\n.darkify_button[dark-mode=\"true\"] svg[mode=\"light\"] {\n  opacity: 0;\n}\n\n.darkify_button[dark-mode=\"true\"] svg[mode=\"dark\"] {\n  opacity: 1;\n}\n\n.darkify_button[dark-mode=\"false\"] {\n  background-color: var(--darkify-ffffff);\n}\n\n.darkify_button[dark-mode=\"false\"] svg path {\n  fill: var(--darkify-333333);\n}\n\n.darkify_button[dark-mode=\"false\"] svg[mode=\"light\"] {\n  opacity: 1;\n}\n\n.darkify_button[dark-mode=\"false\"] svg[mode=\"dark\"] {\n  opacity: 0;\n}");
