@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.3.6
+// @version      0.3.7
 // @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -514,9 +514,9 @@ function getDarkModeStyle() {
   return style.join(' ');
 }
 ;// CONCATENATED MODULE: ./src/interface/index.css
-/* harmony default export */ const src_interface = ("@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n@keyframes filter-fade-out {\n  0% {\n    backdrop-filter: grayscale(1);\n    -webkit-backdrop-filter: grayscale(1);\n  }\n\n  100% {\n    backdrop-filter: grayscale(0);\n    -webkit-backdrop-filter: grayscale(0);\n  }\n}\n\n.darkify_transition_mask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--darkify-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  transform: scale(1);\n  backdrop-filter: invert(1) grayscale(1);\n  -webkit-backdrop-filter: invert(1) grayscale(1);\n}\n\n.darkify_transition_mask.darkify_transitioning {\n  animation-duration: var(--darkify-duration);\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-fill-mode: forwards;\n  animation-timing-function: var(--darkify-timing-function);\n  animation-direction: normal;\n}\n\n.darkify_gray_mask {\n  position: fixed;\n  top: 0px;\n  left: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: none;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  backdrop-filter: grayscale(1);\n  -webkit-backdrop-filter: grayscale(1);\n}\n\n.darkify_gray_mask.darkify_displayed {\n  display: block;\n  opacity: 1;\n}\n\n.darkify_gray_mask.darkify_filter_fade_out {\n  animation-duration: var(--darkify-duration-half);\n  animation-name: filter-fade-out;\n  animation-fill-mode: forwards;\n  animation-timing-function: ease-out;\n}\n\n.darkify_button {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  z-index: 1001;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: background-color var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);\n}\n\n.darkify_button svg {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  width: 23px;\n  height: 23px;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: opacity var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n}\n\n.darkify_button svg path {\n  transition: fill var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n}\n\n.darkify_button[dark-mode=\"true\"] {\n  background-color: var(--darkify-333333);\n}\n\n.darkify_button[dark-mode=\"true\"] svg path {\n  fill: var(--darkify-ffffff);\n}\n\n.darkify_button[dark-mode=\"true\"] svg[mode=\"light\"] {\n  opacity: 0;\n}\n\n.darkify_button[dark-mode=\"true\"] svg[mode=\"dark\"] {\n  opacity: 1;\n}\n\n.darkify_button[dark-mode=\"false\"] {\n  background-color: var(--darkify-ffffff);\n}\n\n.darkify_button[dark-mode=\"false\"] svg path {\n  fill: var(--darkify-333333);\n}\n\n.darkify_button[dark-mode=\"false\"] svg[mode=\"light\"] {\n  opacity: 1;\n}\n\n.darkify_button[dark-mode=\"false\"] svg[mode=\"dark\"] {\n  opacity: 0;\n}");
+/* harmony default export */ const src_interface = ("@keyframes transitioning-opacity {\n  0% {\n    opacity: 0;\n  }\n\n  100% {\n    opacity: 1;\n  }\n}\n\n@keyframes filter-fade-out {\n  0% {\n    backdrop-filter: invert(1) grayscale(1);\n    -webkit-backdrop-filter: invert(1) grayscale(1);\n  }\n\n  100% {\n    backdrop-filter: invert(0) grayscale(0);\n    -webkit-backdrop-filter: invert(0) grayscale(0);\n  }\n}\n\n.darkify_transition_mask {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  background-color: var(--darkify-transparent);\n  z-index: 999;\n  user-select: none;\n  -webkit-user-select: none;\n  opacity: 0;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  transform: scale(1);\n  backdrop-filter: invert(1) grayscale(1);\n  -webkit-backdrop-filter: invert(1) grayscale(1);\n}\n\n.darkify_transition_mask.darkify_transitioning {\n  animation-duration: var(--darkify-duration);\n  animation-name: transitioning-opacity, transitioning-zoom;\n  animation-fill-mode: forwards;\n  animation-timing-function: var(--darkify-timing-function);\n  animation-direction: normal;\n}\n\n.darkify_ending_mask {\n  position: fixed;\n  top: 0px;\n  left: 0px;\n  width: 100%;\n  height: 100%;\n  z-index: 1000;\n  user-select: none;\n  -webkit-user-select: none;\n  display: none;\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  backdrop-filter: invert(1) grayscale(1);\n  -webkit-backdrop-filter: invert(1) grayscale(1);\n}\n\n.darkify_ending_mask.darkify_displayed {\n  display: block;\n  opacity: 1;\n}\n\n.darkify_ending_mask.darkify_filter_fade_out {\n  animation-duration: var(--darkify-duration-2);\n  animation-name: filter-fade-out;\n  animation-fill-mode: forwards;\n  animation-timing-function: ease-out;\n}\n\n.darkify_button {\n  width: 43px;\n  height: 43px;\n  position: fixed;\n  bottom: 12px;\n  left: 12px;\n  border-radius: 100%;\n  z-index: 1001;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: background-color var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n  outline: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.1);\n}\n\n.darkify_button svg {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  width: 23px;\n  height: 23px;\n  user-select: none;\n  -webkit-user-select: none;\n  transition: opacity var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n}\n\n.darkify_button svg path {\n  transition: fill var(--darkify-duration);\n  transition-timing-function: var(--darkify-timing-function);\n}\n\n.darkify_button[dark-mode=\"true\"] {\n  background-color: var(--darkify-333333);\n}\n\n.darkify_button[dark-mode=\"true\"] svg path {\n  fill: var(--darkify-ffffff);\n}\n\n.darkify_button[dark-mode=\"true\"] svg[mode=\"light\"] {\n  opacity: 0;\n}\n\n.darkify_button[dark-mode=\"true\"] svg[mode=\"dark\"] {\n  opacity: 1;\n}\n\n.darkify_button[dark-mode=\"false\"] {\n  background-color: var(--darkify-ffffff);\n}\n\n.darkify_button[dark-mode=\"false\"] svg path {\n  fill: var(--darkify-333333);\n}\n\n.darkify_button[dark-mode=\"false\"] svg[mode=\"light\"] {\n  opacity: 1;\n}\n\n.darkify_button[dark-mode=\"false\"] svg[mode=\"dark\"] {\n  opacity: 0;\n}");
 ;// CONCATENATED MODULE: ./src/interface/theme.css
-/* harmony default export */ const theme = (":root {\n  --darkify-ffffff: #ffffff;\n  --darkify-333333: #333333;\n  --darkify-transparent: rgba(0, 0, 0, 0);\n  --darkify-timing-function: cubic-bezier(0.77, 0, 0.175, 1);\n  --darkify-duration: 750ms;\n  --darkify-duration-half: 375ms;\n}");
+/* harmony default export */ const theme = (":root {\n  --darkify-ffffff: #ffffff;\n  --darkify-333333: #333333;\n  --darkify-transparent: rgba(0, 0, 0, 0);\n  --darkify-timing-function: cubic-bezier(0.77, 0, 0.175, 1);\n  --darkify-duration: 750ms;\n  --darkify-duration-2: 500ms;\n}");
 ;// CONCATENATED MODULE: ./src/interface/index.ts
 
 
@@ -551,9 +551,9 @@ function initializeMask() {
   var transitionMask = document.createElement('div');
   transitionMask.classList.add('darkify_transition_mask');
   document.documentElement.appendChild(transitionMask);
-  var grayMask = document.createElement('div');
-  grayMask.classList.add('darkify_gray_mask');
-  document.documentElement.appendChild(grayMask);
+  var endingMask = document.createElement('div');
+  endingMask.classList.add('darkify_ending_mask');
+  document.documentElement.appendChild(endingMask);
 }
 function getTransitionKeyframes() {
   var padding = 100;
@@ -577,7 +577,7 @@ function turnOnDarkMode() {
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
   var darkModeStyle = getDarkModeStyle();
-  var grayMask = document.querySelector('.darkify_gray_mask');
+  var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener('animationend', function (e) {
@@ -586,14 +586,14 @@ function turnOnDarkMode() {
       keyframesLoaderInstance.remove();
     }
     transitionMask.classList.remove('darkify_transitioning');
-    grayMask.classList.add('darkify_displayed');
+    endingMask.classList.add('darkify_displayed');
     document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle;
     setTimeout(function () {
-      grayMask.classList.add('darkify_filter_fade_out');
+      endingMask.classList.add('darkify_filter_fade_out');
     }, 1);
-    grayMask.addEventListener('animationend', function (e) {
-      grayMask.classList.remove('darkify_displayed');
-      grayMask.classList.remove('darkify_filter_fade_out');
+    endingMask.addEventListener('animationend', function (e) {
+      endingMask.classList.remove('darkify_displayed');
+      endingMask.classList.remove('darkify_filter_fade_out');
     }, {
       once: true
     });
@@ -610,7 +610,7 @@ function turnOffDarkMode() {
   keyframesLoader.id = "".concat(sessionID, "_keyframes");
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
-  var grayMask = document.querySelector('.darkify_gray_mask');
+  var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener('animationend', function (e) {
@@ -619,14 +619,14 @@ function turnOffDarkMode() {
       keyframesLoaderInstance.remove();
     }
     transitionMask.classList.remove('darkify_transitioning');
-    grayMask.classList.add('darkify_displayed');
+    endingMask.classList.add('darkify_displayed');
     document.querySelector('style.dark_mode_style_loader').innerHTML = '';
     setTimeout(function () {
-      grayMask.classList.add('darkify_filter_fade_out');
+      endingMask.classList.add('darkify_filter_fade_out');
     }, 1);
-    grayMask.addEventListener('animationend', function (e) {
-      grayMask.classList.remove('darkify_displayed');
-      grayMask.classList.remove('darkify_filter_fade_out');
+    endingMask.addEventListener('animationend', function (e) {
+      endingMask.classList.remove('darkify_displayed');
+      endingMask.classList.remove('darkify_filter_fade_out');
     }, {
       once: true
     });
