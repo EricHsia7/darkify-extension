@@ -264,13 +264,14 @@ function getColorInRGBA(element, property) {
         b: 0,
         a: 0
       };
-    } else if (color.startsWith('rgb')) {
+    }
+    if (color.startsWith('rgb')) {
       return rgbStringToRGBA(color);
-    } else if (color.startsWith('#')) {
+    }
+    if (color.startsWith('#')) {
       return hexToRGBA(color);
-    } else if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
-      return parseGradient(color);
-    } else if (color.startsWith('url')) {
+    }
+    if (color.startsWith('url')) {
       return {
         type: 'color',
         r: 0,
@@ -278,10 +279,15 @@ function getColorInRGBA(element, property) {
         b: 0,
         a: 0
       };
-    } else {
-      // Assume it's a color name
-      return nameToRGBA(color);
     }
+    return {
+      type: 'color',
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 0
+    };
+    //return nameToRGBA(color);
   }
   return getColorInRGBAFromString(color);
 }
