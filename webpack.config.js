@@ -67,7 +67,7 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.css$/,
-          use: ['raw-loader', 'css-loader']
+          use: ['css-loader', 'raw-loader']
         }
       ]
     },
