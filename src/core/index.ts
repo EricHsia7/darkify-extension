@@ -190,7 +190,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     const radialGradientRegex = /^radial-gradient\((.*)\)$/;
     const conicGradientRegex = /^conic-gradient\((.*)\)$/;
 
-    function parseLinearGradient(gradientString) {
+    function parseLinearGradient(gradientString: string) {
       // Regular expression to match the linear-gradient function
       const regex = /linear-gradient\((.*)\)/;
       const matches = gradientString.match(regex);
@@ -219,13 +219,15 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
       const positionRegex = /(\d+(cm|mm|in|px|pt|px|em|ex|ch|rem|vw|vh|vmin|vmax|%))$/;
       parts.forEach((part) => {
         var matches2 = part.trim().match(positionRegex);
-        var color = getColorInRGBAFromString(part.trim().replace(positionRegex, '').trim());
-        var position = matches2[0].trim();
-        colorStops.push({
-          type: 'color-stop',
-          color,
-          position
-        });
+        if (matches2) {
+          var color = getColorInRGBAFromString(part.trim().replace(positionRegex, '').trim());
+          var position = matches2[0].trim();
+          colorStops.push({
+            type: 'color-stop',
+            color,
+            position
+          });
+        }
       });
 
       return { type: 'linear-gradient', direction, colorStops };
@@ -364,15 +366,19 @@ function propertiesToStyle(selector: string, properties: object): string {
         value = `rgba(${property.r}, ${property.g}, ${property.b}, ${property.a})`;
         break;
       case 'linear-gradient':
-        var colorStopsString = property.colorStops
-          .map((stop) => {
-            return `rgba(${stop.color.r}, ${stop.color.g}, ${stop.color.b}, ${stop.color.a}) ${stop.position}`;
-          })
-          .join(', ');
-        value = `linear-gradient(${property.direction}, ${colorStopsString})`;
+        if (property.colorStops.length >= 2) {
+          var colorStopsString = property.colorStops
+            .map((stop) => {
+              return `rgba(${stop.color.r}, ${stop.color.g}, ${stop.color.b}, ${stop.color.a}) ${stop.position}`;
+            })
+            .join(', ');
+          value = `linear-gradient(${property.direction}, ${colorStopsString})`;
+        } else {
+          continue;
+        }
         break;
       default:
-        value = '';
+        continue;
         break;
     }
 
