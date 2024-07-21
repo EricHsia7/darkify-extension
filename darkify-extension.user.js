@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.3.2
+// @version      0.3.3
 // @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -139,9 +139,9 @@ function invertRGBA(color) {
   var a = (color === null || color === void 0 ? void 0 : color.a) || 0;
   return needToInvert({
     type: 'color',
-    r: color.r,
-    g: color === null || color === void 0 ? void 0 : color.g,
-    b: color.b
+    r: (color === null || color === void 0 ? void 0 : color.r) || 0,
+    g: (color === null || color === void 0 ? void 0 : color.g) || 0,
+    b: (color === null || color === void 0 ? void 0 : color.b) || 0
   }) ? {
     type: 'color',
     r: r,
