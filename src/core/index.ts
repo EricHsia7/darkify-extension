@@ -142,8 +142,10 @@ function invertRGBA(color: RGBA): RGBA {
   var hsl: HSL = rgbToHsl(color);
   if (hsl.s <= 0.38) {
     needToInvert = true;
-  } else if (hsl.l <= 0.23) {
-    needToInvert = true;
+  } else {
+    if (hsl.l <= 0.23) {
+      needToInvert = true;
+    }
   }
   if (needToInvert) {
     var r = 255 - (color?.r || defaultR);
