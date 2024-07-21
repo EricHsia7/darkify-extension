@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.3.0
-// @description  Darkify Any Website
+// @version      0.3.1
+// @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
 // @inject-into  content
@@ -327,7 +327,7 @@ function getColorInRGBA(element, property) {
     if (matches = gradient.match(linearGradientRegex)) {
       return parseLinearGradient(gradient);
     } else if (matches = gradient.match(radialGradientRegex)) {
-      return parseRadialGradient(matches);
+      return parseRadialGradient(gradient);
     } else if (matches = gradient.match(conicGradientRegex)) {
       return parseConicGradient(matches);
     } else {
