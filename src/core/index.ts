@@ -263,7 +263,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     const conicGradientRegex = /^conic-gradient\((.*)\)$/;
 
     function parseColorStops(parts: string[]): colorStop[] {
-      const positionRegex = /(\d+(cm|mm|in|px|pt|px|em|ex|ch|rem|vw|vh|vmin|vmax|%))$/;
+      const positionRegex = /(\d+(cm|mm|in|px|pt|pc|rem|ex|ch|em|vw|vh|vmin|vmax|%))$/;
       var colorStops: colorStop[] = [];
       parts.forEach((part) => {
         var matches2 = part.trim().match(positionRegex);
