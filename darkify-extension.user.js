@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.1.8
+// @version      0.1.9
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -126,6 +126,7 @@ function invertRGB(color) {
   var g = 255 - color.g;
   var b = 255 - color.b;
   return needToInvert(color) ? {
+    type: 'color',
     r: r,
     g: g,
     b: b
@@ -320,6 +321,7 @@ function invertProperties(properties) {
     var property = properties[key];
     if (((_property = property) === null || _property === void 0 ? void 0 : _property.type) === 'color') {
       result[key] = Object.assign(invertRGB({
+        type: 'color',
         r: property.r,
         g: property.g,
         b: property.b
