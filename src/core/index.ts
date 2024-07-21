@@ -30,7 +30,7 @@ interface colorStop {
 
 type hex = string;
 
-type colorRelatedProperty = 'color' | 'background-color' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color';
+type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color';
 
 function rgbToHsl(color: RGB): HSL {
   var r = color.r / 255;
@@ -233,7 +233,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA {
 
 function getColorRelatedProperties(element: HTMLElement): object {
   var result: object = {};
-  var list: colorRelatedProperty[] = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
+  var list: colorRelatedProperty[] = ['color', 'background-color', 'background-image', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
   /*
   var totalR: number = 0;
   var totalG: number = 0;
