@@ -303,7 +303,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     if ((matches = gradient.match(linearGradientRegex))) {
       return parseLinearGradient(gradient);
     } else if ((matches = gradient.match(radialGradientRegex))) {
-      return parseRadialGradient(matches);
+      return parseRadialGradient(gradient);
     } else if ((matches = gradient.match(conicGradientRegex))) {
       return parseConicGradient(matches);
     } else {

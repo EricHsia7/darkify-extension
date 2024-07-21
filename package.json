@@ -1,7 +1,7 @@
 {
   "name": "@erichsia7/darkify-extension",
-  "version": "0.3.0",
-  "description": "Darkify Any Website",
+  "version": "0.3.1",
+  "description": "Darken Any Website",
   "main": "darkify-extension.user.js",
   "private": false,
   "scripts": {
