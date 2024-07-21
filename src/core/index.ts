@@ -86,7 +86,40 @@ function rgbToHsl(color: RGB): HSL {
     h /= 6;
   }
 
-  return { h, s, l };
+  return { type: 'color', h, s, l };
+}
+
+function hslToRgb(hsl: HSL): RGB {
+  let { h, s, l } = hsl;
+
+  if (s === 0) {
+    // achromatic
+    let rgb = Math.round(l * 255);
+    return { r: rgb, g: rgb, b: rgb };
+  } else {
+    function hueToRgb(p: number, q: number, t: number): number {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 3) return q;
+      if (t < 1 / 2) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    }
+
+    let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    let p = 2 * l - q;
+
+    let r = hueToRgb(p, q, h + 1 / 3);
+    let g = hueToRgb(p, q, h);
+    let b = hueToRgb(p, q, h - 1 / 3);
+
+    return {
+      type: 'color',
+      r: Math.round(r * 255),
+      g: Math.round(g * 255),
+      b: Math.round(b * 255)
+    };
+  }
 }
 
 function rgbToHex(color: RGB): hex {
@@ -104,31 +137,33 @@ function rgbaToHex(color: RGBA): hex {
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
 
-function needToInvert(color: RGB): boolean {
+function invertRGBA(color: RGBA): RGBA {
+  var needToInvert = false;
   var hsl: HSL = rgbToHsl(color);
   if (hsl.s <= 0.38) {
-    return true;
-  } else {
-    if (hsl.l <= 0.23) {
-      return true;
-    }
+    needToInvert = true;
+  } else if (hsl.l <= 0.23) {
+    needToInvert = true;
   }
-  return false;
-}
+  if (needToInvert) {
+    var r = 255 - (color?.r || defaultR);
+    var g = 255 - (color?.g || defaultG);
+    var b = 255 - (color?.b || defaultB);
 
-function invertRGB(color: RGB): RGB {
-  var r = 255 - (color?.r || 255);
-  var g = 255 - (color?.g || 255);
-  var b = 255 - (color?.b || 255);
-  return needToInvert(color) ? { type: 'color', r, g, b } : color;
-}
+    var hsl2: HSL = rgbToHsl({ type: 'color', r, g, b });
+    var h = hsl.h;
+    var s = hsl2.s;
+    var l = hsl2.l;
 
-function invertRGBA(color: RGBA): RGBA {
-  var r = 255 - (color?.r || defaultR);
-  var g = 255 - (color?.g || defaultG);
-  var b = 255 - (color?.b || defaultB);
-  var a = color?.a || 0;
-  return needToInvert({ type: 'color', r: color?.r || defaultR, g: color?.g || defaultG, b: color?.b || defaultB }) ? { type: 'color', r, g, b, a } : color;
+    var color2: RGB = hslToRgb({ type: 'color', h, s, l });
+    var r2 = color2.r;
+    var g2 = color2.g;
+    var b2 = color2.b;
+    var a2 = color?.a || 0;
+    return { type: 'color', r: r2, g: g2, b: b2, a: a2 };
+  } else {
+    return color;
+  }
 }
 
 function darkenRGB(color: RGB, percent: number): RGB {
