@@ -46,19 +46,20 @@
   z-index: 1000;
   user-select: none;
   -webkit-user-select: none;
-  display: none;
-  opacity: 1;
+  display: block;
+  opacity: 0;
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   mask-image: -webkit-radial-gradient(white, black);
   backdrop-filter: grayscale(1) !important;
   -webkit-backdrop-filter: grayscale(1) !important;
+  transform: translateX(-100%);
 }
 
 .darkify_gray_mask.darkify_displayed {
-  display: block;
   opacity: 1;
+  transform: translateX(0%);
 }
 
 .darkify_gray_mask.darkify_fade_out {
