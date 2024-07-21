@@ -67,7 +67,7 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader']
+          use: ['css-loader', 'style-loader']
         }
       ]
     },
@@ -78,6 +78,10 @@ module.exports = (env, argv) => {
     optimization: {
       minimize: true,
       minimizer: [
+        new TerserPlugin({
+          //terserOptions: {},
+          extractComments: false
+        }),
         new CssMinimizerPlugin({
           parallel: 4,
           minimizerOptions: {
@@ -89,10 +93,6 @@ module.exports = (env, argv) => {
               }
             ]
           }
-        }),
-        new TerserPlugin({
-          //terserOptions: {},
-          extractComments: false
         })
       ]
     }
