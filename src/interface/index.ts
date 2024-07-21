@@ -76,7 +76,9 @@ function turnOnDarkMode(): void {
       transitionMask.classList.remove('darkify_transitioning');
       grayMask.classList.add('darkify_displayed');
       document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle;
-      grayMask.classList.add('darkify_fade_out');
+      setTimeout(() => {
+        grayMask.classList.add('darkify_fade_out');
+      }, 1);
       grayMask.addEventListener(
         'animationend',
         function (e) {
@@ -112,7 +114,9 @@ function turnOffDarkMode(): void {
       transitionMask.classList.remove('darkify_transitioning');
       grayMask.classList.add('darkify_displayed');
       document.querySelector('style.dark_mode_style_loader').innerHTML = '';
-      grayMask.classList.add('darkify_fade_out');
+      setTimeout(() => {
+        grayMask.classList.add('darkify_fade_out');
+      }, 1);
       grayMask.addEventListener(
         'animationend',
         function (e) {

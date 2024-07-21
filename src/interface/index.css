@@ -54,18 +54,16 @@
   z-index: 1000;
   user-select: none;
   -webkit-user-select: none;
-  display: block;
-  opacity: 0;
+  display: none;
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   backdrop-filter: grayscale(1) !important;
   -webkit-backdrop-filter: grayscale(1) !important;
-  transform: translateX(-100%);
 }
 
 .darkify_gray_mask.darkify_displayed {
+  display: block;
   opacity: 1;
-  transform: translateX(0%);
 }
 
 .darkify_gray_mask.darkify_fade_out {
