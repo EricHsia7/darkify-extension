@@ -50,7 +50,7 @@ interface conicGradient {
 
 type hex = string;
 
-type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color';
+type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color' | 'fill' | 'stroke';
 
 const defaultR: number = 255;
 const defaultG: number = 255;
@@ -408,7 +408,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
 
 function getColorRelatedProperties(element: HTMLElement): object {
   var result: object = {};
-  var list: colorRelatedProperty[] = ['color', 'background-color', 'background-image', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
+  var list: colorRelatedProperty[] = ['color', 'background-color', 'background-image', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color', 'fill', 'stroke'];
   /*
   var totalR: number = 0;
   var totalG: number = 0;
