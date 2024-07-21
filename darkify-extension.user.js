@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.2
+// @version      0.2.3
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -254,6 +254,7 @@ function getColorInRGBA(element, property) {
     }
   }
   function getColorInRGBAFromString(color) {
+    // Resolve CSS variable if present
     color = resolveCSSVariable(color);
     if (color === 'transparent') {
       return {
@@ -267,19 +268,20 @@ function getColorInRGBA(element, property) {
       return rgbStringToRGBA(color);
     } else if (color.startsWith('#')) {
       return hexToRGBA(color);
+    } else if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
+      return parseGradient(color);
+    } else if (color.startsWith('url')) {
+      return {
+        type: 'color',
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 0
+      };
     } else {
       // Assume it's a color name
       return nameToRGBA(color);
     }
-  }
-
-  // Resolve CSS variable if present
-  color = resolveCSSVariable(color);
-  if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
-    return parseGradient(color);
-  }
-  if (color.startsWith('url')) {
-    color = 'transparent';
   }
   return getColorInRGBAFromString(color);
 }
