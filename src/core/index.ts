@@ -113,18 +113,18 @@ function needToInvert(color: RGB): boolean {
 }
 
 function invertRGB(color: RGB): RGB {
-  var r = 255 - color.r;
-  var g = 255 - color.g;
-  var b = 255 - color.b;
+  var r = 255 - (color?.r || 255);
+  var g = 255 - (color?.g || 255);
+  var b = 255 - (color?.b || 255);
   return needToInvert(color) ? { type: 'color', r, g, b } : color;
 }
 
 function invertRGBA(color: RGBA): RGBA {
-  var r = 255 - color.r;
-  var g = 255 - color.g;
-  var b = 255 - color.b;
-  var a = color.a;
-  return needToInvert({ type: 'color', r: color.r, g: color.g, b: color.b }) ? { type: 'color', r, g, b, a } : color;
+  var r = 255 - (color?.r || 0);
+  var g = 255 - (color?.g || 0);
+  var b = 255 - (color?.b || 0);
+  var a = color?.a || 0;
+  return needToInvert({ type: 'color', r: color.r, g: color?.g, b: color.b }) ? { type: 'color', r, g, b, a } : color;
 }
 
 function darkenRGB(color: RGB, percent: number): RGB {
@@ -330,8 +330,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     if (color.startsWith('url')) {
       return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
     }
-    return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
-    //return nameToRGBA(color);
+    return nameToRGBA(color);
   }
 
   return getColorInRGBAFromString(color);
@@ -347,7 +346,11 @@ function getColorRelatedProperties(element: HTMLElement): object {
   var totalA: number = 0;
   */
   for (var property of list) {
-    result[property] = getColorInRGBA(element, property);
+    try {
+      result[property] = getColorInRGBA(element, property);
+    } catch (e) {
+      continue;
+    }
     /*
     totalR += result[property].r;
     totalG += result[property].g;
