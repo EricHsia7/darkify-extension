@@ -1,11 +1,12 @@
 {
   "name": "Darkify",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Darken Any Website",
   "run-at": "document-end",
   "author": "erichsia7",
   "inject-into": "content",
   "updateURL": "https://erichsia7.github.io/darkify-extension/darkify-extension.user.js",
   "downloadURL": "https://erichsia7.github.io/darkify-extension/darkify-extension.user.js",
-  "match": "*://*/*"
+  "match": "*://*/*",
+  "noframes": ""
 }

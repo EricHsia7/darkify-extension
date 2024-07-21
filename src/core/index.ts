@@ -55,11 +55,36 @@ type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 
 const defaultR: number = 255;
 const defaultG: number = 255;
 const defaultB: number = 255;
+const defaultA: number = 0;
 
-function rgbToHsl(color: RGB): HSL {
-  var r = (color.hasOwnProperty('r') ? color.r : defaultR) / 255;
-  var g = (color.hasOwnProperty('g') ? color.g : defaultG) / 255;
-  var b = (color.hasOwnProperty('b') ? color.b : defaultB) / 255;
+function fixRGB(color: RGB): RGB {
+  if (typeof color === 'object' && !Array.isArray(color)) {
+    var r: number = color.hasOwnProperty('r') ? color.r : defaultR;
+    var g: number = color.hasOwnProperty('g') ? color.g : defaultG;
+    var b: number = color.hasOwnProperty('b') ? color.b : defaultB;
+    return { type: 'color', r, g, b };
+  } else {
+    return { type: 'color', r: defaultR, g: defaultG, b: defaultB };
+  }
+}
+
+function fixRGBA(color: RGBA): RGBA {
+  if (typeof color === 'object' && !Array.isArray(color)) {
+    var r: number = color.hasOwnProperty('r') ? color.r : defaultR;
+    var g: number = color.hasOwnProperty('g') ? color.g : defaultG;
+    var b: number = color.hasOwnProperty('b') ? color.b : defaultB;
+    var a: number = color.hasOwnProperty('a') ? color.a : defaultA;
+    return { type: 'color', r, g, b, a };
+  } else {
+    return { type: 'color', r: defaultR, g: defaultG, b: defaultB, a: defaultA };
+  }
+}
+
+function RGB2HSL(color: RGB): HSL {
+  var fixedColor: RGB = fixRGB(color);
+  var r = fixedColor.r / 255;
+  var g = fixedColor.g / 255;
+  var b = fixedColor.b / 255;
 
   let max = Math.max(r, g, b);
   let min = Math.min(r, g, b);
@@ -89,15 +114,15 @@ function rgbToHsl(color: RGB): HSL {
   return { type: 'color', h, s, l };
 }
 
-function hslToRgb(hsl: HSL): RGB {
+function HSL2RGB(hsl: HSL): RGB {
   let { h, s, l } = hsl;
 
   if (s === 0) {
     // achromatic
     let rgb = Math.round(l * 255);
-    return { r: rgb, g: rgb, b: rgb };
+    return { type: 'color', r: rgb, g: rgb, b: rgb };
   } else {
-    function hueToRgb(p: number, q: number, t: number): number {
+    function HUE2RGB(p: number, q: number, t: number): number {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
       if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -109,9 +134,9 @@ function hslToRgb(hsl: HSL): RGB {
     let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
     let p = 2 * l - q;
 
-    let r = hueToRgb(p, q, h + 1 / 3);
-    let g = hueToRgb(p, q, h);
-    let b = hueToRgb(p, q, h - 1 / 3);
+    let r = HUE2RGB(p, q, h + 1 / 3);
+    let g = HUE2RGB(p, q, h);
+    let b = HUE2RGB(p, q, h - 1 / 3);
 
     return {
       type: 'color',
@@ -122,24 +147,26 @@ function hslToRgb(hsl: HSL): RGB {
   }
 }
 
-function rgbToHex(color: RGB): hex {
-  var r = color.hasOwnProperty('r') ? color.r : defaultR;
-  var g = color.hasOwnProperty('g') ? color.g : defaultG;
-  var b = color.hasOwnProperty('b') ? color.b : defaultB;
+function RGB2HEX(color: RGB): hex {
+  var fixedColor: RGB = fixRGB(color);
+  var r: number = fixedColor.r;
+  var g: number = fixedColor.g;
+  var b: number = fixedColor.b;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
 
-function rgbaToHex(color: RGBA): hex {
-  var r = color.hasOwnProperty('r') ? color.r : defaultR;
-  var g = color.hasOwnProperty('g') ? color.g : defaultG;
-  var b = color.hasOwnProperty('b') ? color.b : defaultB;
-  var a = Math.round(color.a * 255);
+function RGBA2HEX(color: RGBA): hex {
+  var fixedColor: RGBA = fixRGBA(color);
+  var r: number = fixedColor.r;
+  var g: number = fixedColor.g;
+  var b: number = fixedColor.b;
+  var a: number = Math.round(fixedColor.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
 
 function invertRGBA(color: RGBA): RGBA {
   var needToInvert = false;
-  var hsl: HSL = rgbToHsl(color);
+  var hsl: HSL = RGB2HSL(color);
   if (hsl.s <= 0.38) {
     needToInvert = true;
   } else {
@@ -148,20 +175,22 @@ function invertRGBA(color: RGBA): RGBA {
     }
   }
   if (needToInvert) {
-    var r = 255 - (color.hasOwnProperty('r') ? color.r : defaultR);
-    var g = 255 - (color.hasOwnProperty('g') ? color.g : defaultG);
-    var b = 255 - (color.hasOwnProperty('b') ? color.b : defaultB);
+    var fixedColor: RGBA = fixRGBA(color);
 
-    var hsl2: HSL = rgbToHsl({ type: 'color', r, g, b });
+    var r = 255 - fixedColor.r;
+    var g = 255 - fixedColor.g;
+    var b = 255 - fixedColor.b;
+
+    var hsl2: HSL = RGB2HSL({ type: 'color', r, g, b });
     var h = hsl.h;
     var s = hsl2.s;
     var l = hsl2.l;
 
-    var color2: RGB = hslToRgb({ type: 'color', h, s, l });
+    var color2: RGB = HSL2RGB({ type: 'color', h, s, l });
     var r2 = color2.r;
     var g2 = color2.g;
     var b2 = color2.b;
-    var a2 = color?.a ? color.a : 0;
+    var a2 = fixedColor.a;
     return { type: 'color', r: r2, g: g2, b: b2, a: a2 };
   } else {
     return color;
@@ -191,7 +220,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     return value;
   }
 
-  function hexToRGBA(hex: string): RGBA {
+  function HEX2RGBA(hex: string): RGBA {
     let r, g, b;
     if (hex.length === 4) {
       // #fff
@@ -363,13 +392,13 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
       return rgbStringToRGBA(color);
     }
     if (color.startsWith('#')) {
-      return hexToRGBA(color);
+      return HEX2RGBA(color);
     }
     if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
       return parseGradient(color);
     }
     if (color.startsWith('url')) {
-      return { type: 'color', r: defaultR, g: defaultG, b: defaultB, a: 0 };
+      return { type: 'color', r: defaultR, g: defaultG, b: defaultB, a: defaultA };
     }
     return nameToRGBA(color);
   }
@@ -504,5 +533,5 @@ export function getDarkModeStyle(): object {
     var invertedProperties = invertProperties(getColorRelatedProperties(element));
     style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties));
   }
-  return style.join(' ');
+  return style.join('');
 }
