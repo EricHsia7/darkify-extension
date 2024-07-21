@@ -15,11 +15,11 @@ interface RGB {
   b: number;
 }
 
-interface HSL {
+interface HSV {
   type: 'color';
   h: number;
   s: number;
-  l: number;
+  v: number;
 }
 
 interface colorStop {
@@ -80,70 +80,106 @@ function fixRGBA(color: RGBA): RGBA {
   }
 }
 
-function RGB2HSL(color: RGB): HSL {
+function RGB2HSV(color: RGB): HSV {
   var fixedColor: RGB = fixRGB(color);
-  var r = fixedColor.r / 255;
-  var g = fixedColor.g / 255;
-  var b = fixedColor.b / 255;
+    // Normalize the RGB values by dividing by 255
+    r = fixedColor.r/255;
+    g = fixedColor.g/255;
+    b = fixedColor.b/255;
 
-  let max = Math.max(r, g, b);
-  let min = Math.min(r, g, b);
-  let h,
-    s,
-    l = (max + min) / 2;
+    // Find the minimum and maximum values among r, g, and b
+    let max = Math.max(r, g, b);
+    let min = Math.min(r, g, b);
 
-  if (max === min) {
-    h = s = 0; // achromatic
-  } else {
-    let d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0);
-        break;
-      case g:
-        h = (b - r) / d + 2;
-        break;
-      case b:
-        h = (r - g) / d + 4;
-        break;
+    // Calculate the difference between the max and min values
+    let delta = max - min;
+
+    // Initialize h, s, and v
+    let h, s, v = max;
+
+    // Calculate the saturation
+    s = max === 0 ? 0 : delta / max;
+
+    // Calculate the hue
+    if (max === min) {
+        h = 0; // Undefined hue (achromatic)
+    } else {
+        if (max === r) {
+            h = (g - b) / delta + (g < b ? 6 : 0);
+        } else if (max === g) {
+            h = (b - r) / delta + 2;
+        } else {
+            h = (r - g) / delta + 4;
+        }
+        h /= 6;
     }
-    h /= 6;
-  }
 
-  return { type: 'color', h, s, l };
+    // Convert h, s, and v to their respective ranges
+    h = Math.round(h * 360);
+    s = Math.round(s * 100);
+    v = Math.round(v * 100);
+
+    return { type: 'color', h, s, v };
 }
 
-function HSL2RGB(hsl: HSL): RGB {
-  let { h, s, l } = hsl;
+function HSV2RGB(hsv: HSV): RGB {
+    // Normalize the hue to the range 0-1
+    h = hsv.h / 360;
+    // Normalize the saturation and value to the range 0-1
+    s = hsv.s / 100;
+    v = hsv.v / 100;
 
-  if (s === 0) {
-    // achromatic
-    let rgb = Math.round(l * 255);
-    return { type: 'color', r: rgb, g: rgb, b: rgb };
-  } else {
-    function HUE2RGB(p: number, q: number, t: number): number {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1 / 6) return p + (q - p) * 6 * t;
-      if (t < 1 / 3) return q;
-      if (t < 1 / 2) return p + (q - p) * (2 / 3 - t) * 6;
-      return p;
+    let r, g, b;
+
+    let i = Math.floor(h * 6);
+    let f = h * 6 - i;
+    let p = v * (1 - s);
+    let q = v * (1 - f * s);
+    let t = v * (1 - (1 - f) * s);
+
+    switch (i % 6) {
+        case 0:
+            r = v;
+            g = t;
+            b = p;
+            break;
+        case 1:
+            r = q;
+            g = v;
+            b = p;
+            break;
+        case 2:
+            r = p;
+            g = v;
+            b = t;
+            break;
+        case 3:
+            r = p;
+            g = q;
+            b = v;
+            break;
+        case 4:
+            r = t;
+            g = p;
+            b = v;
+            break;
+        case 5:
+            r = v;
+            g = p;
+            b = q;
+            break;
     }
 
-    let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    let p = 2 * l - q;
-
-    let r = HUE2RGB(p, q, h + 1 / 3);
-    let g = HUE2RGB(p, q, h);
-    let b = HUE2RGB(p, q, h - 1 / 3);
+    // Convert r, g, b values from range 0-1 to range 0-255
+    r = Math.round(r * 255);
+    g = Math.round(g * 255);
+    b = Math.round(b * 255);
 
     return {
       type: 'color',
-      r: Math.round(r * 255),
-      g: Math.round(g * 255),
-      b: Math.round(b * 255)
-    };
+      r,
+      g,
+      b
   }
 }
 
@@ -166,11 +202,11 @@ function RGBA2HEX(color: RGBA): hex {
 
 function invertRGBA(color: RGBA): RGBA {
   var needToInvert = false;
-  var hsl: HSL = RGB2HSL(color);
-  if (hsl.s <= 0.38) {
+  var hsv: HSV = RGB2HSV(color);
+  if (hsv.s <= 0.38) {
     needToInvert = true;
   } else {
-    if (hsl.l <= 0.23) {
+    if (hsv.v <= 0.46) {
       needToInvert = true;
     }
   }
@@ -181,12 +217,12 @@ function invertRGBA(color: RGBA): RGBA {
     var g = 255 - fixedColor.g;
     var b = 255 - fixedColor.b;
 
-    var hsl2: HSL = RGB2HSL({ type: 'color', r, g, b });
-    var h = hsl.h;
-    var s = hsl2.s;
-    var l = hsl2.l;
+    var hsv2: HSV = RGB2HSV({ type: 'color', r, g, b });
+    var h = hsv.h;
+    var s = hsv2.s;
+    var v = hsv2.v;
 
-    var color2: RGB = HSL2RGB({ type: 'color', h, s, l });
+    var color2: RGB = HSV2RGB({ type: 'color', h, s, v });
     var r2 = color2.r;
     var g2 = color2.g;
     var b2 = color2.b;
