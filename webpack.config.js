@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
+const TerserPlugin = require('terser-webpack-plugin');
 
 var userscriptHeader = require('./config/header.json');
 var userscriptExclusionList = require('./config/exclusion_list.json');
@@ -32,7 +33,8 @@ module.exports = (env, argv) => {
             .join('\n');
         },
         raw: true, // if true, banner will not be wrapped in a comment
-        entryOnly: true // if true, the banner will only be added to the entry chunks
+        entryOnly: true, // if true, the banner will only be added to the entry chunks
+        stage: webpack.Compilation.PROCESS_ASSETS_STAGE_REPORT
       })
     ],
     target: ['web', 'es6'], // Target the browser environment (es6 is the default for browsers)
@@ -72,7 +74,14 @@ module.exports = (env, argv) => {
       mainFields: ['browser', 'module', 'main']
     },
     optimization: {
-      minimize: false
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            extractComments: false
+          }
+        })
+      ]
     }
   };
 };

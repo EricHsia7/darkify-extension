@@ -16,6 +16,9 @@ To install Darkify, you need to do these steps:
 
 [^1]: "New tricks" is derived from the saying "You can't teach an old dog new tricks." It means you can use websites in the ways you are used to.
 
+## Privacy
+Darkify is designed with your privacy as a top priority. Darkify does not collect, store, or transmit any personal data or browsing information. All functionalities are executed locally on your device, ensuring that your activities remain private and secure. We do not track your usage patterns, nor do we share any information with third parties. Your data stays with you, and you can use it with complete peace of mind.
+
 ## Roadmaps
 * More customized options.
 * Smoother transition.
