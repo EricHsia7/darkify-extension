@@ -231,10 +231,6 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA {
   return getColorInRGBAFromString(color);
 }
 
-// Example usage:
-const element = document.getElementById('myElement');
-const backgroundColorRGBA = getColorInRGBA(element, 'background-image');
-console.log(backgroundColorRGBA);
 function getColorRelatedProperties(element: HTMLElement): object {
   var result: object = {};
   var list: colorRelatedProperty[] = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
