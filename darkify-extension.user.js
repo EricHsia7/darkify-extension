@@ -97,17 +97,6 @@ function rgbToHsl(color) {
     l: l
   };
 }
-function needToInvert(color) {
-  var hsl = rgbToHsl(color);
-  if (hsl.s <= 0.38) {
-    return true;
-  } else {
-    if (hsl.l <= 0.23) {
-      return true;
-    }
-  }
-  return false;
-}
 function rgbToHex(color) {
   var r = color.r;
   var g = color.g;
@@ -121,6 +110,17 @@ function rgbaToHex(color) {
   var a = Math.round(color.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
+function needToInvert(color) {
+  var hsl = rgbToHsl(color);
+  if (hsl.s <= 0.38) {
+    return true;
+  } else {
+    if (hsl.l <= 0.23) {
+      return true;
+    }
+  }
+  return false;
+}
 function invertRGB(color) {
   var r = 255 - color.r;
   var g = 255 - color.g;
@@ -130,6 +130,24 @@ function invertRGB(color) {
     r: r,
     g: g,
     b: b
+  } : color;
+}
+function invertRGBA(color) {
+  var r = 255 - color.r;
+  var g = 255 - color.g;
+  var b = 255 - color.b;
+  var a = color.a;
+  return needToInvert({
+    type: 'color',
+    r: color.r,
+    g: color.g,
+    b: color.b
+  }) ? {
+    type: 'color',
+    r: r,
+    g: g,
+    b: b,
+    a: a
   } : color;
 }
 function darkenRGB(color, percent) {
@@ -324,18 +342,53 @@ function invertProperties(properties) {
   for (var key in properties) {
     var _property;
     var property = properties[key];
-    if (((_property = property) === null || _property === void 0 ? void 0 : _property.type) === 'color') {
-      result[key] = Object.assign(invertRGB({
-        type: 'color',
-        r: property.r,
-        g: property.g,
-        b: property.b
-      }), {
-        a: property.a
-      });
-      continue;
+    switch ((_property = property) === null || _property === void 0 ? void 0 : _property.type) {
+      case 'color':
+        result[key] = invertRGBA(property);
+        break;
+      case 'linear-gradient':
+        result[key] = {
+          type: 'linear-gradient',
+          direction: direction,
+          colorStops: property.colorStops.map(function (stop) {
+            return {
+              type: 'color-stop',
+              color: invertRGBA(stop.color),
+              position: position
+            };
+          })
+        };
+        break;
+      case 'radial-gradient':
+        result[key] = {
+          type: 'radial-gradient',
+          shapeAndSize: shapeAndSize,
+          colorStops: property.colorStops.map(function (stop) {
+            return {
+              type: 'color-stop',
+              color: invertRGBA(stop.color),
+              position: position
+            };
+          })
+        };
+        break;
+      case 'conic-gradient':
+        result[key] = {
+          type: 'conic-gradient',
+          angle: angle,
+          colorStops: property.colorStops.map(function (stop) {
+            return {
+              type: 'color-stop',
+              color: invertRGBA(stop.color),
+              position: position
+            };
+          })
+        };
+        break;
+      default:
+        result[key] = property;
+        break;
     }
-    result[key] = property;
   }
   return result;
 }
@@ -345,8 +398,19 @@ function propertiesToStyle(selector, properties) {
     var _property2;
     var property = properties[key];
     var value = '';
-    if (((_property2 = property) === null || _property2 === void 0 ? void 0 : _property2.type) === 'color') {
-      value = "rgba(".concat(property.r, ", ").concat(property.g, ", ").concat(property.b, ", ").concat(property.a, ")");
+    switch ((_property2 = property) === null || _property2 === void 0 ? void 0 : _property2.type) {
+      case 'color':
+        value = "rgba(".concat(property.r, ", ").concat(property.g, ", ").concat(property.b, ", ").concat(property.a, ")");
+        break;
+      case 'linear-gradient':
+        var colorStopsString = property.colorStops.map(function (stop) {
+          return "rgba(".concat(stop.color.r, ", ").concat(stop.color.g, ", ").concat(stop.color.b, ", ").concat(stop.color.a, ") ").concat(stop.position);
+        }).join(', ');
+        value = "linear-gradient(".concat(property.direction, ", ").concat(colorStopsString, ")");
+        break;
+      default:
+        value = '';
+        break;
     }
     lines.push("".concat(key, ": ").concat(value, " !important"));
   }
