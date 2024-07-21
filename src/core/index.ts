@@ -96,7 +96,7 @@ function invertRGB(color: RGB): RGB {
   var r = 255 - color.r;
   var g = 255 - color.g;
   var b = 255 - color.b;
-  return needToInvert(color) ? { r, g, b } : color;
+  return needToInvert(color) ? { type: 'color', r, g, b } : color;
 }
 
 function darkenRGB(color: RGB, percent: number): RGB {
@@ -269,7 +269,7 @@ function invertProperties(properties: object): object {
   for (var key in properties) {
     var property = properties[key];
     if (property?.type === 'color') {
-      result[key] = Object.assign(invertRGB({ r: property.r, g: property.g, b: property.b }), { a: property.a });
+      result[key] = Object.assign(invertRGB({ type: 'color', r: property.r, g: property.g, b: property.b }), { a: property.a });
       continue;
     }
     result[key] = property;
