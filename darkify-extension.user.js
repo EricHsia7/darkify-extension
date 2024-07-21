@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.4.1
+// @version      0.4.2
 // @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -95,10 +95,45 @@ function rgbToHsl(color) {
     h /= 6;
   }
   return {
+    type: 'color',
     h: h,
     s: s,
     l: l
   };
+}
+function hslToRgb(hsl) {
+  var h = hsl.h,
+    s = hsl.s,
+    l = hsl.l;
+  if (s === 0) {
+    // achromatic
+    var rgb = Math.round(l * 255);
+    return {
+      r: rgb,
+      g: rgb,
+      b: rgb
+    };
+  } else {
+    var hueToRgb = function hueToRgb(p, q, t) {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 3) return q;
+      if (t < 1 / 2) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    var p = 2 * l - q;
+    var r = hueToRgb(p, q, h + 1 / 3);
+    var g = hueToRgb(p, q, h);
+    var b = hueToRgb(p, q, h - 1 / 3);
+    return {
+      type: 'color',
+      r: Math.round(r * 255),
+      g: Math.round(g * 255),
+      b: Math.round(b * 255)
+    };
+  }
 }
 function rgbToHex(color) {
   var r = (color === null || color === void 0 ? void 0 : color.r) || defaultR;
@@ -113,45 +148,47 @@ function rgbaToHex(color) {
   var a = Math.round(color.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
-function needToInvert(color) {
+function invertRGBA(color) {
+  var needToInvert = false;
   var hsl = rgbToHsl(color);
   if (hsl.s <= 0.38) {
-    return true;
-  } else {
-    if (hsl.l <= 0.23) {
-      return true;
-    }
+    needToInvert = true;
+  } else if (hsl.l <= 0.23) {
+    needToInvert = true;
   }
-  return false;
-}
-function invertRGB(color) {
-  var r = 255 - ((color === null || color === void 0 ? void 0 : color.r) || 255);
-  var g = 255 - ((color === null || color === void 0 ? void 0 : color.g) || 255);
-  var b = 255 - ((color === null || color === void 0 ? void 0 : color.b) || 255);
-  return needToInvert(color) ? {
-    type: 'color',
-    r: r,
-    g: g,
-    b: b
-  } : color;
-}
-function invertRGBA(color) {
-  var r = 255 - ((color === null || color === void 0 ? void 0 : color.r) || defaultR);
-  var g = 255 - ((color === null || color === void 0 ? void 0 : color.g) || defaultG);
-  var b = 255 - ((color === null || color === void 0 ? void 0 : color.b) || defaultB);
-  var a = (color === null || color === void 0 ? void 0 : color.a) || 0;
-  return needToInvert({
-    type: 'color',
-    r: (color === null || color === void 0 ? void 0 : color.r) || defaultR,
-    g: (color === null || color === void 0 ? void 0 : color.g) || defaultG,
-    b: (color === null || color === void 0 ? void 0 : color.b) || defaultB
-  }) ? {
-    type: 'color',
-    r: r,
-    g: g,
-    b: b,
-    a: a
-  } : color;
+  if (needToInvert) {
+    var r = 255 - ((color === null || color === void 0 ? void 0 : color.r) || defaultR);
+    var g = 255 - ((color === null || color === void 0 ? void 0 : color.g) || defaultG);
+    var b = 255 - ((color === null || color === void 0 ? void 0 : color.b) || defaultB);
+    var hsl2 = rgbToHsl({
+      type: 'color',
+      r: r,
+      g: g,
+      b: b
+    });
+    var h = hsl.h;
+    var s = hsl2.s;
+    var l = hsl2.l;
+    var color2 = hslToRgb({
+      type: 'color',
+      h: h,
+      s: s,
+      l: l
+    });
+    var r2 = color2.r;
+    var g2 = color2.g;
+    var b2 = color2.b;
+    var a2 = (color === null || color === void 0 ? void 0 : color.a) || 0;
+    return {
+      type: 'color',
+      r: r2,
+      g: g2,
+      b: b2,
+      a: a2
+    };
+  } else {
+    return color;
+  }
 }
 function darkenRGB(color, percent) {
   var r = Math.floor(color.r * (1 - percent / 100));
