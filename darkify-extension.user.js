@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.4.2
+// @version      0.4.3
 // @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -153,8 +153,10 @@ function invertRGBA(color) {
   var hsl = rgbToHsl(color);
   if (hsl.s <= 0.38) {
     needToInvert = true;
-  } else if (hsl.l <= 0.23) {
-    needToInvert = true;
+  } else {
+    if (hsl.l <= 0.23) {
+      needToInvert = true;
+    }
   }
   if (needToInvert) {
     var r = 255 - ((color === null || color === void 0 ? void 0 : color.r) || defaultR);
