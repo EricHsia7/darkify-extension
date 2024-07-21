@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.3.1
+// @version      0.3.2
 // @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -65,9 +65,9 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 
 function rgbToHsl(color) {
-  var r = color.r / 255;
-  var g = color.g / 255;
-  var b = color.b / 255;
+  var r = ((color === null || color === void 0 ? void 0 : color.r) || 0) / 255;
+  var g = ((color === null || color === void 0 ? void 0 : color.g) || 0) / 255;
+  var b = ((color === null || color === void 0 ? void 0 : color.b) || 0) / 255;
   var max = Math.max(r, g, b);
   var min = Math.min(r, g, b);
   var h,
@@ -98,15 +98,15 @@ function rgbToHsl(color) {
   };
 }
 function rgbToHex(color) {
-  var r = color.r;
-  var g = color.g;
-  var b = color.b;
+  var r = (color === null || color === void 0 ? void 0 : color.r) || 0;
+  var g = (color === null || color === void 0 ? void 0 : color.g) || 0;
+  var b = (color === null || color === void 0 ? void 0 : color.b) || 0;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
 function rgbaToHex(color) {
-  var r = color.r;
-  var g = color.g;
-  var b = color.b;
+  var r = (color === null || color === void 0 ? void 0 : color.r) || 0;
+  var g = (color === null || color === void 0 ? void 0 : color.g) || 0;
+  var b = (color === null || color === void 0 ? void 0 : color.b) || 0;
   var a = Math.round(color.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
