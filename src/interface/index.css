@@ -8,13 +8,15 @@
   }
 }
 
-@keyframes fade-out {
+@keyframes filter-fade-out {
   0% {
-    opacity: 1;
+    backdrop-filter: grayscale(1);
+    -webkit-backdrop-filter: grayscale(1);
   }
 
   100% {
-    opacity: 0;
+    backdrop-filter: grayscale(0);
+    -webkit-backdrop-filter: grayscale(0);
   }
 }
 
@@ -33,14 +35,14 @@
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   transform: scale(1);
-  backdrop-filter: invert(1) grayscale(1) !important;
-  -webkit-backdrop-filter: invert(1) grayscale(1) !important;
+  backdrop-filter: invert(1) grayscale(1);
+  -webkit-backdrop-filter: invert(1) grayscale(1);
 }
 
 .darkify_transition_mask.darkify_transitioning {
   animation-duration: var(--darkify-duration);
   animation-name: transitioning-opacity, transitioning-zoom;
-  animation-iteration-count: forward;
+  animation-fill-mode: forwards;
   animation-timing-function: var(--darkify-timing-function);
   animation-direction: normal;
 }
@@ -57,8 +59,8 @@
   display: none;
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  backdrop-filter: grayscale(1) !important;
-  -webkit-backdrop-filter: grayscale(1) !important;
+  backdrop-filter: grayscale(1);
+  -webkit-backdrop-filter: grayscale(1);
 }
 
 .darkify_gray_mask.darkify_displayed {
@@ -66,10 +68,10 @@
   opacity: 1;
 }
 
-.darkify_gray_mask.darkify_fade_out {
+.darkify_gray_mask.darkify_filter_fade_out {
   animation-duration: var(--darkify-duration-half);
-  animation-name: fade-out;
-  animation-iteration-count: forward;
+  animation-name: filter-fade-out;
+  animation-fill-mode: forwards;
   animation-timing-function: ease-out;
 }
 

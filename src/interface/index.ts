@@ -77,13 +77,13 @@ function turnOnDarkMode(): void {
       grayMask.classList.add('darkify_displayed');
       document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle;
       setTimeout(() => {
-        grayMask.classList.add('darkify_fade_out');
+        grayMask.classList.add('darkify_filter_fade_out');
       }, 1);
       grayMask.addEventListener(
         'animationend',
         function (e) {
           grayMask.classList.remove('darkify_displayed');
-          grayMask.classList.remove('darkify_fade_out');
+          grayMask.classList.remove('darkify_filter_fade_out');
         },
         { once: true }
       );
@@ -115,13 +115,13 @@ function turnOffDarkMode(): void {
       grayMask.classList.add('darkify_displayed');
       document.querySelector('style.dark_mode_style_loader').innerHTML = '';
       setTimeout(() => {
-        grayMask.classList.add('darkify_fade_out');
+        grayMask.classList.add('darkify_filter_fade_out');
       }, 1);
       grayMask.addEventListener(
         'animationend',
         function (e) {
           grayMask.classList.remove('darkify_displayed');
-          grayMask.classList.remove('darkify_fade_out');
+          grayMask.classList.remove('darkify_filter_fade_out');
         },
         { once: true }
       );
