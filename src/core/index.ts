@@ -128,7 +128,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
   const style = getComputedStyle(element);
   let color = style.getPropertyValue(property).trim();
 
-  function resolveCSSVariable(value) {
+  function resolveCSSVariable(value: string): string {
     if (value.startsWith('var(')) {
       const variableName = value.slice(4, -1).trim();
       const resolvedValue = style.getPropertyValue(variableName).trim();
@@ -140,7 +140,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     return value;
   }
 
-  function hexToRGBA(hex) {
+  function hexToRGBA(hex: hex): RGBA {
     let r, g, b;
     if (hex.length === 4) {
       // #fff
@@ -225,6 +225,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
   }
 
   function getColorInRGBAFromString(color) {
+    // Resolve CSS variable if present
     color = resolveCSSVariable(color);
 
     if (color === 'transparent') {
@@ -233,21 +234,14 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
       return rgbStringToRGBA(color);
     } else if (color.startsWith('#')) {
       return hexToRGBA(color);
+    } else if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
+      return parseGradient(color);
+    } else if (color.startsWith('url')) {
+      return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
     } else {
       // Assume it's a color name
       return nameToRGBA(color);
     }
-  }
-
-  // Resolve CSS variable if present
-  color = resolveCSSVariable(color);
-
-  if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
-    return parseGradient(color);
-  }
-
-  if (color.startsWith('url')) {
-    color = 'transparent';
   }
 
   return getColorInRGBAFromString(color);
