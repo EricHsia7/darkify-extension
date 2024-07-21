@@ -10,13 +10,13 @@
 
 @keyframes filter-fade-out {
   0% {
-    backdrop-filter: invert(1) grayscale(1);
-    -webkit-backdrop-filter: invert(1) grayscale(1);
+    backdrop-filter: grayscale(1);
+    -webkit-backdrop-filter: grayscale(1);
   }
 
   100% {
-    backdrop-filter: invert(0) grayscale(0);
-    -webkit-backdrop-filter: invert(0) grayscale(0);
+    backdrop-filter: grayscale(0);
+    -webkit-backdrop-filter: grayscale(0);
   }
 }
 
@@ -59,8 +59,8 @@
   display: none;
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  backdrop-filter: invert(1) grayscale(1);
-  -webkit-backdrop-filter: invert(1) grayscale(1);
+  backdrop-filter: grayscale(1);
+  -webkit-backdrop-filter: grayscale(1);
 }
 
 .darkify_ending_mask.darkify_displayed {
