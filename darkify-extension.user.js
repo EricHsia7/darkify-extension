@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.5
+// @version      0.2.6
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -352,7 +352,7 @@ function invertProperties(properties) {
       case 'linear-gradient':
         result[key] = {
           type: 'linear-gradient',
-          direction: direction,
+          direction: property.direction,
           colorStops: property.colorStops.map(function (stop) {
             return {
               type: 'color-stop',
@@ -365,7 +365,7 @@ function invertProperties(properties) {
       case 'radial-gradient':
         result[key] = {
           type: 'radial-gradient',
-          shapeAndSize: shapeAndSize,
+          shapeAndSize: property.shapeAndSize,
           colorStops: property.colorStops.map(function (stop) {
             return {
               type: 'color-stop',
@@ -378,7 +378,7 @@ function invertProperties(properties) {
       case 'conic-gradient':
         result[key] = {
           type: 'conic-gradient',
-          angle: angle,
+          angle: property.angle,
           colorStops: property.colorStops.map(function (stop) {
             return {
               type: 'color-stop',
