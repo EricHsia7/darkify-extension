@@ -1,0 +1,16 @@
+// ==UserScript==
+// @name         Darkify
+// @version      0.4.8
+// @description  Darken Any Website
+// @run-at       document-end
+// @author       erichsia7
+// @inject-into  content
+// @updateURL    https://erichsia7.github.io/darkify-extension/darkify-extension.user.js
+// @downloadURL  https://erichsia7.github.io/darkify-extension/darkify-extension.user.js
+// @match        *://*/*
+// @noframes     
+// @exclude      *://*.google.com/*
+// @exclude      *://*.youtube.com/*
+// @exclude      *://github.*/*
+// ==/UserScript==
+@keyframes transitioning-opacity{0%{opacity:0}to{opacity:1}}@keyframes filter-fade-out{0%{backdrop-filter:grayscale(1);-webkit-backdrop-filter:grayscale(1)}to{backdrop-filter:grayscale(0);-webkit-backdrop-filter:grayscale(0)}}.darkify_transition_mask{background-color:var(--darkify-transparent);border-radius:100%;bottom:12px;height:43px;left:12px;opacity:0;outline:none;position:fixed;user-select:none;-webkit-user-select:none;width:43px;z-index:999;-webkit-tap-highlight-color:rgba(0,0,0,0);backdrop-filter:invert(1) grayscale(1);-webkit-backdrop-filter:invert(1) grayscale(1);transform:scale(1)}.darkify_transition_mask.darkify_transitioning{animation-direction:normal;animation-duration:var(--darkify-duration);animation-fill-mode:forwards;animation-name:transitioning-opacity,transitioning-zoom;animation-timing-function:var(--darkify-timing-function)}.darkify_ending_mask{display:none;height:100%;left:0;outline:none;position:fixed;top:0;user-select:none;-webkit-user-select:none;width:100%;z-index:1000;-webkit-tap-highlight-color:rgba(0,0,0,0);backdrop-filter:grayscale(1);-webkit-backdrop-filter:grayscale(1)}.darkify_ending_mask.darkify_displayed{display:block;opacity:1}.darkify_ending_mask.darkify_filter_fade_out{animation-duration:var(--darkify-duration-2);animation-fill-mode:forwards;animation-name:filter-fade-out;animation-timing-function:ease-out}.darkify_button{align-items:center;border-radius:100%;bottom:12px;display:flex;height:43px;justify-content:center;left:12px;outline:none;position:fixed;transition:background-color var(--darkify-duration);transition-timing-function:var(--darkify-timing-function);width:43px;z-index:1001;-webkit-tap-highlight-color:rgba(0,0,0,0);box-shadow:0 0 15px -5px rgba(0,0,0,.1)}.darkify_button,.darkify_button svg{user-select:none;-webkit-user-select:none}.darkify_button svg{height:23px;left:10px;position:absolute;top:10px;transition:opacity var(--darkify-duration);transition-timing-function:var(--darkify-timing-function);width:23px}.darkify_button svg path{transition:fill var(--darkify-duration);transition-timing-function:var(--darkify-timing-function)}.darkify_button[dark-mode=true]{background-color:var(--darkify-333333)}.darkify_button[dark-mode=true] svg path{fill:var(--darkify-ffffff)}.darkify_button[dark-mode=true] svg[mode=light]{opacity:0}.darkify_button[dark-mode=true] svg[mode=dark]{opacity:1}.darkify_button[dark-mode=false]{background-color:var(--darkify-ffffff)}.darkify_button[dark-mode=false] svg path{fill:var(--darkify-333333)}.darkify_button[dark-mode=false] svg[mode=light]{opacity:1}.darkify_button[dark-mode=false] svg[mode=dark]{opacity:0}:root{--darkify-ffffff:#fff;--darkify-333333:#333;--darkify-transparent:transparent;--darkify-timing-function:cubic-bezier(0.77,0,0.175,1);--darkify-duration:750ms;--darkify-duration-2:500ms}
