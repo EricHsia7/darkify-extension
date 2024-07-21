@@ -35,9 +35,9 @@ export function initializeMask(): void {
   var transitionMask = document.createElement('div');
   transitionMask.classList.add('darkify_transition_mask');
   document.documentElement.appendChild(transitionMask);
-  var grayMask = document.createElement('div');
-  grayMask.classList.add('darkify_gray_mask');
-  document.documentElement.appendChild(grayMask);
+  var endingMask = document.createElement('div');
+  endingMask.classList.add('darkify_ending_mask');
+  document.documentElement.appendChild(endingMask);
 }
 
 function getTransitionKeyframes(): string {
@@ -63,7 +63,7 @@ function turnOnDarkMode(): void {
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
   var darkModeStyle = getDarkModeStyle();
-  var grayMask = document.querySelector('.darkify_gray_mask');
+  var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener(
@@ -74,16 +74,16 @@ function turnOnDarkMode(): void {
         keyframesLoaderInstance.remove();
       }
       transitionMask.classList.remove('darkify_transitioning');
-      grayMask.classList.add('darkify_displayed');
+      endingMask.classList.add('darkify_displayed');
       document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle;
       setTimeout(() => {
-        grayMask.classList.add('darkify_filter_fade_out');
+        endingMask.classList.add('darkify_filter_fade_out');
       }, 1);
-      grayMask.addEventListener(
+      endingMask.addEventListener(
         'animationend',
         function (e) {
-          grayMask.classList.remove('darkify_displayed');
-          grayMask.classList.remove('darkify_filter_fade_out');
+          endingMask.classList.remove('darkify_displayed');
+          endingMask.classList.remove('darkify_filter_fade_out');
         },
         { once: true }
       );
@@ -101,7 +101,7 @@ function turnOffDarkMode(): void {
   keyframesLoader.id = `${sessionID}_keyframes`;
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
-  var grayMask = document.querySelector('.darkify_gray_mask');
+  var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener(
@@ -112,16 +112,16 @@ function turnOffDarkMode(): void {
         keyframesLoaderInstance.remove();
       }
       transitionMask.classList.remove('darkify_transitioning');
-      grayMask.classList.add('darkify_displayed');
+      endingMask.classList.add('darkify_displayed');
       document.querySelector('style.dark_mode_style_loader').innerHTML = '';
       setTimeout(() => {
-        grayMask.classList.add('darkify_filter_fade_out');
+        endingMask.classList.add('darkify_filter_fade_out');
       }, 1);
-      grayMask.addEventListener(
+      endingMask.addEventListener(
         'animationend',
         function (e) {
-          grayMask.classList.remove('darkify_displayed');
-          grayMask.classList.remove('darkify_filter_fade_out');
+          endingMask.classList.remove('darkify_displayed');
+          endingMask.classList.remove('darkify_filter_fade_out');
         },
         { once: true }
       );

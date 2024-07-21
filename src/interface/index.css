@@ -10,13 +10,13 @@
 
 @keyframes filter-fade-out {
   0% {
-    backdrop-filter: grayscale(1);
-    -webkit-backdrop-filter: grayscale(1);
+    backdrop-filter: invert(1) grayscale(1);
+    -webkit-backdrop-filter: invert(1) grayscale(1);
   }
 
   100% {
-    backdrop-filter: grayscale(0);
-    -webkit-backdrop-filter: grayscale(0);
+    backdrop-filter: invert(0) grayscale(0);
+    -webkit-backdrop-filter: invert(0) grayscale(0);
   }
 }
 
@@ -47,7 +47,7 @@
   animation-direction: normal;
 }
 
-.darkify_gray_mask {
+.darkify_ending_mask {
   position: fixed;
   top: 0px;
   left: 0px;
@@ -59,17 +59,17 @@
   display: none;
   outline: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  backdrop-filter: grayscale(1);
-  -webkit-backdrop-filter: grayscale(1);
+  backdrop-filter: invert(1) grayscale(1);
+  -webkit-backdrop-filter: invert(1) grayscale(1);
 }
 
-.darkify_gray_mask.darkify_displayed {
+.darkify_ending_mask.darkify_displayed {
   display: block;
   opacity: 1;
 }
 
-.darkify_gray_mask.darkify_filter_fade_out {
-  animation-duration: var(--darkify-duration-half);
+.darkify_ending_mask.darkify_filter_fade_out {
+  animation-duration: var(--darkify-duration-2);
   animation-name: filter-fade-out;
   animation-fill-mode: forwards;
   animation-timing-function: ease-out;
