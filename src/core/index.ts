@@ -57,9 +57,9 @@ const defaultG: number = 255;
 const defaultB: number = 255;
 
 function rgbToHsl(color: RGB): HSL {
-  var r = (color?.r || defaultR) / 255;
-  var g = (color?.g || defaultG) / 255;
-  var b = (color?.b || defaultB) / 255;
+  var r = (color.hasOwnProperty('r') ? color.r : defaultR) / 255;
+  var g = (color.hasOwnProperty('g') ? color.g : defaultG) / 255;
+  var b = (color.hasOwnProperty('b') ? color.b : defaultB) / 255;
 
   let max = Math.max(r, g, b);
   let min = Math.min(r, g, b);
@@ -123,16 +123,16 @@ function hslToRgb(hsl: HSL): RGB {
 }
 
 function rgbToHex(color: RGB): hex {
-  var r = color?.r || defaultR;
-  var g = color?.g || defaultG;
-  var b = color?.b || defaultB;
+  var r = color.hasOwnProperty('r') ? color.r : defaultR;
+  var g = color.hasOwnProperty('g') ? color.g : defaultG;
+  var b = color.hasOwnProperty('b') ? color.b : defaultB;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
 
 function rgbaToHex(color: RGBA): hex {
-  var r = color?.r || defaultR;
-  var g = color?.g || defaultG;
-  var b = color?.b || defaultB;
+  var r = color.hasOwnProperty('r') ? color.r : defaultR;
+  var g = color.hasOwnProperty('g') ? color.g : defaultG;
+  var b = color.hasOwnProperty('b') ? color.b : defaultB;
   var a = Math.round(color.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
@@ -148,9 +148,9 @@ function invertRGBA(color: RGBA): RGBA {
     }
   }
   if (needToInvert) {
-    var r = 255 - (color?.r || defaultR);
-    var g = 255 - (color?.g || defaultG);
-    var b = 255 - (color?.b || defaultB);
+    var r = 255 - (color.hasOwnProperty('r') ? color.r : defaultR);
+    var g = 255 - (color.hasOwnProperty('g') ? color.g : defaultG);
+    var b = 255 - (color.hasOwnProperty('b') ? color.b : defaultB);
 
     var hsl2: HSL = rgbToHsl({ type: 'color', r, g, b });
     var h = hsl.h;
@@ -161,7 +161,7 @@ function invertRGBA(color: RGBA): RGBA {
     var r2 = color2.r;
     var g2 = color2.g;
     var b2 = color2.b;
-    var a2 = color?.a || 0;
+    var a2 = color?.a ? color.a : 0;
     return { type: 'color', r: r2, g: g2, b: b2, a: a2 };
   } else {
     return color;
