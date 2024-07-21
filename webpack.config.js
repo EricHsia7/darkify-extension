@@ -67,7 +67,13 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.css$/,
-          use: ['css-loader', 'style-loader']
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: { sourceMap: true } // Enable source maps
+            }
+          ]
         }
       ]
     },
