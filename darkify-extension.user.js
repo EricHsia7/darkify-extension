@@ -144,8 +144,6 @@ function darkenRGB(color, percent) {
 function getColorInRGBA(element, property) {
   var style = getComputedStyle(element);
   var color = style.getPropertyValue(property).trim();
-
-  // Function to resolve CSS variables
   function resolveCSSVariable(value) {
     if (value.startsWith('var(')) {
       var variableName = value.slice(4, -1).trim();
@@ -157,9 +155,6 @@ function getColorInRGBA(element, property) {
     }
     return value;
   }
-
-  // Resolve CSS variable if present
-  color = resolveCSSVariable(color);
   function hexToRGBA(hex) {
     var r, g, b;
     if (hex.length === 4) {
@@ -176,6 +171,7 @@ function getColorInRGBA(element, property) {
       throw new Error('Invalid hex format');
     }
     return {
+      type: 'color',
       r: r,
       g: g,
       b: b,
@@ -186,6 +182,7 @@ function getColorInRGBA(element, property) {
     var match = rgb.match(/rgba?\((\d+), (\d+), (\d+)(?:, (\d+\.?\d*))?\)/);
     if (!match) throw new Error('Invalid RGB/RGBA format');
     return {
+      type: 'color',
       r: parseInt(match[1]),
       g: parseInt(match[2]),
       b: parseInt(match[3]),
@@ -198,22 +195,95 @@ function getColorInRGBA(element, property) {
     var computedColor = ctx.fillStyle; // Now it’s in rgb format
     return rgbStringToRGBA(computedColor);
   }
-  if (color === 'transparent') {
-    return {
-      r: 0,
-      g: 0,
-      b: 0,
-      a: 0
-    };
-  } else if (color.startsWith('rgb')) {
-    return rgbStringToRGBA(color);
-  } else if (color.startsWith('#')) {
-    return hexToRGBA(color);
-  } else {
-    // Assume it's a color name
-    return nameToRGBA(color);
+  function parseColorStops(colorStops) {
+    return colorStops.split(',').map(function (stop) {
+      var parts = stop.trim().split(/\s+/);
+      var color = parts[0];
+      var position = parts[1] || null;
+      return {
+        type: 'color-stop',
+        color: getColorInRGBAFromString(color),
+        position: position
+      };
+    });
   }
+  function parseGradient(gradient) {
+    var linearGradientRegex = /linear-gradient\(([^)]+)\)/;
+    var radialGradientRegex = /radial-gradient\(([^)]+)\)/;
+    var conicGradientRegex = /conic-gradient\(([^)]+)\)/;
+    function parseLinearGradient(matches) {
+      var parts = matches[1].split(/,(.+)/);
+      var direction = parts[0].trim();
+      var colorStops = parseColorStops(parts[1]);
+      return {
+        type: 'linear-gradient',
+        direction: direction,
+        colorStops: colorStops
+      };
+    }
+    function parseRadialGradient(matches) {
+      var parts = matches[1].split(/,(.+)/);
+      var shapeAndSize = parts[0].trim();
+      var colorStops = parseColorStops(parts[1]);
+      return {
+        type: 'radial-gradient',
+        shapeAndSize: shapeAndSize,
+        colorStops: colorStops
+      };
+    }
+    function parseConicGradient(matches) {
+      var parts = matches[1].split(/,(.+)/);
+      var angle = parts[0].trim();
+      var colorStops = parseColorStops(parts[1]);
+      return {
+        type: 'conic-gradient',
+        angle: angle,
+        colorStops: colorStops
+      };
+    }
+    var matches;
+    if (matches = gradient.match(linearGradientRegex)) {
+      return parseLinearGradient(matches);
+    } else if (matches = gradient.match(radialGradientRegex)) {
+      return parseRadialGradient(matches);
+    } else if (matches = gradient.match(conicGradientRegex)) {
+      return parseConicGradient(matches);
+    } else {
+      throw new Error('Unsupported gradient format');
+    }
+  }
+  function getColorInRGBAFromString(color) {
+    color = resolveCSSVariable(color);
+    if (color === 'transparent') {
+      return {
+        type: 'color',
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 0
+      };
+    } else if (color.startsWith('rgb')) {
+      return rgbStringToRGBA(color);
+    } else if (color.startsWith('#')) {
+      return hexToRGBA(color);
+    } else {
+      // Assume it's a color name
+      return nameToRGBA(color);
+    }
+  }
+
+  // Resolve CSS variable if present
+  color = resolveCSSVariable(color);
+  if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
+    return parseGradient(color);
+  }
+  return getColorInRGBAFromString(color);
 }
+
+// Example usage:
+var core_element = document.getElementById('myElement');
+var backgroundColorRGBA = getColorInRGBA(core_element, 'background-image');
+console.log(backgroundColorRGBA);
 function getColorRelatedProperties(element) {
   var result = {};
   var list = ['color', 'background-color', 'border-top-color', 'border-bottom-color', 'border-right-color', 'border-left-color', 'outline-color', 'text-decoration-color'];
@@ -226,6 +296,7 @@ function getColorRelatedProperties(element) {
   for (var _i = 0, _list = list; _i < _list.length; _i++) {
     var property = _list[_i];
     result[property] = getColorInRGBA(element, property);
+    console.log(result[property]);
     /*
     totalR += result[property].r;
     totalG += result[property].g;
@@ -245,22 +316,32 @@ function getColorRelatedProperties(element) {
 function invertProperties(properties) {
   var result = {};
   for (var key in properties) {
+    var _property;
     var property = properties[key];
-    result[key] = Object.assign(invertRGB({
-      r: property.r,
-      g: property.g,
-      b: property.b
-    }), {
-      a: property.a
-    });
+    if (((_property = property) === null || _property === void 0 ? void 0 : _property.type) === 'color') {
+      result[key] = Object.assign(invertRGB({
+        r: property.r,
+        g: property.g,
+        b: property.b
+      }), {
+        a: property.a
+      });
+      continue;
+    }
+    result[key] = property;
   }
   return result;
 }
 function propertiesToStyle(selector, properties) {
   var lines = [];
   for (var key in properties) {
+    var _property2;
     var property = properties[key];
-    lines.push("".concat(key, ": rgba(").concat(property.r, ", ").concat(property.g, ", ").concat(property.b, ", ").concat(property.a, ") !important"));
+    var value = '';
+    if (((_property2 = property) === null || _property2 === void 0 ? void 0 : _property2.type) === 'color') {
+      value = "rgba(".concat(property.r, ", ").concat(property.g, ", ").concat(property.b, ", ").concat(property.a, ")");
+    }
+    lines.push("".concat(key, ": ").concat(value, " !important"));
   }
   return "".concat(selector, " {").concat(lines.join(';'), "}");
 }
