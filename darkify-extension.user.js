@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.8
+// @version      0.2.9
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -245,13 +245,15 @@ function getColorInRGBA(element, property) {
       var positionRegex = /(\d+(cm|mm|in|px|pt|px|em|ex|ch|rem|vw|vh|vmin|vmax|%))$/;
       parts.forEach(function (part) {
         var matches2 = part.trim().match(positionRegex);
-        var color = getColorInRGBAFromString(part.trim().replace(positionRegex, '').trim());
-        var position = matches2[0].trim();
-        colorStops.push({
-          type: 'color-stop',
-          color: color,
-          position: position
-        });
+        if (matches2) {
+          var color = getColorInRGBAFromString(part.trim().replace(positionRegex, '').trim());
+          var position = matches2[0].trim();
+          colorStops.push({
+            type: 'color-stop',
+            color: color,
+            position: position
+          });
+        }
       });
       return {
         type: 'linear-gradient',
@@ -425,13 +427,17 @@ function propertiesToStyle(selector, properties) {
         value = "rgba(".concat(property.r, ", ").concat(property.g, ", ").concat(property.b, ", ").concat(property.a, ")");
         break;
       case 'linear-gradient':
-        var colorStopsString = property.colorStops.map(function (stop) {
-          return "rgba(".concat(stop.color.r, ", ").concat(stop.color.g, ", ").concat(stop.color.b, ", ").concat(stop.color.a, ") ").concat(stop.position);
-        }).join(', ');
-        value = "linear-gradient(".concat(property.direction, ", ").concat(colorStopsString, ")");
+        if (property.colorStops.length >= 2) {
+          var colorStopsString = property.colorStops.map(function (stop) {
+            return "rgba(".concat(stop.color.r, ", ").concat(stop.color.g, ", ").concat(stop.color.b, ", ").concat(stop.color.a, ") ").concat(stop.position);
+          }).join(', ');
+          value = "linear-gradient(".concat(property.direction, ", ").concat(colorStopsString, ")");
+        } else {
+          continue;
+        }
         break;
       default:
-        value = '';
+        continue;
         break;
     }
     lines.push("".concat(key, ": ").concat(value, " !important"));
