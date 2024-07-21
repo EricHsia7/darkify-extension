@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.1
+// @version      0.2.2
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -181,7 +181,7 @@ function getColorInRGBA(element, property) {
   }
   function rgbStringToRGBA(rgb) {
     var match = rgb.match(/rgba?\((\d+), (\d+), (\d+)(?:, (\d+\.?\d*))?\)/);
-    if (!match) throw new Error('Invalid RGB/RGBA format');
+    if (!match) throw new Error("Invalid RGB/RGBA format: ".concat(rgb));
     return {
       type: 'color',
       r: parseInt(match[1]),
