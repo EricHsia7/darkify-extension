@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.6
+// @version      0.2.7
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -357,7 +357,7 @@ function invertProperties(properties) {
             return {
               type: 'color-stop',
               color: invertRGBA(stop.color),
-              position: position
+              position: stop.position
             };
           })
         };
@@ -370,7 +370,7 @@ function invertProperties(properties) {
             return {
               type: 'color-stop',
               color: invertRGBA(stop.color),
-              position: position
+              position: stop.position
             };
           })
         };
@@ -383,7 +383,7 @@ function invertProperties(properties) {
             return {
               type: 'color-stop',
               color: invertRGBA(stop.color),
-              position: position
+              position: stop.position
             };
           })
         };
