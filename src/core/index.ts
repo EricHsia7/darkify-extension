@@ -242,6 +242,7 @@ function getColorRelatedProperties(element: HTMLElement): object {
   */
   for (var property of list) {
     result[property] = getColorInRGBA(element, property);
+    console.log(element.tagName);
     console.log(result[property]);
     /*
     totalR += result[property].r;
