@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const AdvancedPreset = require('cssnano-preset-advanced');
 
 var userscriptHeader = require('./config/header.json');
 var userscriptExclusionList = require('./config/exclusion_list.json');
@@ -79,6 +81,18 @@ module.exports = (env, argv) => {
         new TerserPlugin({
           //terserOptions: {},
           extractComments: false
+        }),
+        new CssMinimizerPlugin({
+          parallel: 4,
+          minimizerOptions: {
+            preset: [
+              'default',
+              AdvancedPreset,
+              {
+                discardComments: { removeAll: true }
+              }
+            ]
+          }
         })
       ]
     }
