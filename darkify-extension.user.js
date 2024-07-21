@@ -122,9 +122,9 @@ function needToInvert(color) {
   return false;
 }
 function invertRGB(color) {
-  var r = 255 - color.r;
-  var g = 255 - color.g;
-  var b = 255 - color.b;
+  var r = 255 - ((color === null || color === void 0 ? void 0 : color.r) || 255);
+  var g = 255 - ((color === null || color === void 0 ? void 0 : color.g) || 255);
+  var b = 255 - ((color === null || color === void 0 ? void 0 : color.b) || 255);
   return needToInvert(color) ? {
     type: 'color',
     r: r,
@@ -133,14 +133,14 @@ function invertRGB(color) {
   } : color;
 }
 function invertRGBA(color) {
-  var r = 255 - color.r;
-  var g = 255 - color.g;
-  var b = 255 - color.b;
-  var a = color.a;
+  var r = 255 - ((color === null || color === void 0 ? void 0 : color.r) || 0);
+  var g = 255 - ((color === null || color === void 0 ? void 0 : color.g) || 0);
+  var b = 255 - ((color === null || color === void 0 ? void 0 : color.b) || 0);
+  var a = (color === null || color === void 0 ? void 0 : color.a) || 0;
   return needToInvert({
     type: 'color',
     r: color.r,
-    g: color.g,
+    g: color === null || color === void 0 ? void 0 : color.g,
     b: color.b
   }) ? {
     type: 'color',
@@ -364,14 +364,7 @@ function getColorInRGBA(element, property) {
         a: 0
       };
     }
-    return {
-      type: 'color',
-      r: 0,
-      g: 0,
-      b: 0,
-      a: 0
-    };
-    //return nameToRGBA(color);
+    return nameToRGBA(color);
   }
   return getColorInRGBAFromString(color);
 }
@@ -386,7 +379,11 @@ function getColorRelatedProperties(element) {
   */
   for (var _i = 0, _list = list; _i < _list.length; _i++) {
     var property = _list[_i];
-    result[property] = getColorInRGBA(element, property);
+    try {
+      result[property] = getColorInRGBA(element, property);
+    } catch (e) {
+      continue;
+    }
     /*
     totalR += result[property].r;
     totalG += result[property].g;
