@@ -53,9 +53,9 @@ type hex = string;
 type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color';
 
 function rgbToHsl(color: RGB): HSL {
-  var r = color.r / 255;
-  var g = color.g / 255;
-  var b = color.b / 255;
+  var r = (color?.r || 0) / 255;
+  var g = (color?.g || 0) / 255;
+  var b = (color?.b || 0) / 255;
 
   let max = Math.max(r, g, b);
   let min = Math.min(r, g, b);
@@ -86,16 +86,16 @@ function rgbToHsl(color: RGB): HSL {
 }
 
 function rgbToHex(color: RGB): hex {
-  var r = color.r;
-  var g = color.g;
-  var b = color.b;
+  var r = color?.r || 0;
+  var g = color?.g || 0;
+  var b = color?.b || 0;
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
 }
 
 function rgbaToHex(color: RGBA): hex {
-  var r = color.r;
-  var g = color.g;
-  var b = color.b;
+  var r = color?.r || 0;
+  var g = color?.g || 0;
+  var b = color?.b || 0;
   var a = Math.round(color.a * 255);
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase() + alpha.toString(16).padStart(2, '0').toUpperCase();
 }
