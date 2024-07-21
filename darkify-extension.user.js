@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.2.4
+// @version      0.2.5
 // @description  Darkify Any Website
 // @run-at       document-end
 // @author       erichsia7
@@ -288,6 +288,9 @@ function getColorInRGBA(element, property) {
     }
     if (color.startsWith('#')) {
       return hexToRGBA(color);
+    }
+    if (color.startsWith('linear-gradient') || color.startsWith('radial-gradient') || color.startsWith('conic-gradient')) {
+      return parseGradient(color);
     }
     if (color.startsWith('url')) {
       return {
