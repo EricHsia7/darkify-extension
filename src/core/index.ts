@@ -160,7 +160,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
 
   function rgbStringToRGBA(rgb: string): RGBA {
     const match = rgb.match(/rgba?\((\d+), (\d+), (\d+)(?:, (\d+\.?\d*))?\)/);
-    if (!match) throw new Error('Invalid RGB/RGBA format');
+    if (!match) throw new Error(`Invalid RGB/RGBA format: ${rgb}`);
     return {
       type: 'color',
       r: parseInt(match[1]),
