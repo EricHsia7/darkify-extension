@@ -28,6 +28,24 @@ interface colorStop {
   position: string;
 }
 
+interface linearGradient {
+  type: 'linear-gradient';
+  direction: string;
+  colorStops: colorStop[];
+}
+
+interface radialGradient {
+  type: 'radial-gradient';
+  shapeAndSize: string;
+  colorStops: colorStop[];
+}
+
+interface conicGradient {
+  type: 'conic-gradient';
+  angle: string;
+  colorStops: colorStop[];
+}
+
 type hex = string;
 
 type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color';
@@ -106,7 +124,7 @@ function darkenRGB(color: RGB, percent: number): RGB {
   return { r, g, b };
 }
 
-function getColorInRGBA(element: HTMLElement, property: object): RGBA {
+function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGradient | radialGradient | conicGradient {
   const style = getComputedStyle(element);
   let color = style.getPropertyValue(property).trim();
 
@@ -228,6 +246,10 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA {
     return parseGradient(color);
   }
 
+  if (color.startsWith('url')) {
+    color = 'transparent';
+  }
+
   return getColorInRGBAFromString(color);
 }
 
@@ -241,9 +263,7 @@ function getColorRelatedProperties(element: HTMLElement): object {
   var totalA: number = 0;
   */
   for (var property of list) {
-    console.log(element.tagName);
     result[property] = getColorInRGBA(element, property);
-    console.log(result[property]);
     /*
     totalR += result[property].r;
     totalG += result[property].g;
