@@ -113,21 +113,15 @@ function RGB2HSV(color: RGB): HSV {
         }
         h /= 6;
     }
-
-    // Convert h, s, and v to their respective ranges
-    h = Math.round(h * 360);
-    s = Math.round(s * 100);
-    v = Math.round(v * 100);
-
     return { type: 'color', h, s, v };
 }
 
 function HSV2RGB(hsv: HSV): RGB {
     // Normalize the hue to the range 0-1
-    var h = hsv.h / 360;
+    var h = hsv.h;
     // Normalize the saturation and value to the range 0-1
-    var s = hsv.s / 100;
-    var v = hsv.v / 100;
+    var s = hsv.s;
+    var v = hsv.v;
 
     let r, g, b;
 
