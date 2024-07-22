@@ -52,10 +52,10 @@ type hex = string;
 
 type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color' | 'fill' | 'stroke';
 
-const defaultR: number = 255;
-const defaultG: number = 255;
-const defaultB: number = 255;
-const defaultA: number = 1;
+const defaultR: number = 0;
+const defaultG: number = 0;
+const defaultB: number = 0;
+const defaultA: number = 0;
 
 function fixRGB(color: RGB): RGB {
   if (typeof color === 'object' && !Array.isArray(color)) {
@@ -237,6 +237,7 @@ function darkenRGB(color: RGB, percent: number): RGB {
 }
 
 function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGradient | radialGradient | conicGradient {
+  const tagName: string = String(element.tagName).toLowerCase();
   const style = getComputedStyle(element);
   let color = style.getPropertyValue(property).trim();
 
@@ -418,7 +419,11 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
     color = resolveCSSVariable(color);
 
     if (color === 'transparent') {
-      return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
+      if (tagName === 'html' || tagName === 'body') {
+        return { type: 'color', r: 255, g: 255, b: 255, a: 1 };
+      } else {
+        return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
+      }
     }
     if (color.startsWith('rgb')) {
       return rgbStringToRGBA(color);
