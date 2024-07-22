@@ -236,6 +236,37 @@ function darkenRGB(color: RGB, percent: number): RGB {
   return { r, g, b };
 }
 
+function calculateContrastBetweenTwoColors(color1: RGB, color2: RGB): number {
+  //color1: background
+  //color2: text
+  function calculateRelativeLuminance(color: RGB): number {
+    var fixedColor: RGB = fixRGB(color);
+    var r: number = fixedColor.r / 255;
+    var g: number = fixedColor.g / 255;
+    var b: number = fixedColor.b / 255;
+    function calculateScalar(value: number): number {
+      if (value <= 0.03928) {
+        return value / 12.92;
+      } else {
+        return Math.pow((value + 0.055) / 1.055, 2.4);
+      }
+    }
+    var R: number = calculateScalar(r);
+    var G: number = calculateScalar(g);
+    var B: number = calculateScalar(b);
+    var L: number = 0.2126 * R + 0.7152 * G + 0.0722 * B;
+    return L;
+  }
+
+  var fixedColor1: RGB = fixRGB(color1);
+  var fixedColor2: RGB = fixRGB(color2);
+
+  var L1: number = calculateRelativeLuminance(fixedColor1);
+  var L2: number = calculateRelativeLuminance(fixedColor2);
+  var contrast: number = (L1 + 0.05) / (L2 + 0.05);
+  return contrast
+}
+
 function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGradient | radialGradient | conicGradient {
   const tagName: string = String(element.tagName).toLowerCase();
   const style = getComputedStyle(element);
