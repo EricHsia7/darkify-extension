@@ -79,8 +79,8 @@
   width: 43px;
   height: 43px;
   position: fixed;
-  bottom: 12px;
-  left: 12px;
+  bottom: 15px;
+  left: 15px;
   border-radius: 100%;
   z-index: 1001;
   display: flex;

@@ -38,8 +38,8 @@ function getTransitionKeyframes(): string {
   var windowWidth: number = window.innerWidth;
   var windowHeight: number = window.innerHeight;
   var radius: number = 43 / 2;
-  var centerX: number = 12 + radius;
-  var centerY: number = windowHeight - (12 + radius);
+  var centerX: number = 15 + radius;
+  var centerY: number = windowHeight - (15 + radius);
   var cornerX: number = windowWidth + padding;
   var cornerY: number = -1 * padding;
   var scale: number = Math.sqrt(Math.pow(cornerX - centerX, 2) + Math.pow(cornerY - centerY, 2)) / radius;
