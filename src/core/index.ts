@@ -52,9 +52,9 @@ type hex = string;
 
 type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 'fill' | 'border-top-color' | 'border-bottom-color' | 'border-right-color' | 'border-left-color' | 'outline-color' | 'text-decoration-color' | 'fill' | 'stroke';
 
-const defaultR: number = 0;
-const defaultG: number = 0;
-const defaultB: number = 0;
+const defaultR: number = 255;
+const defaultG: number = 255;
+const defaultB: number = 255;
 const defaultA: number = 0;
 
 function fixRGB(color: RGB): RGB {
