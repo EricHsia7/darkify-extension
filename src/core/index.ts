@@ -556,7 +556,7 @@ function propertiesToStyle(selector: string, properties: object): string {
 
 export function getDarkModeStyle(): object {
   var style = [];
-  var elements = document.querySelectorAll('body *,body');
+  var elements = document.querySelectorAll('html,body,body *');
   for (var element of elements) {
     var identifier: string = generateID('');
     element.setAttribute('darkify-extension', identifier);
