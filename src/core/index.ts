@@ -236,7 +236,7 @@ function darkenRGB(color: RGB, percent: number): RGB {
   return { r, g, b };
 }
 
-function calculateContrastBetweenTwoColors(color1: RGB, color2: RGB): number {
+function calculateContrastBetweenTwoColors(color1: RGB, color2: RGB, raw: boolean): number {
   //color1: background
   //color2: text
   function calculateRelativeLuminance(color: RGB): number {
@@ -264,7 +264,7 @@ function calculateContrastBetweenTwoColors(color1: RGB, color2: RGB): number {
   var L1: number = calculateRelativeLuminance(fixedColor1);
   var L2: number = calculateRelativeLuminance(fixedColor2);
   var contrast: number = (L1 + 0.05) / (L2 + 0.05);
-  return contrast
+  return raw ? contrast : Math.max(contrast, 1 / contrast);
 }
 
 function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGradient | radialGradient | conicGradient {
