@@ -83,9 +83,9 @@ function fixRGBA(color: RGBA): RGBA {
 function RGB2HSV(color: RGB): HSV {
   var fixedColor: RGB = fixRGB(color);
     // Normalize the RGB values by dividing by 255
-    r = fixedColor.r/255;
-    g = fixedColor.g/255;
-    b = fixedColor.b/255;
+    var r = fixedColor.r/255;
+    var g = fixedColor.g/255;
+    var b = fixedColor.b/255;
 
     // Find the minimum and maximum values among r, g, and b
     let max = Math.max(r, g, b);
@@ -124,10 +124,10 @@ function RGB2HSV(color: RGB): HSV {
 
 function HSV2RGB(hsv: HSV): RGB {
     // Normalize the hue to the range 0-1
-    h = hsv.h / 360;
+    var h = hsv.h / 360;
     // Normalize the saturation and value to the range 0-1
-    s = hsv.s / 100;
-    v = hsv.v / 100;
+    var s = hsv.s / 100;
+    var v = hsv.v / 100;
 
     let r, g, b;
 
