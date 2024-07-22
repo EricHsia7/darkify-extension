@@ -82,99 +82,101 @@ function fixRGBA(color: RGBA): RGBA {
 
 function RGB2HSV(color: RGB): HSV {
   var fixedColor: RGB = fixRGB(color);
-    // Normalize the RGB values by dividing by 255
-    var r = fixedColor.r/255;
-    var g = fixedColor.g/255;
-    var b = fixedColor.b/255;
+  // Normalize the RGB values by dividing by 255
+  var r = fixedColor.r / 255;
+  var g = fixedColor.g / 255;
+  var b = fixedColor.b / 255;
 
-    // Find the minimum and maximum values among r, g, and b
-    let max = Math.max(r, g, b);
-    let min = Math.min(r, g, b);
+  // Find the minimum and maximum values among r, g, and b
+  let max = Math.max(r, g, b);
+  let min = Math.min(r, g, b);
 
-    // Calculate the difference between the max and min values
-    let delta = max - min;
+  // Calculate the difference between the max and min values
+  let delta = max - min;
 
-    // Initialize h, s, and v
-    let h, s, v = max;
+  // Initialize h, s, and v
+  let h,
+    s,
+    v = max;
 
-    // Calculate the saturation
-    s = max === 0 ? 0 : delta / max;
+  // Calculate the saturation
+  s = max === 0 ? 0 : delta / max;
 
-    // Calculate the hue
-    if (max === min) {
-        h = 0; // Undefined hue (achromatic)
+  // Calculate the hue
+  if (max === min) {
+    h = 0; // Undefined hue (achromatic)
+  } else {
+    if (max === r) {
+      h = (g - b) / delta + (g < b ? 6 : 0);
+    } else if (max === g) {
+      h = (b - r) / delta + 2;
     } else {
-        if (max === r) {
-            h = (g - b) / delta + (g < b ? 6 : 0);
-        } else if (max === g) {
-            h = (b - r) / delta + 2;
-        } else {
-            h = (r - g) / delta + 4;
-        }
-        h /= 6;
+      h = (r - g) / delta + 4;
     }
-    return { type: 'color', h, s, v };
+    h /= 6;
+  }
+  return { type: 'color', h, s, v };
 }
 
 function HSV2RGB(hsv: HSV): RGB {
-    // Normalize the hue to the range 0-1
-    var h = hsv.h;
-    // Normalize the saturation and value to the range 0-1
-    var s = hsv.s;
-    var v = hsv.v;
+  // Normalize the hue to the range 0-1
+  var h = hsv.h;
+  // Normalize the saturation and value to the range 0-1
+  var s = hsv.s;
+  var v = hsv.v;
 
-    let r, g, b;
+  let r, g, b;
 
-    let i = Math.floor(h * 6);
-    let f = h * 6 - i;
-    let p = v * (1 - s);
-    let q = v * (1 - f * s);
-    let t = v * (1 - (1 - f) * s);
+  let i = Math.floor(h * 6);
+  let f = h * 6 - i;
+  let p = v * (1 - s);
+  let q = v * (1 - f * s);
+  let t = v * (1 - (1 - f) * s);
 
-    switch (i % 6) {
-        case 0:
-            r = v;
-            g = t;
-            b = p;
-            break;
-        case 1:
-            r = q;
-            g = v;
-            b = p;
-            break;
-        case 2:
-            r = p;
-            g = v;
-            b = t;
-            break;
-        case 3:
-            r = p;
-            g = q;
-            b = v;
-            break;
-        case 4:
-            r = t;
-            g = p;
-            b = v;
-            break;
-        case 5:
-            r = v;
-            g = p;
-            b = q;
-            break;
-    }
-
-    // Convert r, g, b values from range 0-1 to range 0-255
-    r = Math.round(r * 255);
-    g = Math.round(g * 255);
-    b = Math.round(b * 255);
-
-    return {
-      type: 'color',
-      r,
-      g,
-      b
+  switch (i % 6) {
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+    case 5:
+      r = v;
+      g = p;
+      b = q;
+      break;
   }
+
+  // Convert r, g, b values from range 0-1 to range 0-255
+  r = Math.round(r * 255);
+  g = Math.round(g * 255);
+  b = Math.round(b * 255);
+
+  return {
+    type: 'color',
+    r,
+    g,
+    b
+  };
 }
 
 function RGB2HEX(color: RGB): hex {
