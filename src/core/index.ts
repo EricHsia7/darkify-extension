@@ -203,10 +203,10 @@ function RGBA2HEX(color: RGBA): hex {
 function invertRGBA(color: RGBA): RGBA {
   var needToInvert = false;
   var hsv: HSV = RGB2HSV(color);
-  if (hsv.s <= 0.38) {
+  if (hsv.s <= 38) {
     needToInvert = true;
   } else {
-    if (hsv.v <= 0.46) {
+    if (hsv.v <= 46) {
       needToInvert = true;
     }
   }
