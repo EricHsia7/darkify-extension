@@ -453,7 +453,7 @@ function getColorInRGBA(element: HTMLElement, property: object): RGBA | linearGr
       if (tagName === 'html' || tagName === 'body') {
         return { type: 'color', r: 255, g: 255, b: 255, a: 1 };
       } else {
-        return { type: 'color', r: 0, g: 0, b: 0, a: 0 };
+        return { type: 'color', r: 255, g: 255, b: 255, a: 0 };
       }
     }
     if (color.startsWith('rgb')) {
