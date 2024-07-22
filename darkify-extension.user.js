@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Darkify
-// @version      0.5.1
+// @version      0.5.2
 // @description  Darken Any Website
 // @run-at       document-end
 // @author       erichsia7
