@@ -15,7 +15,7 @@
 .darkify_prompt {
   width: clamp(180px, calc(100% - 30px), 450px);
   height: 50px;
-  border-radius: var(--darkify-border-radius-default);
+  border-radius: 15px;
   position: fixed;
   left: 50%;
   bottom: 0px;
