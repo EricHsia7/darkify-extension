@@ -50,6 +50,7 @@ function getTransitionKeyframes(): string {
 function turnOnDarkMode(): void | string {
   var sessionID: string = generateID('d_');
   var button = document.querySelector('.darkify_button');
+  button.setAttribute('dark-mode', 'true');
   button.setAttribute('darkifying', 'true');
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = `${sessionID}_keyframes`;
@@ -67,6 +68,7 @@ function turnOnDarkMode(): void | string {
         keyframesLoaderInstance.remove();
       }
       button.setAttribute('darkifying', 'false');
+      button.setAttribute('dark-mode', 'false');
       return '';
     }
   }
@@ -101,6 +103,7 @@ function turnOnDarkMode(): void | string {
 function turnOffDarkMode(): void {
   var sessionID: string = generateID('d_');
   var button = document.querySelector('.darkify_button');
+  button.setAttribute('dark-mode', 'false');
   button.setAttribute('darkifying', 'true');
   var keyframesLoader = document.createElement('style');
   keyframesLoader.id = `${sessionID}_keyframes`;
@@ -142,11 +145,9 @@ function switchDarkMode(): void {
   var darkifying = button.getAttribute('darkifying');
   if (darkifying === 'false') {
     if (currentMode === 'false') {
-      button.setAttribute('dark-mode', 'true');
       turnOnDarkMode();
     } else {
       if (currentMode === 'true') {
-        button.setAttribute('dark-mode', 'false');
         turnOffDarkMode();
       }
     }

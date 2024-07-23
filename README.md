@@ -27,10 +27,10 @@ Darkify is designed with your privacy as a top priority. Darkify does not collec
 
 ## Roadmaps
 
-* More customized options.
-* Smoother transition.
-* Automatically enable upon pages ready.
-* Detect built-in dark mode provided by websites.
+* [ ] More customized options.
+* [ ] Smoother transition.
+* [ ] Automatically enable upon pages ready.
+* [x] Detect built-in dark mode provided by websites.
 
 ## Acknowledgement
 
