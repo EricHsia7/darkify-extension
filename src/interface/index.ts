@@ -58,7 +58,6 @@ function turnOnDarkMode(): void | string {
   var darkModeStyle = getDarkModeStyle();
   var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
-  console.log(darkModeStyle.possibility);
   var darkenAnyway = false;
   if (darkModeStyle.possibility > 0.28) {
     darkenAnyway = confirm(`This webpage is already in dark mode. Are you sure to darken this page anyway?`);
@@ -67,6 +66,7 @@ function turnOnDarkMode(): void | string {
       if (!(keyframesLoaderInstance === null)) {
         keyframesLoaderInstance.remove();
       }
+      button.setAttribute('darkifying', 'false');
       return '';
     }
   }
