@@ -652,9 +652,9 @@ export function getDarkModeStyle(): object {
     }
     style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties));
   }
-  var builtInDarkModePossibility: number = totalBuiltInDarkModePossibility / totalBuiltInDarkModePossibilityWeight;
+  var possibility: number = totalBuiltInDarkModePossibility / totalBuiltInDarkModePossibilityWeight;
   return {
     style: style.join(''),
-    possobility: builtInDarkModePossibility
+    possobility: possibility
   };
 }
