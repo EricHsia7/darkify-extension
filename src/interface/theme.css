@@ -1,5 +1,8 @@
 :root {
   --darkify-ffffff: #ffffff;
+  --darkify-ffffff-r: 255;
+  --darkify-ffffff-g: 255;
+  --darkify-ffffff-b: 255;
   --darkify-333333: #333333;
   --darkify-transparent: rgba(0, 0, 0, 0);
   --darkify-timing-function: cubic-bezier(0.77, 0, 0.175, 1);

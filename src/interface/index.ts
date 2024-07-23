@@ -1,8 +1,9 @@
 import { getDarkModeStyle } from '../core/index.ts';
 import { generateID } from '../tools/index.ts';
 
-import './index.css';
 import './theme.css';
+import './index.css';
+import './prompt.css';
 
 export function initializeCSS(): void {
   var dark_mode_style_loader = document.createElement('style');
@@ -47,6 +48,42 @@ function getTransitionKeyframes(): string {
   return keyframes;
 }
 
+function prompt_message(message: string, duration: number = 1200): void {
+  message = String(message);
+  var all_prompt = document.querySelectorAll('.darkify_prompt');
+  if (!(all_prompt === null)) {
+    var all_prompt_len = all_prompt.length;
+    for (var e = 0; e < all_prompt_len; e++) {
+      all_prompt[e].remove();
+    }
+  }
+  var duration_base: number = 300;
+  var translateY: number = -15;
+  var prompt_id: string = generateID('darkify_prompt_');
+  var prompt_element = document.createElement('div');
+  prompt_element.id = prompt_id;
+  prompt_element.classList.add('darkify_prompt');
+  prompt_element.classList.add('darkify_prompt_animation_' + prompt_id);
+  var prompt_center_element = document.createElement('div');
+  prompt_center_element.classList.add('darkify_prompt_content');
+  prompt_center_element.innerText = message;
+  prompt_element.appendChild(prompt_center_element);
+  var prompt_css = `.darkify_prompt_animation_${prompt_id}{animation-timing-function:cubic-bezier(.21,.75,.1,.96);animation-name:prompt${prompt_id};animation-duration:${duration + duration_base * 2}ms;animation-fill-mode:forwards;animation-timing-function:ease-in-out}@keyframes prompt${prompt_id}{0%{opacity:0;transform:translateX(-50%) translateY(${translateY}px) scale(0.8);}${Math.floor((duration_base / (duration + duration_base + 150)) * 100)}%{opacity:1;transform:translateX(-50%) translateY(calc(${translateY}px)) scale(1);}${Math.floor(((duration_base + duration) / (duration + duration_base + 150)) * 100)}%{opacity:1;transform:translateX(-50%) translateY(calc(${translateY}px)) scale(1);}100%{opacity:0;transform:translateX(-50%) translateY(${translateY}px) scale(1);}}`;
+  var prompt_css_element = document.createElement('style');
+  prompt_css_element.innerHTML = prompt_css;
+  prompt_element.appendChild(prompt_css_element);
+  document.body.appendChild(prompt_element);
+  document.getElementById(prompt_id).addEventListener(
+    'animationend',
+    function () {
+      if (!(document.getElementById(prompt_id) === null)) {
+        document.getElementById(prompt_id).remove();
+      }
+    },
+    { once: true }
+  );
+}
+
 function turnOnDarkMode(): void | string {
   var sessionID: string = generateID('d_');
   var button = document.querySelector('.darkify_button');
@@ -58,8 +95,9 @@ function turnOnDarkMode(): void | string {
   var darkModeStyle = getDarkModeStyle();
   var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
+  console.log(darkModeStyle.possibility);
   if (darkModeStyle.possibility > 0.28) {
-    alert(`This webpage is already in dark mode.`);
+    prompt_message('This webpage is already in dark mode.', 1200);
   }
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener(
