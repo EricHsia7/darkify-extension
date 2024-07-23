@@ -96,9 +96,22 @@ function turnOnDarkMode(): void | string {
   var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
   console.log(darkModeStyle.possibility);
+  var darkenAnyway = false;
+  if (darkModeStyle.possibility > 0.28) {
+    darkenAnyway = confirm(`This webpage is already in dark mode. Are you sure to darken this page anyway?`);
+    if (darkenAnyway === false) {
+      var keyframesLoaderInstance = document.querySelector(`style#${sessionID}_keyframes`);
+      if (!(keyframesLoaderInstance === null)) {
+        keyframesLoaderInstance.remove();
+      }
+      return '';
+    }
+  }
+  /*
   if (darkModeStyle.possibility > 0.28) {
     prompt_message('This webpage is already in dark mode.', 1200);
   }
+    */
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener(
     'animationend',
