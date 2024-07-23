@@ -47,7 +47,7 @@ function getTransitionKeyframes(): string {
   return keyframes;
 }
 
-function turnOnDarkMode(): void {
+function turnOnDarkMode(): void | string {
   var sessionID: string = generateID('d_');
   var button = document.querySelector('.darkify_button');
   button.setAttribute('darkifying', 'true');
@@ -56,9 +56,19 @@ function turnOnDarkMode(): void {
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
   var darkModeStyle = getDarkModeStyle();
-  console.log(darkModeStyle.possobility);
   var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
+  var darkenAnyway = false;
+  if (darkModeStyle.possibility < 0.28) {
+    darkenAnyway = window.confirm(`This webpage is in dark mode ${Math.round(darkModeStyle.possibility * 100)} percent. Are you sure to darken this page anyway?`);
+    if (darkenAnyway === false) {
+      var keyframesLoaderInstance = document.querySelector(`style#${sessionID}_keyframes`);
+      if (!(keyframesLoaderInstance === null)) {
+        keyframesLoaderInstance.remove();
+      }
+      return '';
+    }
+  }
   transitionMask.classList.add('darkify_transitioning');
   transitionMask.addEventListener(
     'animationend',
