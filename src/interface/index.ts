@@ -72,7 +72,7 @@ function prompt_message(message: string, duration: number = 1200): void {
   var prompt_css_element = document.createElement('style');
   prompt_css_element.innerHTML = prompt_css;
   prompt_element.appendChild(prompt_css_element);
-  document.body.appendChild(prompt_element);
+  document.documentElement.appendChild(prompt_element);
   document.getElementById(prompt_id).addEventListener(
     'animationend',
     function () {
