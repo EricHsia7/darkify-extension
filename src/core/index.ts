@@ -655,6 +655,6 @@ export function getDarkModeStyle(): object {
   var possibility: number = totalBuiltInDarkModePossibility / totalBuiltInDarkModePossibilityWeight;
   return {
     style: style.join(''),
-    possobility: possibility
+    possibility
   };
 }
