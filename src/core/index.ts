@@ -626,7 +626,7 @@ function getBuiltInDarkModePossibility(properties: object): object {
   var L1: number = calculateRelativeLuminance({ type: 'color', r: backgroundR, g: backgroundG, b: backgroundB });
   var L2: number = calculateRelativeLuminance({ type: 'color', r: textR, g: textG, b: textB });
   if (L1 > L2) {
-    return { include: true, possobility: (L1 + 0.05) / (L2 + 0.05) / 21 };
+    return { include: true, possobility: 1 - (L1 + 0.05) / (L2 + 0.05) / 21 };
   } else {
     return { include: true, possobility: 1 - (L2 + 0.05) / (L1 + 0.05) / 21 };
   }
