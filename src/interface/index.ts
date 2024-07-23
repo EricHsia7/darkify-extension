@@ -56,6 +56,7 @@ function turnOnDarkMode(): void {
   keyframesLoader.innerHTML = getTransitionKeyframes();
   document.documentElement.appendChild(keyframesLoader);
   var darkModeStyle = getDarkModeStyle();
+  console.log(darkModeStyle.possobility);
   var endingMask = document.querySelector('.darkify_ending_mask');
   var transitionMask = document.querySelector('.darkify_transition_mask');
   transitionMask.classList.add('darkify_transitioning');
@@ -68,7 +69,7 @@ function turnOnDarkMode(): void {
       }
       transitionMask.classList.remove('darkify_transitioning');
       endingMask.classList.add('darkify_displayed');
-      document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle;
+      document.querySelector('style.dark_mode_style_loader').innerHTML = darkModeStyle.style;
       setTimeout(() => {
         endingMask.classList.add('darkify_filter_fade_out');
       }, 1);

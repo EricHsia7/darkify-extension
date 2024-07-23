@@ -236,28 +236,28 @@ function darkenRGB(color: RGB, percent: number): RGB {
   return { r, g, b };
 }
 
+function calculateRelativeLuminance(color: RGB): number {
+  var fixedColor: RGB = fixRGB(color);
+  var r: number = fixedColor.r / 255;
+  var g: number = fixedColor.g / 255;
+  var b: number = fixedColor.b / 255;
+  function calculateScalar(value: number): number {
+    if (value <= 0.03928) {
+      return value / 12.92;
+    } else {
+      return Math.pow((value + 0.055) / 1.055, 2.4);
+    }
+  }
+  var R: number = calculateScalar(r);
+  var G: number = calculateScalar(g);
+  var B: number = calculateScalar(b);
+  var L: number = 0.2126 * R + 0.7152 * G + 0.0722 * B;
+  return L;
+}
+
 function calculateContrastBetweenTwoColors(color1: RGB, color2: RGB, raw: boolean): number {
   //color1: background
   //color2: text
-  function calculateRelativeLuminance(color: RGB): number {
-    var fixedColor: RGB = fixRGB(color);
-    var r: number = fixedColor.r / 255;
-    var g: number = fixedColor.g / 255;
-    var b: number = fixedColor.b / 255;
-    function calculateScalar(value: number): number {
-      if (value <= 0.03928) {
-        return value / 12.92;
-      } else {
-        return Math.pow((value + 0.055) / 1.055, 2.4);
-      }
-    }
-    var R: number = calculateScalar(r);
-    var G: number = calculateScalar(g);
-    var B: number = calculateScalar(b);
-    var L: number = 0.2126 * R + 0.7152 * G + 0.0722 * B;
-    return L;
-  }
-
   var fixedColor1: RGB = fixRGB(color1);
   var fixedColor2: RGB = fixRGB(color2);
 
@@ -592,14 +592,66 @@ function propertiesToStyle(selector: string, properties: object): string {
   return `${selector} {${lines.join(';')}}`;
 }
 
+function getBuiltInDarkModePossibility(properties: object): object {
+  var backgroundR: number = 255;
+  var backgroundG: number = 255;
+  var backgroundB: number = 255;
+  var textR: number = 0;
+  var textG: number = 0;
+  var textB: number = 0;
+  if (properties.hasOwnProperty('background-color')) {
+    var backgroundColor = properties['background-color'];
+    if (!(backgroundColor.a === 0)) {
+      backgroundR = backgroundColor.r;
+      backgroundG = backgroundColor.g;
+      backgroundB = backgroundColor.b;
+    }
+  }
+  if (properties.hasOwnProperty('background-color')) {
+    var backgroundColor = properties['background-color'];
+    if (!(backgroundColor.a === 0)) {
+      backgroundR = backgroundColor.r;
+      backgroundG = backgroundColor.g;
+      backgroundB = backgroundColor.b;
+    }
+  }
+  if (properties.hasOwnProperty('color')) {
+    var color = properties['color'];
+    if (!(color.a === 0)) {
+      textR = color.r;
+      textG = color.g;
+      textB = color.b;
+    }
+  }
+  var L1: number = calculateRelativeLuminance({ type: 'color', r: backgroundR, g: backgroundG, b: backgroundB });
+  var L2: number = calculateRelativeLuminance({ type: 'color', r: textR, g: textG, b: textB });
+  if (L1 > L2) {
+    return { include: true, possobility: (L1 + 0.05) / (L2 + 0.05) / 21 };
+  } else {
+    return { include: true, possobility: 1 - (L2 + 0.05) / (L1 + 0.05) / 21 };
+  }
+  return { include: false, possobility: null };
+}
+
 export function getDarkModeStyle(): object {
   var style = [];
   var elements = document.querySelectorAll('html,body,body *');
+  var totalBuiltInDarkModePossibility: number = 0;
+  var totalBuiltInDarkModePossibilityWeight: number = 0;
   for (var element of elements) {
     var identifier: string = generateID('');
     element.setAttribute('darkify-extension', identifier);
-    var invertedProperties = invertProperties(getColorRelatedProperties(element));
+    var rect = element.getBoundingClientRect();
+    var area = rect.width * rect.height;
+    var originalProperties = getColorRelatedProperties(element);
+    var invertedProperties = invertProperties(originalProperties);
+    totalBuiltInDarkModePossibility += getBuiltInDarkModePossibility(originalProperties) * area;
+    totalBuiltInDarkModePossibilityWeight += area;
     style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties));
   }
-  return style.join('');
+  var builtInDarkModePossibility: number = totalBuiltInDarkModePossibility / totalBuiltInDarkModePossibilityWeight;
+  return {
+    style: style.join(''),
+    possobility: builtInDarkModePossibility
+  };
 }
