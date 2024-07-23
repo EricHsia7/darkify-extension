@@ -60,7 +60,7 @@ function turnOnDarkMode(): void | string {
   var transitionMask = document.querySelector('.darkify_transition_mask');
   var darkenAnyway = false;
   if (darkModeStyle.possibility > 0.28) {
-    darkenAnyway = window.confirm(`This webpage is ${Math.round(darkModeStyle.possibility * 100)} percent in dark mode. Are you sure to darken this page anyway?`);
+    darkenAnyway = confirm(`This webpage is ${Math.round(darkModeStyle.possibility * 100)} percent in dark mode. Are you sure to darken this page anyway?`);
     if (darkenAnyway === false) {
       var keyframesLoaderInstance = document.querySelector(`style#${sessionID}_keyframes`);
       if (!(keyframesLoaderInstance === null)) {
