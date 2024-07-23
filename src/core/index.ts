@@ -645,8 +645,11 @@ export function getDarkModeStyle(): object {
     var area = rect.width * rect.height;
     var originalProperties = getColorRelatedProperties(element);
     var invertedProperties = invertProperties(originalProperties);
-    totalBuiltInDarkModePossibility += getBuiltInDarkModePossibility(originalProperties) * area;
-    totalBuiltInDarkModePossibilityWeight += area;
+    var builtInDarkModePossibility: object = getBuiltInDarkModePossibility(originalProperties);
+    if (builtInDarkModePossibility.include) {
+      totalBuiltInDarkModePossibility += builtInDarkModePossibility.possobility * area;
+      totalBuiltInDarkModePossibilityWeight += area;
+    }
     style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties));
   }
   var builtInDarkModePossibility: number = totalBuiltInDarkModePossibility / totalBuiltInDarkModePossibilityWeight;
