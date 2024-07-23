@@ -605,6 +605,8 @@ function getBuiltInDarkModePossibility(properties: object): object {
       backgroundR = backgroundColor.r;
       backgroundG = backgroundColor.g;
       backgroundB = backgroundColor.b;
+    } else {
+      return { include: false, possobility: null };
     }
   }
   if (properties.hasOwnProperty('background-color')) {
@@ -613,6 +615,8 @@ function getBuiltInDarkModePossibility(properties: object): object {
       backgroundR = backgroundColor.r;
       backgroundG = backgroundColor.g;
       backgroundB = backgroundColor.b;
+    } else {
+      return { include: false, possobility: null };
     }
   }
   if (properties.hasOwnProperty('color')) {
@@ -630,7 +634,6 @@ function getBuiltInDarkModePossibility(properties: object): object {
   } else {
     return { include: true, possobility: 1 - (L2 + 0.05) / (L1 + 0.05) / 21 };
   }
-  return { include: false, possobility: null };
 }
 
 export function getDarkModeStyle(): object {
