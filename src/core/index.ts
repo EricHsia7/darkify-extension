@@ -593,7 +593,7 @@ function propertiesToStyle(selector: string, properties: object, tagName: string
   if (tagName === 'input') {
     return `${selector}, ${selector}::placeholder {${lines.join(';')}}`;
   }
-  return `${selector}, ${selector}::before, ${selector}::after {${lines.join(';')}}`;
+  return `${selector} {${lines.join(';')}}`;
 }
 
 function getBuiltInDarkModePossibility(properties: object): object {
