@@ -55,7 +55,7 @@ type colorRelatedProperty = 'color' | 'background-color' | 'background-image' | 
 const defaultR: number = 255;
 const defaultG: number = 255;
 const defaultB: number = 255;
-const defaultA: number = 0;
+const defaultA: number = 1;
 
 function fixRGB(color: RGB): RGB {
   if (typeof color === 'object' && !Array.isArray(color)) {
@@ -549,7 +549,7 @@ function invertProperties(properties: object): object {
   return result;
 }
 
-function propertiesToStyle(selector: string, properties: object): string {
+function propertiesToStyle(selector: string, properties: object, tagName: string): string {
   var lines = [];
   for (var key in properties) {
     var property = properties[key];
@@ -589,7 +589,11 @@ function propertiesToStyle(selector: string, properties: object): string {
 
     lines.push(`${key}: ${value} !important`);
   }
-  return `${selector} {${lines.join(';')}}`;
+
+  if (tagName === 'input') {
+    return `${selector}, ${selector}::placeholder {${lines.join(';')}}`;
+  }
+  return `${selector}, ${selector}::before, ${selector}::after {${lines.join(';')}}`;
 }
 
 function getBuiltInDarkModePossibility(properties: object): object {
@@ -649,7 +653,7 @@ export function getDarkModeStyle(): object {
       totalBuiltInDarkModePossibility += builtInDarkModePossibility.possobility * area;
       totalBuiltInDarkModePossibilityWeight += area;
     }
-    style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties));
+    style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties), element.tagName);
   }
   var possibility: number = totalBuiltInDarkModePossibility / totalBuiltInDarkModePossibilityWeight;
   return {
