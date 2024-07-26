@@ -590,7 +590,10 @@ function propertiesToStyle(selector: string, properties: object, tagName: string
     lines.push(`${key}: ${value} !important`);
   }
 
-  return `${selector} {${lines.join(';')}}`;
+  if (tagName === 'input') {
+    return `${selector}, ${selector}::placeholder {${lines.join(';')}}`;
+  }
+  return `${selector}, ${selector}::before, ${selector}::after {${lines.join(';')}}`;
 }
 
 function getBuiltInDarkModePossibility(properties: object): object {
@@ -650,7 +653,7 @@ export function getDarkModeStyle(): object {
       totalBuiltInDarkModePossibility += builtInDarkModePossibility.possobility * area;
       totalBuiltInDarkModePossibilityWeight += area;
     }
-    style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties), element.tagName);
+    style.push(propertiesToStyle(`${String(element.tagName).toLowerCase()}[darkify-extension="${identifier}"]`, invertedProperties, element.tagName));
   }
   var possibility: number = totalBuiltInDarkModePossibility / totalBuiltInDarkModePossibilityWeight;
   return {
