@@ -590,9 +590,6 @@ function propertiesToStyle(selector: string, properties: object, tagName: string
     lines.push(`${key}: ${value} !important`);
   }
 
-  if (tagName === 'input') {
-    return `${selector}, ${selector}::placeholder {${lines.join(';')}}`;
-  }
   return `${selector} {${lines.join(';')}}`;
 }
 
