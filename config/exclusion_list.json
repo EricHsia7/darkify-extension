@@ -14,6 +14,16 @@
       "name": "Github",
       "pattern": "*://github.*/*",
       "description": ""
+    },
+    {
+      "name": "Twitter",
+      "pattern": "*://twitter.*/*",
+      "description": ""
+    },
+    {
+      "name": "X",
+      "pattern": "*://x.*/*",
+      "description": ""
     }
   ]
 }
